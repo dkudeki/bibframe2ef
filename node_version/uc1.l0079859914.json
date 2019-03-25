@@ -1,0 +1,72 @@
+{
+    "@context": "https://worksets.htrc.illinois.edu/context/HTRC-Framing-V4.json",
+    "metadata": {
+        "id": "http://hdl.handle.net/2027/uc1.l0079859914",
+        "type": "Book",
+        "contributor": [
+            {
+                "id": "http://www.viaf.org/viaf/52921779",
+                "type": "http://id.loc.gov/ontologies/bibframe/Person",
+                "name": "Rogers, Alfred."
+            },
+            {
+                "id": "http://www.viaf.org/viaf/36205761",
+                "type": "http://id.loc.gov/ontologies/bibframe/Person",
+                "name": "Jerry, Laura."
+            },
+            {
+                "id": "http://viaf.org/viaf/73136414",
+                "type": "http://id.loc.gov/ontologies/bibframe/Person",
+                "name": "Ballator, Nada."
+            },
+            {
+                "id": "http://catalogdata.library.illinois.edu/lod/entities/Persons/ht/007888645271028",
+                "type": [
+                    "http://id.loc.gov/ontologies/bibframe/Organization",
+                    "http://id.loc.gov/ontologies/bibframe/Jurisdiction"
+                ],
+                "name": [
+                    "National Center for Education Statistics.",
+                    "National Center for Education Statistics"
+                ]
+            },
+            {
+                "id": "http://www.viaf.org/viaf/66815380",
+                "type": "http://id.loc.gov/ontologies/bibframe/Person",
+                "name": [
+                    "Friedmann, Ernst.",
+                    "Wagenseil, Christian Jakob, 1756-1839."
+                ]
+            }
+        ],
+        "pubDate": "1999",
+        "genre": [
+            "http://id.loc.gov/vocabulary/marcgt/gov",
+            "http://id.loc.gov/vocabulary/marcgt/doc",
+            "http://id.loc.gov/vocabulary/marcgt/sta",
+            "http://id.loc.gov/vocabulary/marcgt/bib"
+        ],
+        "identifier": {
+            "type": "PropertyValue",
+            "propertyID": "oclc",
+            "value": "http://www.worldcat.org/oclc/42254331"
+        },
+        "inLanguage": [
+            "ger",
+            "eng"
+        ],
+        "isAccessibleForFree": true,
+        "mainEntityOfPage": [
+            "http://catalog.hathitrust.org/api/volumes/full/oclc/42254331.json",
+            "http://catalog.hathitrust.org/Record/012336100",
+            "http://catalog.hathitrust.org/api/volumes/brief/oclc/42254331.json"
+        ],
+        "sourceInstitution": {
+            "type": "http://id.loc.gov/ontologies/bibframe/Organization",
+            "name": "UCLA"
+        },
+        "rightsAttributes": "pd",
+        "typeOfResource": "http://id.loc.gov/ontologies/bibframe/Text",
+        "title": "NAEP 1998 reading : state report for California /"
+    }
+}

@@ -283,7 +283,7 @@ function sendQuery(filename,handle,doneCallback) {
 
 function createEF(handle,doneCallback) {
 	handle = 'http://hdl.handle.net/2027/' + handle;
-	sendQuery('./bibframe2ef.rq',handle,doneCallback);
+	sendQuery('./small_bibframe2ef.rq',handle,doneCallback);
 }
 
 function onComplete(err,results) {
@@ -339,7 +339,7 @@ fs.readFile(read_file,'utf8',function(err,data) {
 			handles.push(handle);
 		}
 	}
-	handles = ['uc1.c3064491']
+	handles = ['uva.x000193393']
 
 	processHandleList(handles,results);
 })

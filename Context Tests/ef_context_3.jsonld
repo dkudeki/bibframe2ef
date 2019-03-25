@@ -1,0 +1,39 @@
+{
+	"@context": {
+		"s": "http://schema.org/",
+		"htrc" : "http://wcsa.htrc.illinois.edu/",
+
+		"id": "@id",
+		"type": "@type",
+		"metadata": "@graph",
+
+		"title" : "s:volume_name",
+		"name" : "s:name",
+		"enumerationChronology" : "htrc:enumerationChronology",
+		"contributor": "s:contributor",
+		"publisher": "s:publisher",
+		"pubPlace" : "s:locationCreated",
+		"pubDate" : "s:datePublished",
+		"genre" : "s:genre",
+		"language" : "s:inLanguage",
+		"rightsAttributes" : "htrc:accessRights",
+		"isAccessibleForFree" : "s:isAccessibleForFree",
+		"typeOfResource" : "htrc:typeOfResource",
+		"sourceInstitution" : "s:provider",
+		"isPartOf" : "s:isPartOf",
+		"lastRightsUpdateDate" : "s:dateModified",
+		"mainEntityOfPage" : "s:mainEntityOfPage",
+		"issn" : "s:issn",
+		"isbn" : "s:isbn",
+		"identifier" : "s:identifier",
+		"propertyID" : "s:propertyID",
+		"value" : "s:value",
+		"Book" : "s:Book",
+		"PublicationVolume" : "s:PublicationVolume",
+		"CreativeWork" : "s:CreativeWork",
+		"PropertyValue" : "s:PropertyValue",
+		"CreativeWorkSeries" : "s:CreativeWorkSeries",
+
+		"governmentDocument" : "htrc:governmentDocument"
+	}
+}

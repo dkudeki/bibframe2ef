@@ -1,0 +1,50 @@
+{
+    "@context": "https://worksets.htrc.illinois.edu/context/HTRC-Framing-V4.json",
+    "metadata": {
+        "id": "http://hdl.handle.net/2027/uc1.l0052148335",
+        "type": "PublicationVolume",
+        "contributor": {
+            "id": "http://catalogdata.library.illinois.edu/lod/entities/Persons/ht/009645513271019",
+            "type": "http://id.loc.gov/ontologies/bibframe/Organization",
+            "name": "Air Force Engineering and Services Center (U.S.)"
+        },
+        "pubDate": "1986",
+        "genre": [
+            "http://id.loc.gov/vocabulary/marcgt/doc",
+            "http://id.loc.gov/vocabulary/marcgt/gov"
+        ],
+        "identifier": [
+            {
+                "type": "PropertyValue",
+                "propertyID": "oclc",
+                "value": "http://www.worldcat.org/oclc/11125184"
+            },
+            {
+                "type": "PropertyValue",
+                "propertyID": "lccn",
+                "value": "sn85009206"
+            }
+        ],
+        "inLanguage": "eng",
+        "isAccessibleForFree": true,
+        "isPartOf": {
+            "id": "http://www.worldcat.org/oclc/11125184",
+            "type": "CreativeWorkSeries",
+            "volume_name": "Air Force engineering & services quarterly (Tyndall Air Force Base (Fla.) : 1984)"
+        },
+        "issn": "0883-0193",
+        "mainEntityOfPage": [
+            "http://catalog.hathitrust.org/api/volumes/full/oclc/11125184.json",
+            "http://catalog.hathitrust.org/Record/012336038",
+            "http://catalog.hathitrust.org/api/volumes/brief/oclc/11125184.json"
+        ],
+        "sourceInstitution": {
+            "type": "http://id.loc.gov/ontologies/bibframe/Organization",
+            "name": "UCLA"
+        },
+        "rightsAttributes": "pd",
+        "enumerationChronology": "v.25 no.1 mi.-v.27 no.2 yr.1984-86",
+        "typeOfResource": "http://id.loc.gov/ontologies/bibframe/Text",
+        "title": "Air Force engineering & services quarterly."
+    }
+}

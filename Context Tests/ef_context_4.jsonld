@@ -1,0 +1,11 @@
+{
+	"@context": [
+		"http://schema.org/",
+		{
+			"dummyField" : "provider",
+			"metadata" : "@graph",
+			"pubDate" : "datePublished",
+			"pubPlace" : "locationCreated"
+		}
+	]
+}

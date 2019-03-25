@@ -1,0 +1,9 @@
+.DS_Store
+bibframe2ef-V4.rq
+fixDates.py
+fixSolr.js
+fixSolr.py
+checkIngested.py
+node_modules*
+framing-compacting-example*
+worksets/*

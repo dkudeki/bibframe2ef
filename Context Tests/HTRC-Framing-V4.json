@@ -1,0 +1,73 @@
+{
+	"@context" : [ 
+		"http://schema.org/",
+		{
+			"htrc" : "http://wcsa.htrc.illinois.edu/",
+			"schemaVersion" : {
+				"@id" : "htrc:schemaVersion"
+			},
+			"metadata" : "@graph",
+			"title" : "htrc:volume_name",
+			"enumerationChronology" : {
+				"@id" : "htrc:enumerationChronology"
+			},
+			"pubDate" : "datePublished",
+			"pubPlace" : "locationCreated",
+			"language" : { "@id": "inLanguage", "@type": "@id" },
+			"governmentDocument" : {
+				"@id" : "htrc:governmentDocument"
+			},
+			"rightsAttributes" : {
+				"@id" : "htrc:accessRights"
+			},
+			"lastRightsUpdateDate" : "dateModified",
+			"contributor": { "@id": "schema:contributor", "@type": "@id" },
+			"typeOfResource" : {
+				"@id" : "htrc:typeOfResource"
+			},
+			"sourceInstitution" : { "@id": "schema:provider", "@type": "@id" },
+			"identifier": { "@id": "schema:identifier", "@type": "@id" },
+			"genre": { "@id": "schema:genre", "@type": "@id" },
+			"propertyID": "propertyID",
+			"features" : "hasPart",
+			"pages" : "hasPart",
+			"pageCount" : {
+				"@id" : "htrc:pageCount"
+			},
+	 		"seq" : {
+				"@id" : "htrc:seq"
+			},
+			"tokenCount" : {
+				"@id" : "htrc:tokenCount"
+			},
+			"lineCount" : {
+				"@id" : "htrc:lineCount"
+			},
+			"emptyLineCount" : {
+				"@id" : "htrc:emptyLineCount"
+			},
+			"sentenceCount" : {
+				"@id" : "htrc:sentenceCount"
+			},
+			"languages" : {
+				"@id" : "htrc:languages"
+			},
+			"header" : "hasPart",
+			"body" : "hasPart",
+			"footer" : "hasPart",
+			"tokenPosCount" : {
+				"@id" : "htrc:tokenPosCount"
+			},
+			"beginCharCount" : {
+				"@id" : "htrc:beginCharCount"
+			},
+			"endCharCount" : {
+				"@id" : "htrc:endCharCount"
+			},
+			"capAlphaSeq" : {
+				"@id" : "htrc:capAlphaSeq"
+			}
+		}
+	],
+	"@type": ["PublicationVolume","Book","CreativeWork"]
+}
