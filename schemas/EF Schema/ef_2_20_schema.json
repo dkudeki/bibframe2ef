@@ -3,7 +3,7 @@
 	"$id": "https://worksets.htrc.illinois.edu/context/schema.json",
 	"type": "object",
 	"definitions": {
-		"basic": {
+		"unique_name": {
 			"type": "object",
 			"properties": {
 				"id": { "type": "string" },
@@ -12,9 +12,26 @@
 			},
 			"required": [ "name", "type" ]
 		},
-		"basic_array": {
+		"unique_name_array": {
 			"type": "array",
-			"items": { "$ref": "#/definitions/basic" }
+			"items": { "$ref": "#/definitions/unique_name" }
+		},
+		"unique_id": {
+			"type": "object",
+			"properties": {
+				"id": { "type" : "string"},
+				"type": { "type": "string" },
+				"name": { "type": "string" }
+			},
+			"required": [ "id", "type" ]
+		},
+		"unique_id_array": {
+			"type": "array",
+			"items": { "$ref": "#/definitions/unique_id" }
+		},
+		"string_array": {
+			"type": "array",
+			"items": { "type": "string" }
 		}
 	},
 	"properties": {
@@ -28,8 +45,28 @@
 				"volumeNumber": { "type": [ "integer", "string", "null" ] },
 				"publisher": {
 					"anyOf": [
-						{ "$ref": "#/definitions/basic" },
-						{ "$ref": "#/definitions/basic_array" }
+						{ "$ref": "#/definitions/unique_name" },
+						{ "$ref": "#/definitions/unique_name_array" }
+					]
+				},
+				"pubPlace": {
+					"anyOf": [
+						{ "$ref": "#/definitions/unique_id" },
+						{ "$ref": "#/definitions/unique_id_array" }
+					]
+				},
+				"pubDate": { "type": [ "number", "string", "null" ] },
+				"genre": {
+					"anyOf": [
+						{ "type": "string" },
+						{ "$ref": "#/definitions/string_array" }
+					]
+				},
+				"category": {
+					"anyOf": [
+						{ "type": "null" },
+						{ "type": "string" },
+						{ "$ref": "#/definitions/string_array" }
 					]
 				}
 			},
