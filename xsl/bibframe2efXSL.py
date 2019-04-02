@@ -3,11 +3,11 @@ from lxml import etree
 from collections import OrderedDict
 
 def transformGeneratedXML(generated_xml):
-	bashCommand = 'xsltproc /Users/dkudeki-admin/Documents/GitHub/Bibframe-Transform/bibframe2ef/bibframe2ef.xsl ' + xml_input_file
+	bashCommand = 'xsltproc ./bibframe2ef.xsl ' + xml_input_file
 
 
 def generateXMLTripleForVolumes(volume_ids,tree,work,instance):
-	xslt = etree.parse('/Users/dkudeki-admin/Documents/GitHub/Bibframe-Transform/bibframe2ef/bibframe2ef.xsl')
+	xslt = etree.parse('./bibframe2ef.xsl')
 	transform = etree.XSLT(xslt)
 
 	for volume in volume_ids:
@@ -39,7 +39,7 @@ def generateXMLTripleForVolumes(volume_ids,tree,work,instance):
 		new_tree.insert(2,item)
 		try:
 			result = transform(new_tree)
-			result.write_output('/Users/dkudeki-admin/Documents/GitHub/Bibframe-Transform/bibframe2ef/results_xsl/' + volume[27:] + '.json')
+			result.write_output('.results_xsl/' + volume[27:] + '.json')
 		except:
 			print(etree.tostring(new_tree))
 			for error in transform.error_log:

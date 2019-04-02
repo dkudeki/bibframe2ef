@@ -1,0 +1,78 @@
+{
+    "metadata": {
+        "id": "http://hdl.handle.net/2027/mdp.39015031769378",
+        "type": "CreativeWork",
+        "contributor": {
+            "id": "http://www.viaf.org/viaf/76332183",
+            "type": "http://id.loc.gov/ontologies/bibframe/Person",
+            "name": [
+                "Bleich, David",
+                "Bleich, J. David.",
+                "Bleich, David."
+            ]
+        },
+        "genre": [
+            "http://id.loc.gov/vocabulary/marcgt/bib",
+            "http://id.loc.gov/vocabulary/marcgt/doc"
+        ],
+        "identifier": [
+            {
+                "type": "PropertyValue",
+                "propertyID": "oclc",
+                "value": "2817984"
+            },
+            {
+                "type": "PropertyValue",
+                "propertyID": "lccn",
+                "value": "77003432"
+            }
+        ],
+        "inLanguage": "eng",
+        "isAccessibleForFree": false,
+        "isbn": [
+            "9780870684500",
+            "0870684507",
+            "1602801959",
+            "1592644295",
+            "9781602801950",
+            "0870684515",
+            "9781592644292"
+        ],
+        "pubPlace": {
+            "id": "http://id.loc.gov/vocabulary/countries/nyu",
+            "type": "http://id.loc.gov/ontologies/bibframe/Place"
+        },
+        "mainEntityOfPage": "http://catalog.hathitrust.org/Record/000241262",
+        "schema:mainEntityOfPage": [
+            "http://catalog.hathitrust.org/api/volumes/full/oclc/2817984.json",
+            "http://catalog.hathitrust.org/api/volumes/brief/oclc/2817984.json"
+        ],
+        "sourceInstitution": {
+            "type": "http://id.loc.gov/ontologies/bibframe/Organization",
+            "name": "MIU"
+        },
+        "publisher": [
+            {
+                "type": "http://id.loc.gov/ontologies/bibframe/Organization",
+                "name": "Targum Press"
+            },
+            {
+                "type": "http://id.loc.gov/ontologies/bibframe/Organization",
+                "name": "Ktav"
+            },
+            {
+                "type": "http://id.loc.gov/ontologies/bibframe/Organization",
+                "name": "Maggid Books"
+            },
+            {
+                "type": "http://id.loc.gov/ontologies/bibframe/Organization",
+                "name": "KTAV"
+            }
+        ],
+        "accessRights": "ic",
+        "enumerationChronology": "v.4",
+        "title": "Contemporary halakhic problems /",
+        "typeOfResource": "http://id.loc.gov/ontologies/bibframe/Text",
+        "pubDate": null
+    }
+}

@@ -1,0 +1,40 @@
+{
+	"$schema": "http://json-schema.org/schema#",
+	"$id": "https://worksets.htrc.illinois.edu/context/schema.json",
+	"type": "object",
+	"definitions": {
+		"basic": {
+			"type": "object",
+			"properties": {
+				"id": { "type": "string" },
+				"type": { "type": "string" },
+				"name": { "type": "string" }
+			},
+			"required": [ "name", "type" ]
+		},
+		"basic_array": {
+			"type": "array",
+			"items": { "$ref": "#/definitions/basic" }
+		}
+	},
+	"properties": {
+		"metadata": {
+			"type": "object",
+			"properties": {
+				"id": { "type": "string" },
+				"type": { "type": "string" },
+				"title": { "type": "string" },
+				"enumerationChronology": { "type": [ "string", "null" ] },
+				"volumeNumber": { "type": [ "integer", "string", "null" ] },
+				"publisher": {
+					"anyOf": [
+						{ "$ref": "#/definitions/basic" },
+						{ "$ref": "#/definitions/basic_array" }
+					]
+				}
+			},
+			"required": [ "id", "type", "title" ]
+		}
+	},
+	"required": [ "metadata" ]
+}
