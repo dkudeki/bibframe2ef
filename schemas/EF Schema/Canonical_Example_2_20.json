@@ -29,12 +29,12 @@
       "genre" : "book" ,
       "category" : ["Judaic Studies" , "Middle Eastern, Near Eastern, and North African Studies" , "Religious Studies"] ,
       "subjects" : ["Judaism--20th Century" , "Jewish Law"] ,
-      "language" : "English" ,
-      "governmentDocument" : "FALSE" ,
-      "rightsAttributes" : "ic" ,
-      "isAccessibleForFree" : "FALSE" ,
+      "inLanguage" : "English" ,
+      "governmentDocument" : false ,
+      "accessRights" : "ic" ,
+      "isAccessibleForFree" : false ,
       "lastRightsUpdateDate" : "" ,
-      "author" : {
+      "contributor" : {
           "id" : "http://viaf.org/viaf/76332183" ,
           "type" : "Person" ,
           "name" : "J. David Bleich"
@@ -43,19 +43,19 @@
       "sourceInstitution" : "University of Michigan" ,
       "isPartOf" : {
           "type" : "CreativeWorkSeries" ,
-          "itle" : "Contemporary halakhic problems" ,
+          "issueTitle" : "Contemporary halakhic problems" ,
           "category" : "Judaic Studies" ,
           "subjects" : ["Judaism--20th Century" , "Jewish Law"] ,
           "language" : "English" ,
           "governmentDocument" : "FALSE" ,
-          "author" : {
-                "@id" : "http://viaf.org/viaf/76332183" ,
-                "@type" : "Person" ,
+          "contributor" : {
+                "id" : "http://viaf.org/viaf/76332183" ,
+                "type" : "Person" ,
                 "name" : "J. David Bleich"
           } ,
           "isPartOf" : {
-              "@type" : "CreativeWorkSeries" ,
-              "title" : "Library of Jewish Law and Ethics" ,
+              "type" : "CreativeWorkSeries" ,
+              "journalTitle" : "Library of Jewish Law and Ethics" ,
               "language" : "English"
           }
       } ,
