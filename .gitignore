@@ -7,3 +7,4 @@ checkIngested.py
 node_modules*
 framing-compacting-example*
 worksets/*
+node_version/results*

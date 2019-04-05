@@ -48,13 +48,14 @@ def generateXMLTripleForVolumes(volume_ids,tree,work,instance):
 
 
 def main():
-	bibframe_folder = '/Users/dkudeki-admin/Documents/GitHub/Bibframe-Transform/trimmed_all_volumes_json_BIBF_records'
+	bibframe_folder = './inputs'
 	instance = { 'id': None, 'metadata': None }
 	work = { 'id': None, 'metadata': None }
 	for root, dirs, files in os.walk(bibframe_folder):
 		for f in files:
 			if '.xml' in f:
-				file_path = bibframe_folder + '/' + f[5:-5].replace('_segment','') + '/' + f
+#				file_path = bibframe_folder + '/' + f[5:-5].replace('_segment','') + '/' + f
+				file_path = bibframe_folder + '/' + f
 				print(file_path)
 				tree = etree.parse(file_path)
 				print(tree)

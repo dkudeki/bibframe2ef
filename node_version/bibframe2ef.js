@@ -326,7 +326,7 @@ function processHandleList(handles,results) {
 var read_file = 'biology_workset.csv';
 //var read_file = './sample1.csv';
 
-fs.readFile(read_file,'utf8',function(err,data) {
+/*fs.readFile(read_file,'utf8',function(err,data) {
 	var lines = data.split('\n');
 	var handles = []
 	var files = fs.readdirSync('./results');
@@ -338,11 +338,11 @@ fs.readFile(read_file,'utf8',function(err,data) {
 			console.log(handle.replace(/\//g,'=').replace(/\:/g,'+'));
 			handles.push(handle);
 		}
-	}
-	handles = ['uva.x000193393']
+	}*/
+handles = ['nyp.33433000357651']
 
-	processHandleList(handles,results);
-})
+processHandleList(handles,results);
+/*})*/
 
 process.on('uncaughtException', (err) => {
   console.log(`Caught exception: ${err.stack}\n`);

@@ -1,5 +1,5 @@
 <?xml version='1.0'?>
-<xsl:stylesheet version="2.0" 
+<xsl:stylesheet version="1.0" 
 				xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 				xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 				xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
@@ -235,7 +235,18 @@
 
 	<xsl:template name="title">
 		<xsl:variable name="iss_title" select="/rdf:RDF/bf:Instance/bf:title/bf:Title[not(rdf:type)]" />
+		<xsl:variable name="var_titles" select="/rdf:RDF/bf:Instance/bf:title/bf:Title[rdf:type/@rdf:resource = 'http://id.loc.gov/ontologies/bibframe/VariantTitle']" />
 		<xsl:text>, &#10;		"title": "</xsl:text><xsl:value-of select="$iss_title/rdfs:label/text()" /><xsl:text>"</xsl:text>
+		<xsl:if test="count($var_titles) > 0">
+			<xsl:text>, &#10;		"alternateTitle": [</xsl:text>
+			<xsl:for-each select="$var_titles">
+				<xsl:if test="position() != 1">
+					<xsl:text>,</xsl:text>
+				</xsl:if>
+				<xsl:text>&#10;			"</xsl:text><xsl:value-of select="./rdfs:label/text()" /><xsl:text>"</xsl:text>
+			</xsl:for-each>
+			<xsl:text>&#10;		]</xsl:text>
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template name="contribution_agents"><!-- match="/rdf:RDF/bf:Work/bf:contribution/bf:Contribution/">-->
@@ -245,7 +256,9 @@
 			<xsl:when test="$contributor_count = 1">
 				<xsl:text>, &#10;		"contributor": {</xsl:text>
 				<xsl:text> &#10;			"type": "</xsl:text><xsl:value-of select="$node/bf:agent/bf:Agent/rdf:type/@rdf:resource" /><xsl:text>"</xsl:text>
-				<xsl:text>, &#10;			"id": "</xsl:text><xsl:value-of select="$node/bf:agent/bf:Agent/@rdf:about" /><xsl:text>"</xsl:text>
+				<xsl:if test="starts-with($node/bf:agent/bf:Agent/@rdf:about, 'http://www.viaf.org')">
+					<xsl:text>, &#10;			"id": "</xsl:text><xsl:value-of select="$node/bf:agent/bf:Agent/@rdf:about" /><xsl:text>"</xsl:text>
+				</xsl:if>
 				<xsl:text>, &#10;			"name": "</xsl:text><xsl:value-of select="$node/bf:agent/bf:Agent/rdfs:label/text()" /><xsl:text>"</xsl:text>
 				<xsl:text> &#10;		}</xsl:text>
 			</xsl:when>
@@ -258,7 +271,9 @@
 						</xsl:if>
 						<xsl:text> &#10;			{</xsl:text>
 						<xsl:text> &#10;				"type": "</xsl:text><xsl:value-of select="bf:agent/bf:Agent/rdf:type/@rdf:resource" /><xsl:text>"</xsl:text>
-						<xsl:text>, &#10;				"id": "</xsl:text><xsl:value-of select="bf:agent/bf:Agent/@rdf:about" /><xsl:text>"</xsl:text>
+						<xsl:if test="starts-with(bf:agent/bf:Agent/@rdf:about, 'http://www.viaf.org')">
+							<xsl:text>, &#10;				"id": "</xsl:text><xsl:value-of select="bf:agent/bf:Agent/@rdf:about" /><xsl:text>"</xsl:text>
+						</xsl:if>
 						<xsl:text>, &#10;				"name": "</xsl:text><xsl:value-of select="bf:agent/bf:Agent/rdfs:label/text()" /><xsl:text>"</xsl:text>
 						<xsl:text> &#10;			}</xsl:text>
 					</xsl:for-each>
