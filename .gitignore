@@ -4,7 +4,11 @@ fixDates.py
 fixSolr.js
 fixSolr.py
 checkIngested.py
+command_line_notes.txt
 node_modules*
 framing-compacting-example*
 worksets/*
 node_version/results*
+SaxonHE9-9-1-1J/*
+outputs/*
+xsl/outputs/*

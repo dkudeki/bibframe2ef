@@ -82,6 +82,19 @@
 		"identifier_array": {
 			"type": "array",
 			"items": { "$ref": "#/definitions/identifier_object" }
+		},
+		"subject_object": {
+			"type": "object",
+			"properties": {
+				"id": { "type": "string" },
+				"value": { "type": "string" },
+				"type": { "type": "string" }
+			},
+			"required": [ "value", "id" ]
+		},
+		"subject_array": {
+			"type": "array",
+			"items": { "$ref": "#/definitions/subject_object" }
 		}
 	},
 	"properties": {
@@ -129,7 +142,9 @@
 				"subjects": {
 					"anyOf": [
 						{ "type": "null" },
-						{ "$ref": "#/definitions/string_array" }
+						{ "$ref": "#/definitions/string_array" },
+						{ "$ref": "#/definitions/subject_object" },
+						{ "$ref": "#/definitions/subject_array" }
 					]
 				},
 				"inLanguage": {
