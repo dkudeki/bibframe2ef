@@ -1,4 +1,4 @@
-import os, subprocess, time, datetime
+import sys, os, subprocess, time, datetime
 from datetime import timedelta
 from multiprocessing import Pool
 
@@ -13,7 +13,10 @@ def validate(file):
 def main():
 	json_folder = '../outputs'
 
-	p = Pool(4)
+	if len(sys.argv > 1):
+		p = Pool(sys.argv[1])
+	else:
+		p = Pool(4)
 
 	start_time = datetime.datetime.now().time()
 	for root, dirs, files in os.walk(json_folder):
