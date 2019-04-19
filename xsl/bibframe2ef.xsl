@@ -12,17 +12,22 @@
 
 <xsl:key name="lang_combined" match="@rdf:about | @rdf:resource" use="." />
 <xsl:param name="output_path" />
+<xsl:param name="pPat">"</xsl:param>
+<xsl:param name="pRep">\\"</xsl:param>
+<xsl:param name="oneSlash">\\</xsl:param>
+<xsl:param name="twoSlash">\\\\</xsl:param>
 
 <!--	<xsl:ourput encoding="UTF-8" method="text" />
 	<xsl:strip-space elements="*"/>-->
 
 	<xsl:template match='/'>
-		<xsl:variable name="Item" select="ext:node-set(/rdf:RDF/bf:Item)" />
+		<xsl:variable name="Item" select="/rdf:RDF/bf:Item" />
 		<xsl:for-each select="$Item">
-			<xsl:variable name="volume_id" select="substring($Item/@rdf:about,27)" />
-			<xsl:variable name="Instance" select="/rdf:RDF/bf:Instance[@rdf:about = $Item/bf:itemOf/@rdf:resource]" />
-			<xsl:variable name="Work" select="/rdf:RDF/bf:Work[@rdf:about = $Instance/bf:instanceOf/@rdf:resource]" />
-			<!--		<xsl:variable name="saveAs" select="ef_example.jsonld"/>-->
+			<xsl:variable name="volume_id" select="translate(translate(substring(./@rdf:about,28),'/','='),':','+')" />
+			<xsl:variable name="instance_id" select="./bf:itemOf/@rdf:resource" />
+			<xsl:variable name="Instance" select="/rdf:RDF/bf:Instance[@rdf:about = $instance_id][1]" />
+			<xsl:variable name="work_id" select="$Instance/bf:instanceOf/@rdf:resource" />
+			<xsl:variable name="Work" select="/rdf:RDF/bf:Work[@rdf:about = $work_id][1]" />
 
 			<xsl:variable name="output_file_path">
 				<xsl:choose>
@@ -37,40 +42,8 @@
 
 			<xsl:result-document href="{$output_file_path}" method='text' exclude-result-prefixes="#all" omit-xml-declaration="yes" indent="no" encoding="UTF-8">
 				<xsl:text>{</xsl:text>
-	<!--				<xsl:text>{ &#10;	"@context": [</xsl:text>
-					<xsl:text> &#10;		"http://schema.org"</xsl:text>
-					<xsl:text>, &#10;		{</xsl:text>
-					<xsl:text> &#10;			"htrc": "http://wcsa.htrc.illinois.edu/"</xsl:text>
-					<xsl:text>, &#10;			"accessProfile": {</xsl:text>
-					<xsl:text> &#10;				"@id": "htrc:accessProfile"</xsl:text>
-					<xsl:text> &#10;			}</xsl:text>
-					<xsl:text>, &#10;			"title": "name"</xsl:text>
-					<xsl:text>, &#10;			"enumerationChronology": {</xsl:text>
-					<xsl:text> &#10;				"@id": "htrc:enumerationChronology"</xsl:text>
-					<xsl:text> &#10;			}</xsl:text>
-					<xsl:text>, &#10;			"pubDate": "datePublished"</xsl:text>
-					<xsl:text>, &#10;			"pubPlace": "locationCreated"</xsl:text>
-					<xsl:text>, &#10;			"language": "inLanguage"</xsl:text>
-					<xsl:text>, &#10;			"rightsAttributes": {</xsl:text>
-					<xsl:text> &#10;				"@id": "htrc:accessRights"</xsl:text>
-					<xsl:text> &#10;			}</xsl:text>
-					<xsl:text>, &#10;			"contributor": {</xsl:text>
-					<xsl:text> &#10;				"@id": "schema:contributor"</xsl:text>
-					<xsl:text>, &#10;				"@container": "@list"</xsl:text>
-					<xsl:text> &#10;			}</xsl:text>
-					<xsl:text>, &#10;			"sourceInstitution": "provider"</xsl:text>
-					<xsl:text>, &#10;			"lastUpdateDate": "dateModified"</xsl:text>
-					<xsl:text>, &#10;			"identifier": {</xsl:text>
-					<xsl:text> &#10;				"@id": "schema:identifier"</xsl:text>
-					<xsl:text>, &#10;				"@container": "@list"</xsl:text>
-					<xsl:text> &#10;			}</xsl:text>
-					<xsl:text> &#10;		}</xsl:text>
-					<xsl:text> &#10;	]</xsl:text>
-					<xsl:text>, &#10;	"type": "Dataset"</xsl:text>
-					<xsl:text>, &#10;	"schemaVersion": "https://wiki.htrc.illinois.edu/display/COM/Extracted+Features+Dataset_2.0"</xsl:text>
-					<xsl:text>, &#10;	"sourceInstitution": "htrc"</xsl:text>-->
 					<xsl:text> &#10;	"metadata": {</xsl:text>
-					<xsl:text> &#10;		"id": "</xsl:text><xsl:value-of select="$Item/@rdf:about" /><xsl:text>"</xsl:text>
+					<xsl:text> &#10;		"id": "</xsl:text><xsl:value-of select="./@rdf:about" /><xsl:text>"</xsl:text>
 					<xsl:choose>
 						<xsl:when test="substring($Instance/bf:issuance/bf:Issuance/@rdf:about,39) = 'mono'">
 							<xsl:text>, &#10;		"type": "Book"</xsl:text>
@@ -89,7 +62,7 @@
 	<!--				<xsl:text>, &#10;		"type": "</xsl:text><xsl:value-of select="substring(/rdf:RDF/bf:Instance/bf:issuance/bf:Issuance/@rdf:about,39)" /><xsl:text>"</xsl:text>-->
 					<xsl:text>, &#10;		"isAccessibleForFree": </xsl:text>
 						<xsl:choose>
-							<xsl:when test="$Item/dct:accessRights/text() = 'pd'">
+							<xsl:when test="./dct:accessRights/text() = 'pd'">
 								<xsl:text>true</xsl:text>
 							</xsl:when>
 							<xsl:otherwise>
@@ -103,8 +76,31 @@
 					<xsl:call-template name="contribution_agents">
 						<xsl:with-param name="node" select="$Work/bf:contribution/bf:Contribution" />
 					</xsl:call-template>
-					<xsl:if test="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date">
-						<xsl:text>, &#10;		"pubDate": </xsl:text><xsl:value-of select="substring($Item/dct:created/text(),1,4)" />
+					<xsl:if test="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date | ./dct:created">
+						<xsl:choose>
+							<xsl:when test="./dct:created">
+								<xsl:text>, &#10;		"pubDate": </xsl:text>
+								<xsl:choose>
+									<xsl:when test='matches(substring(./dct:created/text(),1,4),"\d{4}")'>
+										<xsl:value-of select="substring(./dct:created/text(),1,4)" />
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:text>"</xsl:text><xsl:value-of select="substring(./dct:created/text(),1,4)" /><xsl:text>"</xsl:text>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:text>, &#10;		"pubDate": </xsl:text>
+								<xsl:choose>
+									<xsl:when test='matches(substring($Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[1]/text(),1,4),"\d{4}")'>
+										<xsl:value-of select="substring($Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[1]/text(),1,4)" />
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:text>"</xsl:text><xsl:value-of select="substring($Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[1]/text(),1,4)" /><xsl:text>"</xsl:text>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:otherwise>
+						</xsl:choose>
 					</xsl:if>
 					<xsl:call-template name="publisher">
 						<xsl:with-param name="Instance" select="$Instance" />
@@ -165,18 +161,18 @@
 							</xsl:if>
 						</xsl:otherwise>
 					</xsl:choose>-->
-					<xsl:if test="$Item/dct:accessRights">
-						<xsl:text>, &#10;		"accessRights": "</xsl:text><xsl:value-of select="$Item/dct:accessRights/text()" /><xsl:text>"</xsl:text>
+					<xsl:if test="./dct:accessRights">
+						<xsl:text>, &#10;		"accessRights": "</xsl:text><xsl:value-of select="./dct:accessRights/text()" /><xsl:text>"</xsl:text>
 					</xsl:if>
-					<xsl:if test="$Item/htrc:contentProviderAgent/@rdf:resource">
+					<xsl:if test="./htrc:contentProviderAgent/@rdf:resource">
 						<xsl:text>, &#10;		"sourceInstitution": {</xsl:text>
 						<xsl:text> &#10;			"type": "http://id.loc.gov/ontologies/bibframe/Organization"</xsl:text>
-						<xsl:text>, &#10;			"name": "</xsl:text><xsl:value-of select="substring($Item/htrc:contentProviderAgent/@rdf:resource,52)" /><xsl:text>"</xsl:text>
+						<xsl:text>, &#10;			"name": "</xsl:text><xsl:value-of select="substring(./htrc:contentProviderAgent/@rdf:resource,52)" /><xsl:text>"</xsl:text>
 						<xsl:text> &#10;		}</xsl:text>
 					</xsl:if>
 					<xsl:text>, &#10;		"mainEntityOfPage": [</xsl:text>
-					<xsl:text> &#10;			"http://catalog.hathitrust.org/api/volumes/brief/oclc/</xsl:text><xsl:value-of select="substring($Item/bf:itemOf/@rdf:resource,30)" /><xsl:text>.json"</xsl:text>
-					<xsl:text>, &#10;			"http://catalog.hathitrust.org/api/volumes/full/oclc/</xsl:text><xsl:value-of select="substring($Item/bf:itemOf/@rdf:resource,30)" /><xsl:text>.json"</xsl:text>
+					<xsl:text> &#10;			"http://catalog.hathitrust.org/api/volumes/brief/oclc/</xsl:text><xsl:value-of select="substring($Instance/@rdf:about,30)" /><xsl:text>.json"</xsl:text>
+					<xsl:text>, &#10;			"http://catalog.hathitrust.org/api/volumes/full/oclc/</xsl:text><xsl:value-of select="substring($Instance/@rdf:about,30)" /><xsl:text>.json"</xsl:text>
 					<xsl:text>, &#10;			"https://catalog.hathitrust.org/Record/</xsl:text><xsl:value-of select="$Work/bf:adminMetadata/bf:AdminMetadata/bf:identifiedBy/bf:Local/rdf:value/text()" /><xsl:text>"</xsl:text>
 					<xsl:text> &#10;		]</xsl:text>
 					<xsl:call-template name="create_identifiers">
@@ -215,8 +211,8 @@
 					<xsl:call-template name="genre">
 						<xsl:with-param name="Work" select="$Work" />
 					</xsl:call-template>
-					<xsl:if test="$Item/bf:enumerationAndChronology">
-						<xsl:text>, &#10;		"enumerationChronology": "</xsl:text><xsl:value-of select="$Item/bf:enumerationAndChronology/text()" /><xsl:text>"</xsl:text>
+					<xsl:if test="./bf:enumerationAndChronology">
+						<xsl:text>, &#10;		"enumerationChronology": "</xsl:text><xsl:value-of select="./bf:enumerationAndChronology/text()" /><xsl:text>"</xsl:text>
 					</xsl:if>
 					<xsl:if test="$Work/rdf:type/@rdf:resource">
 						<xsl:text>, &#10;		"typeOfResource": "</xsl:text><xsl:value-of select="$Work/rdf:type/@rdf:resource" /><xsl:text>"</xsl:text>
@@ -260,8 +256,8 @@
 						</xsl:if>
 						<xsl:text> &#10;			}</xsl:text>
 						<xsl:text> &#10;		}</xsl:text>
-					</xsl:if>
-					<xsl:text> &#10;	}</xsl:text>-->
+					</xsl:if>-->
+					<xsl:text> &#10;	}</xsl:text>
 					<xsl:text>&#10;}</xsl:text>
 			</xsl:result-document>
 		</xsl:for-each>
@@ -271,17 +267,47 @@
 		<xsl:param name="Instance" />
 		<xsl:variable name="iss_title" select="$Instance/bf:title/bf:Title[not(rdf:type)]" />
 		<xsl:variable name="var_titles" select="$Instance/bf:title/bf:Title[rdf:type/@rdf:resource = 'http://id.loc.gov/ontologies/bibframe/VariantTitle']" />
-		<xsl:text>, &#10;		"title": "</xsl:text><xsl:value-of select="$iss_title/rdfs:label/text()" /><xsl:text>"</xsl:text>
-		<xsl:if test="count($var_titles) > 0">
-			<xsl:text>, &#10;		"alternateTitle": [</xsl:text>
-			<xsl:for-each select="$var_titles">
-				<xsl:if test="position() != 1">
-					<xsl:text>,</xsl:text>
+		<xsl:choose>
+			<xsl:when test="count($iss_title) = 1">
+				<xsl:text>, &#10;		"title": "</xsl:text><xsl:value-of select="replace(replace($iss_title/rdfs:label/text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:text>, &#10;		"title": "</xsl:text><xsl:value-of select="replace(replace($iss_title[1]/rdfs:label/text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
+			</xsl:otherwise>
+		</xsl:choose>
+		<xsl:choose>
+			<xsl:when test="count($var_titles) > 0">
+				<xsl:text>, &#10;		"alternateTitle": [</xsl:text>
+				<xsl:for-each select="$var_titles">
+					<xsl:if test="position() != 1">
+						<xsl:text>,</xsl:text>
+					</xsl:if>
+					<xsl:text>&#10;			"</xsl:text><xsl:value-of select="replace(replace(./rdfs:label/text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
+				</xsl:for-each>
+				<xsl:if test="count($iss_title) > 1">
+					<xsl:for-each select="$iss_title">
+						<xsl:if test="position() != 1">
+							<xsl:text>, &#10;			"</xsl:text><xsl:value-of select="replace(replace(./rdfs:label/text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
+						</xsl:if>
+					</xsl:for-each>
 				</xsl:if>
-				<xsl:text>&#10;			"</xsl:text><xsl:value-of select="./rdfs:label/text()" /><xsl:text>"</xsl:text>
-			</xsl:for-each>
-			<xsl:text>&#10;		]</xsl:text>
-		</xsl:if>
+				<xsl:text>&#10;		]</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:if test="count($iss_title) > 1">
+					<xsl:text>, &#10;		"alternateTitle": [</xsl:text>
+					<xsl:for-each select="$iss_title">
+						<xsl:if test="position() != 1">
+							<xsl:if test="position() > 2">
+								<xsl:text>,</xsl:text>
+							</xsl:if>
+							<xsl:text>&#10;			"</xsl:text><xsl:value-of select="replace(replace(./rdfs:label/text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
+						</xsl:if>
+					</xsl:for-each>
+					<xsl:text>&#10;		]</xsl:text>
+				</xsl:if>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 	<xsl:template name="contribution_agents"><!-- match="$Work/bf:contribution/bf:Contribution/">-->
@@ -289,28 +315,32 @@
 		<xsl:variable name="contributor_count" select="count($node)" />
 		<xsl:choose>
 			<xsl:when test="$contributor_count = 1">
-				<xsl:text>, &#10;		"contributor": {</xsl:text>
-				<xsl:text> &#10;			"type": "</xsl:text><xsl:value-of select="$node/bf:agent/bf:Agent/rdf:type/@rdf:resource" /><xsl:text>"</xsl:text>
-				<xsl:if test="starts-with($node/bf:agent/bf:Agent/@rdf:about, 'http://www.viaf.org')">
-					<xsl:text>, &#10;			"id": "</xsl:text><xsl:value-of select="$node/bf:agent/bf:Agent/@rdf:about" /><xsl:text>"</xsl:text>
+				<xsl:if test="$node/bf:agent/bf:Agent/rdfs:label/text()">
+					<xsl:text>, &#10;		"contributor": {</xsl:text>
+					<xsl:text> &#10;			"type": "</xsl:text><xsl:value-of select="$node/bf:agent/bf:Agent/rdf:type/@rdf:resource" /><xsl:text>"</xsl:text>
+					<xsl:if test="starts-with($node/bf:agent/bf:Agent/@rdf:about, 'http://www.viaf.org')">
+						<xsl:text>, &#10;			"id": "</xsl:text><xsl:value-of select="$node/bf:agent/bf:Agent/@rdf:about" /><xsl:text>"</xsl:text>
+					</xsl:if>
+					<xsl:text>, &#10;			"name": "</xsl:text><xsl:value-of select="replace(replace($node/bf:agent/bf:Agent/rdfs:label/text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
+					<xsl:text> &#10;		}</xsl:text>
 				</xsl:if>
-				<xsl:text>, &#10;			"name": "</xsl:text><xsl:value-of select="$node/bf:agent/bf:Agent/rdfs:label/text()" /><xsl:text>"</xsl:text>
-				<xsl:text> &#10;		}</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:if test="$contributor_count > 1">
 					<xsl:text>, &#10;		"contributor": [</xsl:text>
 					<xsl:for-each select="$node">
-						<xsl:if test="position() != 1">
-							<xsl:text>,</xsl:text>
+						<xsl:if test="bf:agent/bf:Agent/rdfs:label/text()">
+							<xsl:if test="position() != 1">
+								<xsl:text>,</xsl:text>
+							</xsl:if>
+							<xsl:text> &#10;			{</xsl:text>
+							<xsl:text> &#10;				"type": "</xsl:text><xsl:value-of select="bf:agent/bf:Agent/rdf:type/@rdf:resource" /><xsl:text>"</xsl:text>
+							<xsl:if test="starts-with(bf:agent/bf:Agent/@rdf:about, 'http://www.viaf.org')">
+								<xsl:text>, &#10;				"id": "</xsl:text><xsl:value-of select="bf:agent/bf:Agent/@rdf:about" /><xsl:text>"</xsl:text>
+							</xsl:if>
+							<xsl:text>, &#10;				"name": "</xsl:text><xsl:value-of select="replace(replace(bf:agent/bf:Agent/rdfs:label/text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
+							<xsl:text> &#10;			}</xsl:text>
 						</xsl:if>
-						<xsl:text> &#10;			{</xsl:text>
-						<xsl:text> &#10;				"type": "</xsl:text><xsl:value-of select="bf:agent/bf:Agent/rdf:type/@rdf:resource" /><xsl:text>"</xsl:text>
-						<xsl:if test="starts-with(bf:agent/bf:Agent/@rdf:about, 'http://www.viaf.org')">
-							<xsl:text>, &#10;				"id": "</xsl:text><xsl:value-of select="bf:agent/bf:Agent/@rdf:about" /><xsl:text>"</xsl:text>
-						</xsl:if>
-						<xsl:text>, &#10;				"name": "</xsl:text><xsl:value-of select="bf:agent/bf:Agent/rdfs:label/text()" /><xsl:text>"</xsl:text>
-						<xsl:text> &#10;			}</xsl:text>
 					</xsl:for-each>
 					<xsl:text> &#10;		]</xsl:text>
 				</xsl:if>
@@ -337,7 +367,7 @@
 					</xsl:if>
 					<xsl:text> &#10;			{</xsl:text>
 					<xsl:text> &#10;				"type": "http://id.loc.gov/ontologies/bibframe/Organization"</xsl:text>
-					<xsl:text>, &#10;				"name": "</xsl:text><xsl:value-of select="./text()" /><xsl:text>"</xsl:text>
+					<xsl:text>, &#10;				"name": "</xsl:text><xsl:value-of select='replace(replace(./text(),$oneSlash,$twoSlash),$pPat,$pRep)' /><xsl:text>"</xsl:text>
 					<xsl:text> &#10;			}</xsl:text>
 				</xsl:for-each>
 				<xsl:text> &#10;		]</xsl:text>
@@ -346,7 +376,7 @@
 				<xsl:if test="count($publishers) = 1" >
 					<xsl:text>, &#10;		"publisher": {</xsl:text>
 					<xsl:text> &#10;			"type": "http://id.loc.gov/ontologies/bibframe/Organization"</xsl:text>
-					<xsl:text>, &#10;			"name": "</xsl:text><xsl:value-of select="$publishers/text()" /><xsl:text>"</xsl:text>
+					<xsl:text>, &#10;			"name": "</xsl:text><xsl:value-of select='replace(replace($publishers/text(),$oneSlash,$twoSlash),$pPat,$pRep)' /><xsl:text>"</xsl:text>
 					<xsl:text> &#10;		}</xsl:text>
 				</xsl:if>
 			</xsl:otherwise>
@@ -592,7 +622,7 @@
 			<xsl:text>, &#10;		"isPartOf": {</xsl:text>
 			<xsl:text> &#10;			"id": "</xsl:text><xsl:value-of select="$Instance/@rdf:about" /><xsl:text>"</xsl:text>
 			<xsl:text>, &#10;			"type": "CreativeWorkSeries"</xsl:text>
-			<xsl:text>, &#10;			"journalTitle": "</xsl:text><xsl:value-of select="$Work/bf:title/bf:Title/rdfs:label/text()" /><xsl:text>"</xsl:text>
+			<xsl:text>, &#10;			"journalTitle": "</xsl:text><xsl:value-of select="replace(replace($Work/bf:title/bf:Title/rdfs:label/text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
 			<xsl:text> &#10;		}</xsl:text>
 		</xsl:if>
 	</xsl:template>

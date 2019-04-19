@@ -1,6 +1,8 @@
-import sys, os, subprocess
+import sys, os, subprocess, time, datetime
 from lxml import etree
 from collections import OrderedDict
+from datetime import timedelta
+from multiprocessing import Pool
 
 def transformGeneratedXML(generated_xml):
 	bashCommand = 'xsltproc ./bibframe2ef.xsl ' + xml_input_file
@@ -46,21 +48,38 @@ def generateXMLTripleForVolumes(volume_ids,tree,work,instance):
 				print(error.message, error.line)
 			sys.exit()
 
+def validate(file):
+	bashCommand = 'ajv validate -s ../schemas/EF-Schema/ef_2_20_schema.json -d ../outputs/' + file
+	with open('output_validation.txt','a') as err_output:
+		subprocess.call(bashCommand.split(), stderr=err_output)
 
 def main():
 	bibframe_folder = './inputs'
+	json_folder = '../outputs'
 	instance = { 'id': None, 'metadata': None }
 	work = { 'id': None, 'metadata': None }
-	for root, dirs, files in os.walk(bibframe_folder):
-		for f in files:
-			if '.xml' in f:
+
+	p = Pool(4)
+
+	start_time = datetime.datetime.now().time()
+	for root, dirs, files in os.walk(json_folder):
+		p.map(validate,files)
+#			for f in files:
+#				bashCommand = 'ajv validate -s ../schemas/EF-Schema/ef_2_20_schema.json -d ../outputs/' + f
+#				subprocess.call(bashCommand.split(), stderr=err_output)
+
+	end_time = datetime.datetime.now().time()
+	print("Start time: " + str(start_time))
+	print("End time: " + str(end_time))
+	print("Run duration: " + str(datetime.datetime.combine(datetime.date.min,end_time)-datetime.datetime.combine(datetime.date.min,start_time)))
+#			if '.xml' in f:
 #				file_path = bibframe_folder + '/' + f[5:-5].replace('_segment','') + '/' + f
-				file_path = bibframe_folder + '/' + f
-				print(file_path)
-				tree = etree.parse(file_path)
-				print(tree)
-				volume_ids = tree.xpath('bf:Item/@rdf:about',namespaces={'bf': 'http://id.loc.gov/ontologies/bibframe/', 'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'})
-				generateXMLTripleForVolumes(list(OrderedDict.fromkeys(volume_ids)),tree,work,instance)
-				sys.exit()
+#				file_path = bibframe_folder + '/' + f
+#				print(file_path)
+#				tree = etree.parse(file_path)
+#				print(tree)
+#				volume_ids = tree.xpath('bf:Item/@rdf:about',namespaces={'bf': 'http://id.loc.gov/ontologies/bibframe/', 'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'})
+#				generateXMLTripleForVolumes(list(OrderedDict.fromkeys(volume_ids)),tree,work,instance)
+#				sys.exit()
 
 main()

@@ -1,0 +1,96 @@
+{
+ "@context" : [ 
+       "http://schema.org/",
+      {
+      "htrc" : "http://wcsa.htrc.illinois.edu/",
+      "accessProfile" : {
+          "@id" : "htrc:accessProfile"
+      },
+      "title" : "name",
+      "enumerationChronology" : {
+          "@id" : "htrc:enumerationChronology"
+      },
+      "pubDate" : "datePublished",
+      "pubPlace" : "locationCreated",
+      "language" : "inLanguage",
+      "rightsAttributes" : {
+          "@id" : "htrc:accessRights"
+      },
+      "contributor": { "@id": "schema:contributor", "@container": "@list" },
+      "sourceInstitution" : "provider",
+      "lastUpdateDate" : "dateModified"
+  } ],
+ "id" : "urn:mdp.39015066005169-EF",
+ "type" : "Dataset",
+ "schemaVersion" : "https://wiki.htrc.illinois.edu/display/COM/Extracted+Features+Dataset_2.0",
+ "dateCreated": "2016-06-24T18:09:40.8205463Z",
+ "sourceInstitution" : "htrc",
+ "about" : {
+    "id" : "https://hdl.handle.net/2027/mdp.39015066005169",
+    "type" :  "PublicationIssue",
+    "accessProfile" : "google",
+    "isAccessibleForFree" : "FALSE",
+    "title" : "Revue française des affaires sociales.",
+    "enumerationChronology" : "v.58:no.4(2004:Oct/Dec.)",
+    "issueNumber": "no.4(2004:Oct./Dec.)",
+    "isPartOf": {
+        "type" : "PublicationVolume",
+        "title" : "Revue française des affaires sociales.",
+        "enumerationChronology" : "v.58",
+        "volumeNumber" : 58,
+        "isPartOf" : {
+            "id" : "http://www.worldcat.org/oclc/2941685" ,
+            "type" : "Periodical", 
+            "title" : "Revue française des affaires sociales.",
+            "issn" : "0035-2985"
+        }
+    },
+    "publisher" : null,
+    "datePublished" : "2004",
+    "locationCreated" : "fr",
+    "genre" : "periodical",
+    "inLanguage" : "fre",
+    "contributor" : [
+        {
+            "id" : "http://viaf.org/viaf/268042717", 
+            "type" : "Organization",
+            "name" : "France Ministère du travail."
+        },
+        {
+            "id" : "http://viaf.org/viaf/127940750",
+            "type" : "Organization",
+            "name" : "France Ministère du travail et de la sécurité sociale."
+        } ,
+        {
+            "id" : "http://viaf.org/viaf/128328202",
+            "type" : "Organization",
+            "name" : "France Ministère d'État chargé des affaires sociales."
+        } ,
+        {
+            "id" : "http://viaf.org/viaf/158271847",
+            "type" : "Organization",
+            "name" : "France Ministère des affaires sociales."
+        } ,
+        {
+            "id" : "http://viaf.org/viaf/263804037",
+            "type" : "Organization",
+            "name" : "France Ministère de la santé publique et de la sécurité sociale."
+        } ,
+        {
+            "id" : "http://viaf.org/viaf/124816252",
+            "type" : "Organization",
+            "name" : "France Ministère du travail, de l'emploi et de la population."
+        }
+    ],
+    "sourceInstitution" : {
+        "id" : "http://viaf.org/viaf/150312895",
+        "type" : "Organization", 
+        "name" : "MIU"
+        }, 
+    "mainEntityOfPage" : [
+       "http://catalog.hathitrust.org/api/volumes/full/hathitrustRecordNumber/598819" ,
+       "http://example.org/sourceInsitutionRecordNumber/000598819"
+    ],
+    "dateModified" : "2010-01-15 21:30:06" 
+ } 
+}
