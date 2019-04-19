@@ -17,9 +17,6 @@
 <xsl:param name="oneSlash">\\</xsl:param>
 <xsl:param name="twoSlash">\\\\</xsl:param>
 
-<!--	<xsl:ourput encoding="UTF-8" method="text" />
-	<xsl:strip-space elements="*"/>-->
-
 	<xsl:template match='/'>
 		<xsl:variable name="Item" select="/rdf:RDF/bf:Item" />
 		<xsl:for-each select="$Item">
@@ -59,7 +56,6 @@
 							</xsl:choose>
 						</xsl:otherwise>
 					</xsl:choose>
-	<!--				<xsl:text>, &#10;		"type": "</xsl:text><xsl:value-of select="substring(/rdf:RDF/bf:Instance/bf:issuance/bf:Issuance/@rdf:about,39)" /><xsl:text>"</xsl:text>-->
 					<xsl:text>, &#10;		"isAccessibleForFree": </xsl:text>
 						<xsl:choose>
 							<xsl:when test="./dct:accessRights/text() = 'pd'">
@@ -69,7 +65,6 @@
 								<xsl:text>false</xsl:text>
 							</xsl:otherwise>
 						</xsl:choose>
-	<!--				<xsl:text>, &#10;		"title": "</xsl:text><xsl:value-of select="$Instance/bf:title/bf:Title/rdfs:label/text()" /><xsl:text>"</xsl:text>-->
 					<xsl:call-template name="title">
 						<xsl:with-param name="Instance" select="$Instance" />
 					</xsl:call-template>
@@ -105,62 +100,12 @@
 					<xsl:call-template name="publisher">
 						<xsl:with-param name="Instance" select="$Instance" />
 					</xsl:call-template>
-	<!--				<xsl:if test="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:agent/bf:Agent/rdfs:label">
-						<xsl:text>, &#10;		"publisher": {</xsl:text>
-						<xsl:text> &#10;			"type": "http://id.loc.gov/ontologies/bibframe/Organization"</xsl:text>
-						<xsl:text>, &#10;			"name": "</xsl:text><xsl:value-of select="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:agent/bf:Agent/rdfs:label/text()" /><xsl:text>"</xsl:text>
-						<xsl:text> &#10;		}</xsl:text>
-					</xsl:if>-->
 					<xsl:call-template name="pub_place">
 						<xsl:with-param name="Instance" select="$Instance" />
 					</xsl:call-template>
-	<!--				<xsl:choose>
-						<xsl:when test="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:place/bf:Place/@rdf:about and $Instance/bf:provisionActivity/bf:ProvisionActivity/bf:place/bf:Place/rdfs:label">
-							<xsl:text>, &#10;		"pubPlace": [</xsl:text>
-							<xsl:text> &#10;			"</xsl:text><xsl:value-of select="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:place/bf:Place/@rdf:about" /><xsl:text>"</xsl:text>
-							<xsl:text>, &#10;			"</xsl:text><xsl:value-of select="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:place/bf:Place/rdfs:label/text()" /><xsl:text>"</xsl:text>
-							<xsl:text> &#10;		]</xsl:text>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:choose>
-								<xsl:when test="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:place/bf:Place/@rdf:about">
-									<xsl:text>, &#10;		"pubPlace": "</xsl:text><xsl:value-of select="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:place/bf:Place/@rdf:about" /><xsl:text>"</xsl:text>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:if test="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:place/bf:Place/rdfs:label">
-										<xsl:text>, &#10;		"pubPlace": "</xsl:text><xsl:value-of select="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:place/bf:Place/rdfs:label/text()" /><xsl:text>"</xsl:text>
-									</xsl:if>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:otherwise>
-					</xsl:choose>-->
 					<xsl:call-template name="languages">
 						<xsl:with-param name="Work" select="$Work" />
 					</xsl:call-template>
-	<!--				<xsl:choose>
-						<xsl:when test="$Work/bf:language/bf:Language/bf:identifiedBy/bf:Identifier/rdf:value/@rdf:resource">
-							<xsl:choose>
-								<xsl:when test="count($Work/bf:language/bf:Language/bf:identifiedBy/bf:Identifier/rdf:value/@rdf:resource) > 1">
-									<xsl:text>, &#10;		"inLanguage": [</xsl:text>
-									<xsl:for-each select="$Work/bf:language/bf:Language/bf:identifiedBy/bf:Identifier/rdf:value/@rdf:resource">
-										<xsl:text> &#10;			"</xsl:text><xsl:value-of select="substring(.,40)" /><xsl:text>"</xsl:text>
-										<xsl:if test="position() != last()">
-											<xsl:text>, </xsl:text>
-										</xsl:if>
-									</xsl:for-each>
-									<xsl:text> &#10;		]</xsl:text>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:text>, &#10;		"inLanguage": "</xsl:text><xsl:value-of select="substring($Work/bf:language/bf:Language/bf:identifiedBy/bf:Identifier/rdf:value/@rdf:resource,40)" /><xsl:text>"</xsl:text>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:if test="$Work/bf:language/bf:Language/@rdf:about">
-								<xsl:text>, &#10;		"inLanguage": "</xsl:text><xsl:value-of select="substring($Work/bf:language/bf:Language/@rdf:about,40)" /><xsl:text>"</xsl:text>
-							</xsl:if>
-						</xsl:otherwise>
-					</xsl:choose>-->
 					<xsl:if test="./dct:accessRights">
 						<xsl:text>, &#10;		"accessRights": "</xsl:text><xsl:value-of select="./dct:accessRights/text()" /><xsl:text>"</xsl:text>
 					</xsl:if>
@@ -188,26 +133,6 @@
 					<xsl:call-template name="subject">
 						<xsl:with-param name="Work" select="$Work" />
 					</xsl:call-template>
-	<!--				<xsl:if test="$Work/bf:genreForm/bf:GenreForm/@rdf:about">
-						<xsl:variable name="genre_count" select="count($Work/bf:genreForm/bf:GenreForm/@rdf:about)" />
-						<xsl:choose>
-							<xsl:when test="$genre_count = 1">
-								<xsl:text>, &#10;		"genre": "</xsl:text><xsl:value-of select="$Work/bf:genreForm/bf:GenreForm/@rdf:about" /><xsl:text>"</xsl:text>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:if test="$genre_count > 1">
-									<xsl:text>, &#10;		"genre": [</xsl:text>
-									<xsl:for-each select="$Work/bf:genreForm/bf:GenreForm/@rdf:about">
-										<xsl:if test="position() != 1">
-											<xsl:text>,</xsl:text>
-										</xsl:if>
-										<xsl:text> &#10;			"</xsl:text><xsl:value-of select="." /><xsl:text>"</xsl:text>
-									</xsl:for-each>
-									<xsl:text> &#10;		]</xsl:text>
-								</xsl:if>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:if>-->
 					<xsl:call-template name="genre">
 						<xsl:with-param name="Work" select="$Work" />
 					</xsl:call-template>
@@ -221,42 +146,6 @@
 						<xsl:with-param name="Instance" select="$Instance" />
 						<xsl:with-param name="Work" select="$Work" />
 					</xsl:call-template>
-	<!--				<xsl:if test="$Instance/bf:genreForm/bf:GenreForm/rdfs:label and $Instance/bf:genreForm/bf:GenreForm/rdfs:label/text() = 'periodical'">
-						<xsl:if test="matches($Item/bf:enumerationAndChronology/text(),'no.')">
-							<xsl:text>, &#10;		"issueNumber": "</xsl:text>
-							<xsl:choose>
-								<xsl:when test="matches($Item/bf:enumerationAndChronology/text(),'-[: ]?v.')">
-									<xsl:text>no.</xsl:text><xsl:value-of select="tokenize(tokenize($Item/bf:enumerationAndChronology/text(),'-[: ]?v.')[1],'no.')[2]" /><xsl:text>-</xsl:text><xsl:text>no.</xsl:text><xsl:value-of select="tokenize(tokenize($Item/bf:enumerationAndChronology/text(),'-[: ]?v.')[last()],'no.')[2]" />
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:text>no.</xsl:text><xsl:value-of select="tokenize($Item/bf:enumerationAndChronology/text(),'no.')[2]" />
-								</xsl:otherwise>
-							</xsl:choose>
-							<xsl:text>"</xsl:text>
-						</xsl:if>
-						<xsl:text>, &#10;		"isPartOf": {</xsl:text>
-						<xsl:text> &#10;			"title": "</xsl:text><xsl:value-of select="$Work/bf:title/bf:Title/rdfs:label/text()" /><xsl:text>"</xsl:text>
-						<xsl:if test="$Item/bf:enumerationAndChronology">
-							<xsl:text> &#10;			"enumerationChronology": "</xsl:text>
-							<xsl:choose>
-								<xsl:when test="matches($Item/bf:enumerationAndChronology/text(),'-[: ]?v.')">
-									<xsl:value-of select="normalize-space(tokenize(tokenize($Item/bf:enumerationAndChronology/text(),'-[: ]?v.')[1],'no.')[1])" /><xsl:text>-</xsl:text><xsl:text>v.</xsl:text><xsl:value-of select="normalize-space(tokenize(tokenize($Item/bf:enumerationAndChronology/text(),'-[: ]?v.')[last()],'no.')[1])" />
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:value-of select="tokenize($Item/bf:enumerationAndChronology/text(),'no.')[1]" />
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:if>
-						<xsl:text>, &#10;			"isPartOf": {</xsl:text>
-						<xsl:text> &#10;				"id": "</xsl:text><xsl:value-of select="$Instance/@rdf:about" /><xsl:text>"</xsl:text>
-						<xsl:text>, &#10;				"title": "</xsl:text><xsl:value-of select="$Work/bf:title/bf:Title/rdfs:label/text()" /><xsl:text>"</xsl:text>
-						<xsl:text>, &#10;				"type": "Periodical"</xsl:text>
-						<xsl:if test="$Instance/bf:identifiedBy/bf:Issn/rdf:value">
-							<xsl:text>, &#10;				"issn": "</xsl:text><xsl:value-of select="$Instance/bf:identifiedBy/bf:Issn/rdf:value/text()" /><xsl:text>"</xsl:text>
-						</xsl:if>
-						<xsl:text> &#10;			}</xsl:text>
-						<xsl:text> &#10;		}</xsl:text>
-					</xsl:if>-->
 					<xsl:text> &#10;	}</xsl:text>
 					<xsl:text>&#10;}</xsl:text>
 			</xsl:result-document>
@@ -310,7 +199,7 @@
 		</xsl:choose>
 	</xsl:template>
 
-	<xsl:template name="contribution_agents"><!-- match="$Work/bf:contribution/bf:Contribution/">-->
+	<xsl:template name="contribution_agents">
 		<xsl:param name="node" />
 		<xsl:variable name="contributor_count" select="count($node)" />
 		<xsl:choose>
@@ -346,13 +235,6 @@
 				</xsl:if>
 			</xsl:otherwise>
 		</xsl:choose>
-<!--		<xsl:for-each select="$node">
-			<xsl:text>, &#10;		"contributor": {</xsl:text>
-			<xsl:text> &#10;			"type": "</xsl:text><xsl:value-of select="bf:agent/bf:Agent/rdf:type/@rdf:resource" /><xsl:text>"</xsl:text>
-			<xsl:text> &#10;			"id": "</xsl:text><xsl:value-of select="bf:agent/bf:Agent/@rdf:about" /><xsl:text>"</xsl:text>
-			<xsl:text> &#10;			"name": "</xsl:text><xsl:value-of select="bf:agent/bf:Agent/rdfs:label/text()" /><xsl:text>"</xsl:text>
-			<xsl:text> &#10;		}</xsl:text>
-			</xsl:for-each>-->
 	</xsl:template>
 
 	<xsl:template name="publisher">
@@ -428,13 +310,6 @@
 						<xsl:text> &#10;			"</xsl:text><xsl:value-of select="substring(.,40)" /><xsl:text>"</xsl:text>
 					</xsl:for-each>
 				<xsl:text> &#10;		]</xsl:text>
-<!--				<xsl:variable name="lang_combined" select="$Work/bf:language/bf:Language/@rdf:about | $Work/bf:language/bf:Language/bf:identifiedBy/bf:Identifier/rdf:value/@rdf:resource" />-->
-<!--				<xsl:for-each select="$lang_combined">
-					<xsl:if test="position() != 1">
-						<xsl:text>,</xsl:text>
-					</xsl:if>
-					<xsl:text> &#10;			"</xsl:text><xsl:value-of select="substring(.,40)" /><xsl:text>"</xsl:text>
-				</xsl:for-each>-->
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:if test="$lang_count = 1">
@@ -541,30 +416,6 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:if>
-<!--		<xsl:choose>
-			<xsl:when test="$subclass = 'Lcc'">
-				<xsl:if test="$Work/bf:classification/bf:ClassificationLcc">
-					<xsl:for-each select="$Work/bf:classification/bf:ClassificationLcc">
-						<xsl:text>, &#10;		"identifier": {</xsl:text>
-						<xsl:text> &#10;			"type": "PropertyValue"</xsl:text>
-						<xsl:text>, &#10;			"propertyID": "</xsl:text><xsl:value-of select="lower-case($subclass)" /><xsl:text>"</xsl:text>
-						<xsl:text>, &#10;			"value": "</xsl:text><xsl:value-of select="./bf:classificationPortion/text()" /><xsl:text> </xsl:text><xsl:value-of select="./bf:itemPortion/text()" /><xsl:text>"</xsl:text>
-						<xsl:text> &#10;		}</xsl:text>
-					</xsl:for-each>
-				</xsl:if>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:if test="$Instance/bf:identifiedBy/*[name() = concat('bf:',$subclass)]/rdf:value">
-					<xsl:for-each select="$Instance/bf:identifiedBy/*[name() = concat('bf:',$subclass)]">
-						<xsl:text>, &#10;		"identifier": {</xsl:text>
-						<xsl:text> &#10;			"type": "PropertyValue"</xsl:text>
-						<xsl:text>, &#10;			"propertyID": "</xsl:text><xsl:value-of select="lower-case($subclass)" /><xsl:text>"</xsl:text>
-						<xsl:text>, &#10;			"value": "</xsl:text><xsl:value-of select="./rdf:value/text()" /><xsl:text>"</xsl:text>
-						<xsl:text> &#10;		}</xsl:text>
-					</xsl:for-each>
-				</xsl:if>
-			</xsl:otherwise>
-		</xsl:choose>-->
 	</xsl:template>
 
 	<xsl:template name="subject">
