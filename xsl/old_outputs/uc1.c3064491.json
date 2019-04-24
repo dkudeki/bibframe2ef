@@ -1,0 +1,56 @@
+{ 
+	"metadata": { 
+		"id": "http://hdl.handle.net/2027/uc1.c3064491", 
+		"type": "PublicationVolume", 
+		"isAccessibleForFree": false, 
+		"title": "L'étoile d'Orient.", 
+		"contributor": { 
+			"type": "http://id.loc.gov/ontologies/bibframe/Organization", 
+			"name": "Centre esotérique oriental de France." 
+		}, 
+		"pubDate": 1908, 
+		"publisher": { 
+			"type": "http://id.loc.gov/ontologies/bibframe/Organization", 
+			"name": "Centre esotérique oriental de France" 
+		}, 
+		"pubPlace": { 
+			"id": "http://id.loc.gov/vocabulary/countries/fr", 
+			"type": "http://id.loc.gov/ontologies/bibframe/Place" 
+		}, 
+		"inLanguage": "fre", 
+		"accessRights": "pdus", 
+		"sourceInstitution": { 
+			"type": "http://id.loc.gov/ontologies/bibframe/Organization", 
+			"name": "NRLF" 
+		}, 
+		"mainEntityOfPage": [ 
+			"http://catalog.hathitrust.org/api/volumes/brief/oclc/214922878.json", 
+			"http://catalog.hathitrust.org/api/volumes/full/oclc/214922878.json", 
+			"https://catalog.hathitrust.org/Record/012336214" 
+		], 
+		"identifier": { 
+			"type": "PropertyValue", 
+			"propertyID": "oclc", 
+			"value": "214922878" 
+		}, 
+		"subjects": [ 
+			{ 
+				"id": "http://catalogdata.library.illinois.edu/lod/entities/Subjects/ht/008901314465025", 
+				"value": "Parapsychology--Research--Periodicals.", 
+				"type": "http://www.loc.gov/mads/rdf/v1#ComplexSubject" 
+			}, 
+			{ 
+				"id": "http://catalogdata.library.illinois.edu/lod/entities/Subjects/ht/012336214465024", 
+				"value": "Mysticism--Asia--Periodicals.", 
+				"type": "http://www.loc.gov/mads/rdf/v1#ComplexSubject" 
+			} 
+		], 
+		"genre": "http://id.loc.gov/vocabulary/marcgt/doc", 
+		"enumerationChronology": "v.1 (1908)", 
+		"typeOfResource": "http://id.loc.gov/ontologies/bibframe/Text", 
+		"isPartOf": { 
+			"id": "http://www.worldcat.org/oclc/214922878", 
+			"type": "CreativeWorkSeries", 
+			"journalTitle": "Etoile d'Orient (Paris, France)" 
+		}
+}

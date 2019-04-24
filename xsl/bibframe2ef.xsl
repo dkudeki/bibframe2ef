@@ -158,12 +158,14 @@
 						<xsl:with-param name="Instance" select="$Instance" />
 						<xsl:with-param name="Work" select="$Work" />
 					</xsl:call-template>
-					<xsl:if test="$Instance/bf:identifiedBy/bf:Issn/rdf:value">
-						<xsl:text>, &#10;		"issn": "</xsl:text><xsl:value-of select="$Instance/bf:identifiedBy/bf:Issn/rdf:value/text()" /><xsl:text>"</xsl:text>
-					</xsl:if>
-					<xsl:if test="$Instance/bf:identifiedBy/bf:Isbn/rdf:value">
-						<xsl:text>, &#10;		"issn": "</xsl:text><xsl:value-of select="$Instance/bf:identifiedBy/bf:Isbn/rdf:value/text()" /><xsl:text>"</xsl:text>
-					</xsl:if>
+					<xsl:call-template name="is_n">
+						<xsl:with-param name="base_path" select="$Instance/bf:identifiedBy/bf:Issn" />
+						<xsl:with-param name="is_n" select="'issn'" />
+					</xsl:call-template>
+					<xsl:call-template name="is_n">
+						<xsl:with-param name="base_path" select="$Instance/bf:identifiedBy/bf:Isbn" />
+						<xsl:with-param name="is_n" select="'isbn'" />
+					</xsl:call-template>
 					<xsl:call-template name="subject">
 						<xsl:with-param name="Work" select="$Work" />
 					</xsl:call-template>
@@ -187,26 +189,37 @@
 
 		<!--This section is for mapping Instance OCLC numbers to Work OCLC numbers, and Work OCLC numbers to general metadata for those works. By storing this we should be able to get around
 			records that are sparse because the full Work/Instance record are not present after their first appearance-->
-		<xsl:variable name="dict_file_path">
+		<xsl:variable name="instance_file_path">
 			<xsl:choose>
 				<xsl:when test="not($dict_path)">
-					<xsl:value-of select="concat(concat('./outputs/dicts/',$filename),'.json')" />
+					<xsl:value-of select="concat(concat('./outputs/dicts/',$filename),'_instance.json')" />
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="concat(concat(concat(concat('file:///',$dict_path),'/dicts/'),$filename),'.json')" />
+					<xsl:value-of select="concat(concat(concat(concat('file:///',$dict_path),'/dicts/'),$filename),'_instance.json')" />
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
 
-		<xsl:result-document href="{$dict_file_path}" method='text' exclude-result-prefixes="#all" omit-xml-declaration="yes" indent="no" encoding="UTF-8">
+		<xsl:variable name="meta_file_path">
+			<xsl:choose>
+				<xsl:when test="not($dict_path)">
+					<xsl:value-of select="concat(concat('./outputs/dicts/',$filename),'_meta.json')" />
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="concat(concat(concat(concat('file:///',$dict_path),'/dicts/'),$filename),'_meta.json')" />
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
+		<xsl:result-document href="{$instance_file_path}" method='text' exclude-result-prefixes="#all" omit-xml-declaration="yes" indent="no" encoding="UTF-8">
 			<xsl:variable name="instance_set" select="/rdf:RDF/bf:Instance[generate-id() = generate-id(key('instances',./@rdf:about)[1])]" />
 			<xsl:text>{</xsl:text>
-				<xsl:text> &#10;	"instance": {</xsl:text>
+<!--				<xsl:text> &#10;	"instance": {</xsl:text>-->
 				<xsl:for-each select="$instance_set">
 					<xsl:if test="position() != 1">
 						<xsl:text>,</xsl:text>
 					</xsl:if>
-					<xsl:text>&#10;		"</xsl:text>
+					<xsl:text>&#10;	"</xsl:text>
 					<xsl:choose>
 						<xsl:when test="substring(./@rdf:about,1,1) != '_'">
 							<xsl:value-of select="substring(./@rdf:about,30)" />
@@ -226,8 +239,14 @@
 					</xsl:choose>
 					<xsl:text>"</xsl:text>
 				</xsl:for-each>
-				<xsl:text> &#10;	}</xsl:text>
-				<xsl:text>, &#10;	"metadata_from_work": {</xsl:text>
+<!--				<xsl:text> &#10;	}</xsl:text>-->
+			<xsl:text>&#10;}</xsl:text>
+		</xsl:result-document>
+
+		<xsl:result-document href="{$meta_file_path}" method='text' exclude-result-prefixes="#all" omit-xml-declaration="yes" indent="no" encoding="UTF-8">
+			<xsl:variable name="instance_set" select="/rdf:RDF/bf:Instance[generate-id() = generate-id(key('instances',./@rdf:about)[1])]" />
+			<xsl:text>{</xsl:text>
+<!--				<xsl:text>, &#10;	"metadata_from_work": {</xsl:text>-->
 				<xsl:for-each select="$instance_set">
 					<xsl:if test="./bf:title/bf:Title">
 						<xsl:variable name="full_work_id" select="./bf:instanceOf/@rdf:resource" />
@@ -235,7 +254,7 @@
 						<xsl:if test="position() != 1">
 							<xsl:text>,</xsl:text>
 						</xsl:if>
-						<xsl:text>&#10;		"</xsl:text>
+						<xsl:text>&#10;	"</xsl:text>
 						<xsl:choose>
 							<xsl:when test="substring(./bf:instanceOf/@rdf:resource,1,1) != '_'">
 								<xsl:value-of select="substring(./bf:instanceOf/@rdf:resource,36)" />
@@ -296,12 +315,14 @@
 							<xsl:with-param name="Instance" select="." />
 							<xsl:with-param name="Work" select="$full_work" />
 						</xsl:call-template>
-						<xsl:if test="./bf:identifiedBy/bf:Issn/rdf:value">
-							<xsl:text>, &#10;		"issn": "</xsl:text><xsl:value-of select="./bf:identifiedBy/bf:Issn/rdf:value/text()" /><xsl:text>"</xsl:text>
-						</xsl:if>
-						<xsl:if test="./bf:identifiedBy/bf:Isbn/rdf:value">
-							<xsl:text>, &#10;		"issn": "</xsl:text><xsl:value-of select="./bf:identifiedBy/bf:Isbn/rdf:value/text()" /><xsl:text>"</xsl:text>
-						</xsl:if>
+						<xsl:call-template name="is_n">
+							<xsl:with-param name="base_path" select="./bf:identifiedBy/bf:Issn" />
+							<xsl:with-param name="is_n" select="'issn'" />
+						</xsl:call-template>
+						<xsl:call-template name="is_n">
+							<xsl:with-param name="base_path" select="./bf:identifiedBy/bf:Isbn" />
+							<xsl:with-param name="is_n" select="'isbn'" />
+						</xsl:call-template>
 						<xsl:call-template name="subject">
 							<xsl:with-param name="Work" select="$full_work" />
 						</xsl:call-template>
@@ -315,10 +336,10 @@
 							<xsl:with-param name="Instance" select="." />
 							<xsl:with-param name="Work" select="$full_work" />
 						</xsl:call-template>
-						<xsl:text> &#10;		}</xsl:text>
+						<xsl:text> &#10;	}</xsl:text>
 					</xsl:if>
 				</xsl:for-each>
-				<xsl:text> &#10;	}</xsl:text>
+<!--				<xsl:text> &#10;	}</xsl:text>-->
 			<xsl:text>&#10;}</xsl:text>
 		</xsl:result-document>
 	</xsl:template>
@@ -590,6 +611,30 @@
 		</xsl:if>
 	</xsl:template>
 
+	<xsl:template name="is_n">
+		<xsl:param name="base_path" />
+		<xsl:param name="is_n" />
+		<xsl:if test="$base_path/rdf:value">
+			<xsl:choose>
+				<xsl:when test="count($base_path[count(./bf:status) = 0 or ./bf:status/bf:Status/rdf:label/text() != 'invalid' or ./bf:status/bf:Status/rdf:label/text() != 'incorrect']) > 1">
+					<xsl:text>, &#10;		"</xsl:text><xsl:value-of select="$is_n" /><xsl:text>": [</xsl:text>
+					<xsl:for-each select="$base_path[count(./bf:status) = 0 or ./bf:status/bf:Status/rdf:label/text() != 'invalid' or ./bf:status/bf:Status/rdf:label/text() != 'incorrect']">
+						<xsl:if test="position() != 1">
+							<xsl:text>,</xsl:text>
+						</xsl:if>
+						<xsl:text> &#10;			"</xsl:text><xsl:value-of select="tokenize(./rdf:value/text(),' ')[position() = 1]" /><xsl:text>"</xsl:text>
+					</xsl:for-each>
+					<xsl:text> &#10;		]</xsl:text>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:if test="count($base_path/bf:status) = 0 or $base_path/bf:status/bf:Status/rdf:label/text() != 'invalid' or $base_path/bf:status/bf:Status/rdf:label/text() != 'incorrect'">
+						<xsl:text>, &#10;		"</xsl:text><xsl:value-of select="$is_n" /><xsl:text>": "</xsl:text><xsl:value-of select="tokenize($base_path/rdf:value/text(),' ')[position() = 1]" /><xsl:text>"</xsl:text>
+					</xsl:if>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:if>
+	</xsl:template>
+
 	<xsl:template name="subject">
 		<xsl:param name="Work" />
 		<xsl:variable name="subjects" select="$Work/bf:subject/*[not(bf:Temporal)]"/>
@@ -603,7 +648,7 @@
 						<xsl:when test="substring(./@rdf:about,1,1) != '_'">
 							<xsl:text> &#10;			{</xsl:text>
 							<xsl:text> &#10;				"id": "</xsl:text><xsl:value-of select="./@rdf:about" /><xsl:text>"</xsl:text>
-							<xsl:text>, &#10;				"value": "</xsl:text><xsl:value-of select="./rdfs:label" /><xsl:text>"</xsl:text>
+							<xsl:text>, &#10;				"value": "</xsl:text><xsl:value-of select="replace(replace(./rdfs:label,$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
 							<xsl:text>, &#10;				"type": "</xsl:text><xsl:value-of select="./rdf:type[1]/@rdf:resource" /><xsl:text>"</xsl:text>
 							<xsl:text> &#10;			}</xsl:text>
 						</xsl:when>
@@ -645,7 +690,7 @@
 			<xsl:text>, &#10;		"isPartOf": {</xsl:text>
 			<xsl:text> &#10;			"id": "</xsl:text><xsl:value-of select="$Instance/@rdf:about" /><xsl:text>"</xsl:text>
 			<xsl:text>, &#10;			"type": "CreativeWorkSeries"</xsl:text>
-			<xsl:text>, &#10;			"journalTitle": "</xsl:text><xsl:value-of select="replace(replace($Work/bf:title/bf:Title/rdfs:label/text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
+			<xsl:text>, &#10;			"journalTitle": "</xsl:text><xsl:value-of select="replace(replace($Work/bf:title[1]/bf:Title/rdfs:label/text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
 			<xsl:text> &#10;		}</xsl:text>
 		</xsl:if>
 	</xsl:template>
