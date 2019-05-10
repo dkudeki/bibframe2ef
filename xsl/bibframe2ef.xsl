@@ -14,7 +14,6 @@
 <xsl:key name="instances" match="/rdf:RDF/bf:Instance" use="@rdf:about" />
 <xsl:key name="works" match="/rdf:RDF/bf:Work" use="@rdf:about" />
 <xsl:param name="output_path" />
-<xsl:param name="dict_path" />
 <xsl:param name="filename" />
 <xsl:param name="pPat">"</xsl:param>
 <xsl:param name="pRep">\\"</xsl:param>
@@ -191,22 +190,22 @@
 			records that are sparse because the full Work/Instance record are not present after their first appearance-->
 		<xsl:variable name="instance_file_path">
 			<xsl:choose>
-				<xsl:when test="not($dict_path)">
+				<xsl:when test="not($output_path)">
 					<xsl:value-of select="concat(concat('./outputs/dicts/',$filename),'_instance.json')" />
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="concat(concat(concat(concat('file:///',$dict_path),'/dicts/'),$filename),'_instance.json')" />
+					<xsl:value-of select="concat(concat(concat(concat('file:///',$output_path),'/dicts/'),$filename),'_instance.json')" />
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
 
 		<xsl:variable name="meta_file_path">
 			<xsl:choose>
-				<xsl:when test="not($dict_path)">
+				<xsl:when test="not($output_path)">
 					<xsl:value-of select="concat(concat('./outputs/dicts/',$filename),'_meta.json')" />
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="concat(concat(concat(concat('file:///',$dict_path),'/dicts/'),$filename),'_meta.json')" />
+					<xsl:value-of select="concat(concat(concat(concat('file:///',$output_path),'/dicts/'),$filename),'_meta.json')" />
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
@@ -214,7 +213,6 @@
 		<xsl:result-document href="{$instance_file_path}" method='text' exclude-result-prefixes="#all" omit-xml-declaration="yes" indent="no" encoding="UTF-8">
 			<xsl:variable name="instance_set" select="/rdf:RDF/bf:Instance[generate-id() = generate-id(key('instances',./@rdf:about)[1])]" />
 			<xsl:text>{</xsl:text>
-<!--				<xsl:text> &#10;	"instance": {</xsl:text>-->
 				<xsl:for-each select="$instance_set">
 					<xsl:if test="position() != 1">
 						<xsl:text>,</xsl:text>
@@ -239,14 +237,12 @@
 					</xsl:choose>
 					<xsl:text>"</xsl:text>
 				</xsl:for-each>
-<!--				<xsl:text> &#10;	}</xsl:text>-->
 			<xsl:text>&#10;}</xsl:text>
 		</xsl:result-document>
 
 		<xsl:result-document href="{$meta_file_path}" method='text' exclude-result-prefixes="#all" omit-xml-declaration="yes" indent="no" encoding="UTF-8">
 			<xsl:variable name="instance_set" select="/rdf:RDF/bf:Instance[generate-id() = generate-id(key('instances',./@rdf:about)[1])]" />
 			<xsl:text>{</xsl:text>
-<!--				<xsl:text>, &#10;	"metadata_from_work": {</xsl:text>-->
 				<xsl:for-each select="$instance_set">
 					<xsl:if test="./bf:title/bf:Title">
 						<xsl:variable name="full_work_id" select="./bf:instanceOf/@rdf:resource" />
@@ -339,7 +335,6 @@
 						<xsl:text> &#10;	}</xsl:text>
 					</xsl:if>
 				</xsl:for-each>
-<!--				<xsl:text> &#10;	}</xsl:text>-->
 			<xsl:text>&#10;}</xsl:text>
 		</xsl:result-document>
 	</xsl:template>

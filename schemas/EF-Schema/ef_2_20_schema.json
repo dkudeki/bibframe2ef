@@ -37,7 +37,12 @@
 			"type": "object",
 			"properties": {
 				"id": { "type": "string" },
-				"type": { "type": "string" },
+				"type": {
+					"anyOf": [ 
+						{ "type": "string" },
+						{ "$ref": "#/definitions/string_array" }
+					]
+				},
 				"name": {
 					"anyOf": [
 						{ "type": "string" },
@@ -56,9 +61,22 @@
 			"properties": {
 				"type": { "type": "string" },
 				"id": { "type": "string" },
-				"journalTitle": { "type": "string" }
+				"journalTitle": { "type": "string" },
+				"title": { "type": "string" }
 			},
-			"required": [ "type", "journalTitle" ]
+			"required": [ "type" ],
+			"oneOf": [ 
+				{ 
+					"required": [
+						"journalTitle"
+					] 
+				},
+				{
+					"required": [
+						"title"
+					]
+				}
+			]
 		},
 		"issue_object": {
 			"type": "object",
@@ -66,9 +84,22 @@
 				"type": { "type": "string" },
 				"id": { "type": "string" },
 				"issueTitle": { "type": "string" },
-				"isPartOf": { "$ref": "#/definitions/journal_object" }
+				"isPartOf": { "$ref": "#/definitions/journal_object" },
+				"title": { "type": "string" }
 			},
-			"required": [ "type", "issueTitle" ]
+			"required": [ "type" ],
+			"oneOf": [ 
+				{ 
+					"required": [
+						"issueTitle"
+					] 
+				},
+				{
+					"required": [
+						"title"
+					]
+				}
+			]
 		},
 		"identifier_object": {
 			"type": "object",

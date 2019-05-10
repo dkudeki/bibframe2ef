@@ -6,14 +6,14 @@ def transformGeneratedXML(generated_xml):
 	bashCommand = 'xsltproc ./bibframe2ef.xsl ' + xml_input_file
 
 def validate(file):
-	bashCommand = 'ajv validate -s ../schemas/EF-Schema/ef_2_20_schema.json -d ../outputs/' + file
-	with open('output_validation.txt','a') as err_output:
+	bashCommand = 'ajv validate -s ../schemas/EF-Schema/ef_2_20_schema.json -d ../outputs/complete/' + file
+	with open('reports/output_validation.txt','a') as err_output:
 		subprocess.call(bashCommand.split(), stderr=err_output)
 
 def main():
-	json_folder = '../outputs'
+	json_folder = '../outputs/complete'
 
-	if len(sys.argv > 1):
+	if len(sys.argv) > 1:
 		p = Pool(sys.argv[1])
 	else:
 		p = Pool(4)

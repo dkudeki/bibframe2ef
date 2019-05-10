@@ -1,24 +1,27 @@
 import sys, os, subprocess, time, datetime
-from datetime import timedelta
 from multiprocessing import Pool
+from datetime import timedelta
+from itertools import repeat
 
-def transformBIBF2JSON(filename):
-	bashCommand = 'java -jar ../SaxonHE9-9-1-1J/saxon9he.jar inputs/segments/' + filename + ' bibframe2ef.xsl filename=' + filename[:-4]
-	with open('transform_error.txt','a') as err_output:
+def applyXSLStylesheetToBIBFRAMEXML(filename,input_folder,output_folder):
+	print(filename)
+	bashCommand = 'java -jar ../SaxonHE9-9-1-1J/saxon9he.jar ' + input_folder + filename + ' bibframe2ef.xsl output_folder=' + output_folder + ' filename=' + filename[:-4]
+	with open(output_folder + 'reports/transform_error.txt','a') as err_output:
+		print("Calling saxon for " + filename)
 		subprocess.call(bashCommand.split(), stderr=err_output)
+		print("Finished transforming " + filename)
 
-def main():
-	bibframe_folder = sys.argv[1]
-
-	p = Pool(4)
-
+def transformBIBF2JSON(input_folder,output_folder,core_count):
 	start_time = datetime.datetime.now().time()
-	for root, dirs, files in os.walk(bibframe_folder):
-		p.map(transformBIBF2JSON,[f for f in files if f[-4:] == '.xml'])
+	p = Pool(core_count)
+	for root, dirs, files in os.walk(input_folder):
+		p.starmap(applyXSLStylesheetToBIBFRAMEXML,zip([f for f in files if f[-4:] == '.xml'],repeat(input_folder),repeat(output_folder)))
 
 	end_time = datetime.datetime.now().time()
+	print('XSL TRANSFORM:')
 	print("Start time: " + str(start_time))
 	print("End time: " + str(end_time))
 	print("Run duration: " + str(datetime.datetime.combine(datetime.date.min,end_time)-datetime.datetime.combine(datetime.date.min,start_time)))
 
-main()
+if __name__ == "__main__":
+	transformBIBF2JSON(sys.argv[1],sys.argv[2],int(sys.argv[3]))

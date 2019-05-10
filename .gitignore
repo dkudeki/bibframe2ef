@@ -11,4 +11,6 @@ worksets/*
 node_version/results*
 SaxonHE9-9-1-1J/*
 outputs/*
+xsl/*.pyc
 xsl/outputs/*
+xsl/__pycache__/*
