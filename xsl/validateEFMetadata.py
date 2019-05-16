@@ -1,30 +1,26 @@
 import sys, os, subprocess, time, datetime
 from datetime import timedelta
 from multiprocessing import Pool
+from itertools import repeat
 
-def transformGeneratedXML(generated_xml):
-	bashCommand = 'xsltproc ./bibframe2ef.xsl ' + xml_input_file
-
-def validate(file):
-	bashCommand = 'ajv validate -s ../schemas/EF-Schema/ef_2_20_schema.json -d ../outputs/complete/' + file
-	with open('reports/output_validation.txt','a') as err_output:
+def validate(file,output_folder):
+	bashCommand = 'ajv validate -s ../schemas/EF-Schema/ef_2_20_schema.json -d ' + output_folder + 'complete/' + file
+	with open(output_folder + 'reports/validation_error.txt','a') as err_output:
 		subprocess.call(bashCommand.split(), stderr=err_output)
 
-def main():
-	json_folder = '../outputs/complete'
-
-	if len(sys.argv) > 1:
-		p = Pool(sys.argv[1])
-	else:
-		p = Pool(4)
+def validateEFMetadata(output_folder,core_count):
+	json_folder = output_folder + 'complete'
+	p = Pool(core_count)
 
 	start_time = datetime.datetime.now().time()
 	for root, dirs, files in os.walk(json_folder):
-		p.map(validate,files)
+		p.starmap(validate,zip(files,repeat(output_folder)))
 
 	end_time = datetime.datetime.now().time()
+	print("VALIDATE RESULTS:")
 	print("Start time: " + str(start_time))
 	print("End time: " + str(end_time))
 	print("Run duration: " + str(datetime.datetime.combine(datetime.date.min,end_time)-datetime.datetime.combine(datetime.date.min,start_time)))
 
-main()
+if __name__ == "__main__":
+	validateEFMetadata(sys.argv[1],int(sys.argv[2]))

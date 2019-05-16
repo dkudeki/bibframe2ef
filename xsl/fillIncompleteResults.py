@@ -2,20 +2,20 @@ import sys, os, json, subprocess, time, datetime
 from datetime import timedelta
 from multiprocessing import Pool
 
-def main():
-	incomplete_folder = 'outputs/incomplete'
-	complete_folder = 'outputs/complete'
+def fillIncompleteResults(output_folder):
+	incomplete_folder = output_folder + 'incomplete/'
+	complete_folder = output_folder + 'complete/'
 
-	with open('outputs/dicts/instance.json','r') as instance_readfile:
+	with open(output_folder + 'dicts/instance.json','r') as instance_readfile:
 		instances = json.load(instance_readfile)
 
-	with open('outputs/dicts/meta.json','r') as meta_readfile:
+	with open(output_folder + 'dicts/meta.json','r') as meta_readfile:
 		meta = json.load(meta_readfile)
 
-	with open('reports/missing_metadata.txt','w') as err_file:
+	with open(output_folder + 'reports/missing_metadata.txt','w') as err_file:
 		for root, dirs, files in os.walk(incomplete_folder):
 			for f in files:
-				with open(incomplete_folder + '/' + f,'r') as readfile:
+				with open(incomplete_folder + f,'r') as readfile:
 					ef = json.load(readfile)
 					if type(ef['metadata']['identifier']) == dict and ef['metadata']['identifier']['propertyID'] == 'oclc':
 						instance_id = ef['metadata']['identifier']['value']
@@ -32,12 +32,13 @@ def main():
 							if key not in ef['metadata'] or key == 'title':
 								ef['metadata'][key] = work_dict[key]
 
-						with open(complete_folder + '/' + f,'w') as writefile:
+						with open(complete_folder + f,'w') as writefile:
 							json.dump(ef,writefile,indent=4)
 					except:
 						err_file.write(work_id + '\n')
 
-				if os.path.exists(complete_folder + '/' + f):
-					os.remove(incomplete_folder + '/' + f)
+				if os.path.exists(complete_folder + f):
+					os.remove(incomplete_folder + f)
 
-main()
+if __name__ == "__main__":
+	fillIncompleteResults(sys.argv[1])

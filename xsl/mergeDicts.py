@@ -23,6 +23,7 @@ def mergeDicts(output_folder):
 		json.dump(master_meta,write_file)
 
 	end_time = datetime.datetime.now().time()
+	print("MERGE DICTS:")
 	print("Start time: " + str(start_time))
 	print("End time: " + str(end_time))
 	print("Run duration: " + str(datetime.datetime.combine(datetime.date.min,end_time)-datetime.datetime.combine(datetime.date.min,start_time)))

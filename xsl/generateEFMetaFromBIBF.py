@@ -1,6 +1,8 @@
 import sys, os, subprocess, time, datetime, re
 import transformBIBF2JSON
 import mergeDicts
+import fillIncompleteResults
+import validateEFMetadata
 from datetime import timedelta
 
 if os.name == 'nt':
@@ -44,9 +46,19 @@ def validateInput():
 		return False
 
 def callPipeline(input_folder,output_folder,core_count,validate):
+	start_time = datetime.datetime.now().time()
+
 	transformBIBF2JSON.transformBIBF2JSON(input_folder,output_folder,core_count)
-#	mergeDicts.mergeDicts(output_folder)
-	print(input_folder,output_folder,core_count,validate)
+	mergeDicts.mergeDicts(output_folder)
+	fillIncompleteResults.fillIncompleteResults(output_folder)
+	if (validate):
+		validateEFMetadata.validateEFMetadata(output_folder,core_count)
+
+	end_time = datetime.datetime.now().time()
+	print('PIPELINE TIMELINE:')
+	print("Start time: " + str(start_time))
+	print("End time: " + str(end_time))
+	print("Run duration: " + str(datetime.datetime.combine(datetime.date.min,end_time)-datetime.datetime.combine(datetime.date.min,start_time)))
 
 def generateEFMetaFromBIBF():
 	if len(sys.argv) < 3 or len(sys.argv) > 5 or sys.argv[1] == '-h' or sys.argv[1] == '--help':
