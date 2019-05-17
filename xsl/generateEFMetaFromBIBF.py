@@ -13,7 +13,8 @@ else:
 # Pipeline: transformBIBF2JSON -> mergeDicts -> fillIncompleteResults -> validateEFMetadata
 # Inputs:
 #	input folder			- Holds BIBFRAME XML version of metadata
-#	output folder			- folder where output should be written to
+#	output folder			- Folder where output should be written to
+#	saxon jar				- Path to Saxon jar file (saxon9he.jar) we use to apply XSL transform
 #	number of cores to use	- Optional, defaults to 4 if no input
 #	do not validate			- Optional, shortens running time, validation can be run seperately in the future
 
@@ -25,10 +26,10 @@ def validateInput():
 	print(sys.argv)
 	option_regex = r"^--cores=[1-9]$|^-c=[1-9]$|^--fast$|^-f$"
 	if os.path.exists(sys.argv[1]):
-		if len(sys.argv) > 3:
-			if re.search(option_regex,sys.argv[3]):
-				if len(sys.argv) > 4:
-					if re.search(option_regex,sys.argv[4]):
+		if len(sys.argv) > 4:
+			if re.search(option_regex,sys.argv[4]):
+				if len(sys.argv) > 5:
+					if re.search(option_regex,sys.argv[5]):
 						if not os.path.exists(sys.argv[2]):
 							os.mkdir(sys.argv[2])
 						return True
@@ -45,10 +46,10 @@ def validateInput():
 	else:
 		return False
 
-def callPipeline(input_folder,output_folder,core_count,validate):
+def callPipeline(input_folder,output_folder,saxon_jar,core_count,validate):
 	start_time = datetime.datetime.now().time()
 
-	transformBIBF2JSON.transformBIBF2JSON(input_folder,output_folder,core_count)
+	transformBIBF2JSON.transformBIBF2JSON(input_folder,output_folder,saxon_jar,core_count)
 	mergeDicts.mergeDicts(output_folder)
 	fillIncompleteResults.fillIncompleteResults(output_folder)
 	if (validate):
@@ -61,28 +62,29 @@ def callPipeline(input_folder,output_folder,core_count,validate):
 	print("Run duration: " + str(datetime.datetime.combine(datetime.date.min,end_time)-datetime.datetime.combine(datetime.date.min,start_time)))
 
 def generateEFMetaFromBIBF():
-	if len(sys.argv) < 3 or len(sys.argv) > 5 or sys.argv[1] == '-h' or sys.argv[1] == '--help':
+	if len(sys.argv) < 4 or len(sys.argv) > 6 or sys.argv[1] == '-h' or sys.argv[1] == '--help':
 		printHelp()
 	else:
 		if validateInput():
 			input_folder = sys.argv[1]
 			output_folder = sys.argv[2]
+			saxon_jar = sys.argv[3]
 			core_count = 4
 			validate = True
 
-			if len(sys.argv) > 3:
+			if len(sys.argv) > 4:
 				core_regex = r"^--cores=[1-9]$|^-c=[1-9]$"
 				no_validation_regex = r"^--fast$|^-f$"
-				if re.search(no_validation_regex,sys.argv[3]):
+				if re.search(no_validation_regex,sys.argv[4]):
 					validate = False
-				elif re.search(core_regex,sys.argv[3]):
-					core_count = int(sys.argv[3][sys.argv[3].rfind('=')+1:])
+				elif re.search(core_regex,sys.argv[4]):
+					core_count = int(sys.argv[4][sys.argv[4].rfind('=')+1:])
 
-				if len(sys.argv) > 4:
-					if re.search(no_validation_regex,sys.argv[4]):
+				if len(sys.argv) > 5:
+					if re.search(no_validation_regex,sys.argv[5]):
 						validate = False
-					elif re.search(core_regex,sys.argv[4]):
-						core_count = int(sys.argv[4][sys.argv[4].rfind('=')+1:])
+					elif re.search(core_regex,sys.argv[5]):
+						core_count = int(sys.argv[5][sys.argv[5].rfind('=')+1:])
 
 			if input_folder[-1:] != SLASH:
 				input_folder += SLASH
@@ -91,7 +93,7 @@ def generateEFMetaFromBIBF():
 			if not os.path.exists(output_folder + 'reports'):
 				os.mkdir(output_folder + 'reports')
 
-			callPipeline(input_folder,output_folder,core_count,validate)
+			callPipeline(input_folder,output_folder,saxon_jar,core_count,validate)
 		else:
 			printHelp()
 
