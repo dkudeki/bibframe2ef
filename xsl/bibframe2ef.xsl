@@ -44,10 +44,10 @@
 					<xsl:otherwise>
 						<xsl:choose>
 							<xsl:when test="$Instance/bf:title/bf:Title">
-								<xsl:value-of select="concat(concat(concat(concat('file:///',$output_path),'/complete/'),$volume_id),'.json')" />
+								<xsl:value-of select="concat(concat(concat($output_path,'/complete/'),$volume_id),'.json')" />
 							</xsl:when>
 							<xsl:otherwise>
-								<xsl:value-of select="concat(concat(concat(concat('file:///',$output_path),'/incomplete/'),$volume_id),'.json')" />
+								<xsl:value-of select="concat(concat(concat($output_path,'/incomplete/'),$volume_id),'.json')" />
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:otherwise>
@@ -172,7 +172,7 @@
 						<xsl:with-param name="Work" select="$Work" />
 					</xsl:call-template>
 					<xsl:if test="./bf:enumerationAndChronology">
-						<xsl:text>, &#10;		"enumerationChronology": "</xsl:text><xsl:value-of select="./bf:enumerationAndChronology/text()" /><xsl:text>"</xsl:text>
+						<xsl:text>, &#10;		"enumerationChronology": "</xsl:text><xsl:value-of select="replace(replace(./bf:enumerationAndChronology/text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
 					</xsl:if>
 					<xsl:if test="$Work/rdf:type/@rdf:resource">
 						<xsl:text>, &#10;		"typeOfResource": "</xsl:text><xsl:value-of select="$Work/rdf:type/@rdf:resource" /><xsl:text>"</xsl:text>
@@ -194,7 +194,7 @@
 					<xsl:value-of select="concat(concat('./outputs/dicts/',$filename),'_instance.json')" />
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="concat(concat(concat(concat('file:///',$output_path),'/dicts/'),$filename),'_instance.json')" />
+					<xsl:value-of select="concat(concat(concat($output_path,'/dicts/'),$filename),'_instance.json')" />
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
@@ -205,7 +205,7 @@
 					<xsl:value-of select="concat(concat('./outputs/dicts/',$filename),'_meta.json')" />
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="concat(concat(concat(concat('file:///',$output_path),'/dicts/'),$filename),'_meta.json')" />
+					<xsl:value-of select="concat(concat(concat($output_path,'/dicts/'),$filename),'_meta.json')" />
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
@@ -243,97 +243,95 @@
 		<xsl:result-document href="{$meta_file_path}" method='text' exclude-result-prefixes="#all" omit-xml-declaration="yes" indent="no" encoding="UTF-8">
 			<xsl:variable name="instance_set" select="/rdf:RDF/bf:Instance[generate-id() = generate-id(key('instances',./@rdf:about)[1])]" />
 			<xsl:text>{</xsl:text>
-				<xsl:for-each select="$instance_set">
-					<xsl:if test="./bf:title/bf:Title">
-						<xsl:variable name="full_work_id" select="./bf:instanceOf/@rdf:resource" />
-						<xsl:variable name="full_work" select="/rdf:RDF/bf:Work[@rdf:about = $full_work_id][1]" />
-						<xsl:if test="position() != 1">
-							<xsl:text>,</xsl:text>
-						</xsl:if>
-						<xsl:text>&#10;	"</xsl:text>
-						<xsl:choose>
-							<xsl:when test="substring(./bf:instanceOf/@rdf:resource,1,1) != '_'">
-								<xsl:value-of select="substring(./bf:instanceOf/@rdf:resource,36)" />
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="./bf:instanceOf/@rdf:resource" />
-							</xsl:otherwise>
-						</xsl:choose>
-						<xsl:text>":	{</xsl:text>
-						<xsl:text>&#10;		"mainEntityOfPage": [</xsl:text>
-						<xsl:text> &#10;			"http://catalog.hathitrust.org/api/volumes/brief/oclc/</xsl:text><xsl:value-of select="substring(./@rdf:about,30)" /><xsl:text>.json"</xsl:text>
-						<xsl:text>, &#10;			"http://catalog.hathitrust.org/api/volumes/full/oclc/</xsl:text><xsl:value-of select="substring(./@rdf:about,30)" /><xsl:text>.json"</xsl:text>
-						<xsl:if test="$full_work/bf:adminMetadata/bf:AdminMetadata/bf:identifiedBy/bf:Local/rdf:value">
-							<xsl:text>, &#10;			"https://catalog.hathitrust.org/Record/</xsl:text><xsl:value-of select="$full_work/bf:adminMetadata/bf:AdminMetadata/bf:identifiedBy/bf:Local/rdf:value/text()" /><xsl:text>"</xsl:text>
-						</xsl:if>
-						<xsl:text> &#10;		]</xsl:text>
-						<xsl:call-template name="title">
-							<xsl:with-param name="Instance" select="." />
-						</xsl:call-template>
-						<xsl:call-template name="contribution_agents">
-							<xsl:with-param name="node" select="$full_work/bf:contribution/bf:Contribution" />
-						</xsl:call-template>
-						<xsl:if test="./bf:provisionActivity/bf:ProvisionActivity/bf:date">
-							<xsl:text>, &#10;		"pubDate": </xsl:text>
-								<xsl:choose>
-									<xsl:when test="./bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf']">
-										<xsl:choose>
-											<xsl:when test="matches(substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf'][1]/text(),1,4),'\d{4}')">
-												<xsl:value-of select="substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf'][1]/text(),1,4)" />
-											</xsl:when>
-											<xsl:otherwise>
-												<xsl:text>"</xsl:text><xsl:value-of select="substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf'][1]/text(),1,4)" /><xsl:text>"</xsl:text>
-											</xsl:otherwise>
-										</xsl:choose>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:choose>
-											<xsl:when test='matches(substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[1]/text(),1,4),"\d{4}")'>
-												<xsl:value-of select="substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[1]/text(),1,4)" />
-											</xsl:when>
-											<xsl:otherwise>
-												<xsl:text>"</xsl:text><xsl:value-of select="substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[1]/text(),1,4)" /><xsl:text>"</xsl:text>
-											</xsl:otherwise>
-										</xsl:choose>
-									</xsl:otherwise>
-								</xsl:choose>
-						</xsl:if>
-						<xsl:call-template name="publisher">
-							<xsl:with-param name="Instance" select="." />
-						</xsl:call-template>
-						<xsl:call-template name="pub_place">
-							<xsl:with-param name="Instance" select="." />
-						</xsl:call-template>
-						<xsl:call-template name="languages">
-							<xsl:with-param name="Work" select="$full_work" />
-						</xsl:call-template>
-							<xsl:call-template name="create_identifiers">
-							<xsl:with-param name="Instance" select="." />
-							<xsl:with-param name="Work" select="$full_work" />
-						</xsl:call-template>
-						<xsl:call-template name="is_n">
-							<xsl:with-param name="base_path" select="./bf:identifiedBy/bf:Issn" />
-							<xsl:with-param name="is_n" select="'issn'" />
-						</xsl:call-template>
-						<xsl:call-template name="is_n">
-							<xsl:with-param name="base_path" select="./bf:identifiedBy/bf:Isbn" />
-							<xsl:with-param name="is_n" select="'isbn'" />
-						</xsl:call-template>
-						<xsl:call-template name="subject">
-							<xsl:with-param name="Work" select="$full_work" />
-						</xsl:call-template>
-						<xsl:call-template name="genre">
-							<xsl:with-param name="Work" select="$full_work" />
-						</xsl:call-template>
-						<xsl:if test="$full_work/rdf:type/@rdf:resource">
-							<xsl:text>, &#10;		"typeOfResource": "</xsl:text><xsl:value-of select="$full_work/rdf:type/@rdf:resource" /><xsl:text>"</xsl:text>
-						</xsl:if>
-						<xsl:call-template name="part_of">
-							<xsl:with-param name="Instance" select="." />
-							<xsl:with-param name="Work" select="$full_work" />
-						</xsl:call-template>
-						<xsl:text> &#10;	}</xsl:text>
+				<xsl:for-each select="$instance_set[./bf:title/bf:Title]">
+					<xsl:variable name="full_work_id" select="./bf:instanceOf/@rdf:resource" />
+					<xsl:variable name="full_work" select="/rdf:RDF/bf:Work[@rdf:about = $full_work_id][1]" />
+					<xsl:if test="position() != 1">
+						<xsl:text>,</xsl:text>
 					</xsl:if>
+					<xsl:text>&#10;	"</xsl:text>
+					<xsl:choose>
+						<xsl:when test="substring(./bf:instanceOf/@rdf:resource,1,1) != '_'">
+							<xsl:value-of select="substring(./bf:instanceOf/@rdf:resource,36)" />
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="./bf:instanceOf/@rdf:resource" />
+						</xsl:otherwise>
+					</xsl:choose>
+					<xsl:text>":	{</xsl:text>
+					<xsl:text>&#10;		"mainEntityOfPage": [</xsl:text>
+					<xsl:text> &#10;			"http://catalog.hathitrust.org/api/volumes/brief/oclc/</xsl:text><xsl:value-of select="substring(./@rdf:about,30)" /><xsl:text>.json"</xsl:text>
+					<xsl:text>, &#10;			"http://catalog.hathitrust.org/api/volumes/full/oclc/</xsl:text><xsl:value-of select="substring(./@rdf:about,30)" /><xsl:text>.json"</xsl:text>
+					<xsl:if test="$full_work/bf:adminMetadata/bf:AdminMetadata/bf:identifiedBy/bf:Local/rdf:value">
+						<xsl:text>, &#10;			"https://catalog.hathitrust.org/Record/</xsl:text><xsl:value-of select="$full_work/bf:adminMetadata/bf:AdminMetadata/bf:identifiedBy/bf:Local/rdf:value/text()" /><xsl:text>"</xsl:text>
+					</xsl:if>
+					<xsl:text> &#10;		]</xsl:text>
+					<xsl:call-template name="title">
+						<xsl:with-param name="Instance" select="." />
+					</xsl:call-template>
+					<xsl:call-template name="contribution_agents">
+						<xsl:with-param name="node" select="$full_work/bf:contribution/bf:Contribution" />
+					</xsl:call-template>
+					<xsl:if test="./bf:provisionActivity/bf:ProvisionActivity/bf:date">
+						<xsl:text>, &#10;		"pubDate": </xsl:text>
+							<xsl:choose>
+								<xsl:when test="./bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf']">
+									<xsl:choose>
+										<xsl:when test="matches(substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf'][1]/text(),1,4),'\d{4}')">
+											<xsl:value-of select="substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf'][1]/text(),1,4)" />
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:text>"</xsl:text><xsl:value-of select="substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf'][1]/text(),1,4)" /><xsl:text>"</xsl:text>
+										</xsl:otherwise>
+									</xsl:choose>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:choose>
+										<xsl:when test='matches(substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[1]/text(),1,4),"\d{4}")'>
+											<xsl:value-of select="substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[1]/text(),1,4)" />
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:text>"</xsl:text><xsl:value-of select="substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[1]/text(),1,4)" /><xsl:text>"</xsl:text>
+										</xsl:otherwise>
+									</xsl:choose>
+								</xsl:otherwise>
+							</xsl:choose>
+					</xsl:if>
+					<xsl:call-template name="publisher">
+						<xsl:with-param name="Instance" select="." />
+					</xsl:call-template>
+					<xsl:call-template name="pub_place">
+						<xsl:with-param name="Instance" select="." />
+					</xsl:call-template>
+					<xsl:call-template name="languages">
+						<xsl:with-param name="Work" select="$full_work" />
+					</xsl:call-template>
+						<xsl:call-template name="create_identifiers">
+						<xsl:with-param name="Instance" select="." />
+						<xsl:with-param name="Work" select="$full_work" />
+					</xsl:call-template>
+					<xsl:call-template name="is_n">
+						<xsl:with-param name="base_path" select="./bf:identifiedBy/bf:Issn" />
+						<xsl:with-param name="is_n" select="'issn'" />
+					</xsl:call-template>
+					<xsl:call-template name="is_n">
+						<xsl:with-param name="base_path" select="./bf:identifiedBy/bf:Isbn" />
+						<xsl:with-param name="is_n" select="'isbn'" />
+					</xsl:call-template>
+					<xsl:call-template name="subject">
+						<xsl:with-param name="Work" select="$full_work" />
+					</xsl:call-template>
+					<xsl:call-template name="genre">
+						<xsl:with-param name="Work" select="$full_work" />
+					</xsl:call-template>
+					<xsl:if test="$full_work/rdf:type/@rdf:resource">
+						<xsl:text>, &#10;		"typeOfResource": "</xsl:text><xsl:value-of select="$full_work/rdf:type/@rdf:resource" /><xsl:text>"</xsl:text>
+					</xsl:if>
+					<xsl:call-template name="part_of">
+						<xsl:with-param name="Instance" select="." />
+						<xsl:with-param name="Work" select="$full_work" />
+					</xsl:call-template>
+					<xsl:text> &#10;	}</xsl:text>
 				</xsl:for-each>
 			<xsl:text>&#10;}</xsl:text>
 		</xsl:result-document>

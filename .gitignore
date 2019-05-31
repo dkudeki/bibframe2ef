@@ -13,4 +13,6 @@ SaxonHE9-9-1-1J/*
 outputs/*
 xsl/*.pyc
 xsl/outputs/*
+xsl/outputs_old/*
+xsl/inputs/fixed_first_segments/*
 xsl/__pycache__/*

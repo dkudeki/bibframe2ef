@@ -15,6 +15,7 @@ def fillIncompleteResults(output_folder):
 	with open(output_folder + 'reports/missing_metadata.txt','w') as err_file:
 		for root, dirs, files in os.walk(incomplete_folder):
 			for f in files:
+				print(incomplete_folder + f)
 				with open(incomplete_folder + f,'r') as readfile:
 					ef = json.load(readfile)
 					if type(ef['metadata']['identifier']) == dict and ef['metadata']['identifier']['propertyID'] == 'oclc':
@@ -35,7 +36,7 @@ def fillIncompleteResults(output_folder):
 						with open(complete_folder + f,'w') as writefile:
 							json.dump(ef,writefile,indent=4)
 					except:
-						err_file.write(work_id + '\n')
+						err_file.write(work_id + ' ' + f + '\n')
 
 				if os.path.exists(complete_folder + f):
 					os.remove(incomplete_folder + f)
