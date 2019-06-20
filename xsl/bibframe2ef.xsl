@@ -536,7 +536,7 @@
 						<xsl:choose>
 							<xsl:when test="$lccn_count = 1">
 								<xsl:text>, &#10;			"propertyID": "lccn"</xsl:text>
-								<xsl:text>, &#10;			"value": "</xsl:text><xsl:value-of select="$lccn/text()" /><xsl:text>"</xsl:text>
+								<xsl:text>, &#10;			"value": "</xsl:text><xsl:value-of select="replace(replace($lccn/text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:text>, &#10;			"propertyID": "oclc"</xsl:text>
@@ -567,7 +567,7 @@
 						<xsl:text> &#10;			{</xsl:text>
 						<xsl:text> &#10;				"type": "PropertyValue"</xsl:text>
 						<xsl:text>, &#10;				"propertyID": "lccn"</xsl:text>
-						<xsl:text>, &#10;				"value": "</xsl:text><xsl:value-of select="./text()" /><xsl:text>"</xsl:text>
+						<xsl:text>, &#10;				"value": "</xsl:text><xsl:value-of select="replace(replace(./text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
 						<xsl:text> &#10;			}</xsl:text>
 					</xsl:for-each>
 					<xsl:for-each select="$oclc">
