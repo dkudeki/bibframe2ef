@@ -19,7 +19,7 @@ else:
 #	do not validate			- Optional, shortens running time, validation can be run seperately in the future
 
 def printHelp():
-	print('Convert a folder of BIBFRAME XML files and turn them into Extracted Features Metadata Files\n\nUsage: \n\tpython generateEFMetaFromBIBF.py input_folder output_folder [--cores=NUMBER | -c=NUMBER] [--fast | -f]\n\nOptions:\n\t--cores=NUMBER | -c=NUMBER:\tNumber of cores that should be used to run the parallel parts of the script\n\t--fast | -f:\tIncrease speed of processing by skipping validation step')
+	print('Convert a folder of BIBFRAME XML files and turn them into Extracted Features Metadata Files\n\nUsage: \n\tpython generateEFMetaFromBIBF.py input_folder output_folder saxon_jar [--cores=NUMBER | -c=NUMBER] [--fast | -f]\n\nRequirements:\n\tinput_folder:\tFolder containing the BIBFRAME XML files being transformed\n\toutput_folder:\tFolder where the output folders should be written to. This folder will contain three output folders: complete, dicts and incomplete\n\tsaxon_jar:\tThe location of the saxon9he.jar file, which is used to run the stylesheet\n\nOptions:\n\t--cores=NUMBER | -c=NUMBER:\tNumber of cores that should be used to run the parallel parts of the script\n\t--fast | -f:\tIncrease speed of processing by skipping validation step')
 	sys.exit()
 
 def validateInput():
