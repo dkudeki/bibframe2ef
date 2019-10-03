@@ -2,7 +2,15 @@ import sys, os, subprocess, time, datetime
 from datetime import timedelta
 from multiprocessing import Pool
 from itertools import repeat
+from functools import wraps
 
+def unpack(func):
+	@wraps(func)
+	def wrapper(arg_tuple):
+		return func(*arg_tuple)
+	return wrapper
+
+@unpack
 def validate(file,output_folder):
 	bashCommand = 'ajv validate -s ../schemas/EF-Schema/ef_2_20_schema.json -d ' + output_folder + 'complete/' + file
 	with open(output_folder + 'reports/validation_error.txt','a') as err_output:
@@ -14,7 +22,7 @@ def validateEFMetadata(output_folder,core_count):
 
 	start_time = datetime.datetime.now().time()
 	for root, dirs, files in os.walk(json_folder):
-		p.starmap(validate,zip(files,repeat(output_folder)))
+		p.map(validate,iterable=zip(files,repeat(output_folder)))
 
 	end_time = datetime.datetime.now().time()
 	print("VALIDATE RESULTS:")

@@ -2,7 +2,15 @@ import sys, os, subprocess, time, datetime
 from multiprocessing import Pool
 from datetime import timedelta
 from itertools import repeat
+from functools import wraps
 
+def unpack(func):
+	@wraps(func)
+	def wrapper(arg_tuple):
+		return func(*arg_tuple)
+	return wrapper
+
+@unpack
 def applyXSLStylesheetToBIBFRAMEXML(filename,input_folder,output_folder,saxon_jar):
 	print(filename)
 	bashCommand = 'java -jar ' + saxon_jar + ' ' + input_folder + filename + ' bibframe2ef.xsl output_path=' + output_folder + ' filename=' + filename[:-4]
@@ -15,7 +23,7 @@ def transformBIBF2JSON(input_folder,output_folder,saxon_jar,core_count):
 	start_time = datetime.datetime.now().time()
 	p = Pool(core_count)
 	for root, dirs, files in os.walk(input_folder):
-		p.starmap(applyXSLStylesheetToBIBFRAMEXML,zip([f for f in files if f[-4:] == '.xml'],repeat(input_folder),repeat(output_folder),repeat(saxon_jar)))
+		p.map(applyXSLStylesheetToBIBFRAMEXML,iterable=zip([f for f in files if f[-4:] == '.xml'],repeat(input_folder),repeat(output_folder),repeat(saxon_jar)))
 
 	end_time = datetime.datetime.now().time()
 	print('XSL TRANSFORM:')
