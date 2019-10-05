@@ -24,7 +24,7 @@ def printHelp():
 
 def validateInput():
 	print(sys.argv)
-	option_regex = r"^--cores=[1-30]$|^-c=[1-30]$|^--fast$|^-f$"
+	option_regex = r"^--cores=[4-9]|[1-3][0-9]?$|^-c=[4-9]|[1-3][0-9]?$|^--fast$|^-f$"
 	if os.path.exists(sys.argv[1]):
 		if len(sys.argv) > 4:
 			if re.search(option_regex,sys.argv[4]):
