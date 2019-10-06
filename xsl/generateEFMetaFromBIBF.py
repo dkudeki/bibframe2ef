@@ -24,7 +24,7 @@ def printHelp():
 
 def validateInput():
 	print(sys.argv)
-	option_regex = r"^--cores=[4-9]|[1-3][0-9]?$|^-c=[4-9]|[1-3][0-9]?$|^--fast$|^-f$"
+	option_regex = r"^--cores=[1-9][0-9]?$|^-c=[1-9][0-9]?$|^--fast$|^-f$"
 	if os.path.exists(sys.argv[1]):
 		if len(sys.argv) > 4:
 			if re.search(option_regex,sys.argv[4]):
@@ -73,18 +73,24 @@ def generateEFMetaFromBIBF():
 			validate = True
 
 			if len(sys.argv) > 4:
-				core_regex = r"^--cores=[4-9]|[1-3][0-9]?$|^-c=[4-9]|[1-3][0-9]?$"
+				core_regex = r"^--cores=[1-9][0-9]?$|^-c=[1-9][0-9]?$"
 				no_validation_regex = r"^--fast$|^-f$"
 				if re.search(no_validation_regex,sys.argv[4]):
 					validate = False
 				elif re.search(core_regex,sys.argv[4]):
 					core_count = int(sys.argv[4][sys.argv[4].rfind('=')+1:])
+					if core_count > 40:
+						print("Too many cores. Please try again with fewer cores.")
+						sys.exit()
 
 				if len(sys.argv) > 5:
 					if re.search(no_validation_regex,sys.argv[5]):
 						validate = False
 					elif re.search(core_regex,sys.argv[5]):
 						core_count = int(sys.argv[5][sys.argv[5].rfind('=')+1:])
+						if core_count > 40:
+							print("Too many cores. Please try again with fewer cores.")
+							sys.exit()
 
 			if input_folder[-1:] != SLASH:
 				input_folder += SLASH
