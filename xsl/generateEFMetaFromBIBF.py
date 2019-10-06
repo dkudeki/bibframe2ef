@@ -73,7 +73,7 @@ def generateEFMetaFromBIBF():
 			validate = True
 
 			if len(sys.argv) > 4:
-				core_regex = r"^--cores=[1-9]$|^-c=[1-9]$"
+				core_regex = r"^--cores=[4-9]|[1-3][0-9]?$|^-c=[4-9]|[1-3][0-9]?$"
 				no_validation_regex = r"^--fast$|^-f$"
 				if re.search(no_validation_regex,sys.argv[4]):
 					validate = False
