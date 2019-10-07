@@ -103,6 +103,7 @@ def generateEFMetaFromBIBF():
 			if not os.path.exists(output_folder + 'reports'):
 				os.mkdir(output_folder + 'reports')
 
+			print(core_count)
 			callPipeline(input_folder,output_folder,saxon_jar,core_count,validate)
 		else:
 			printHelp()
