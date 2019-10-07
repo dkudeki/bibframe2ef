@@ -82,6 +82,8 @@ def generateEFMetaFromBIBF():
 					if core_count > 40:
 						print("Too many cores. Please try again with fewer cores.")
 						sys.exit()
+				else:
+					print("First optional input not formatted correctly")
 
 				if len(sys.argv) > 5:
 					if re.search(no_validation_regex,sys.argv[5]):
@@ -91,6 +93,8 @@ def generateEFMetaFromBIBF():
 						if core_count > 40:
 							print("Too many cores. Please try again with fewer cores.")
 							sys.exit()
+					else:
+						print("Second optional input not formatted correctly")
 
 			if input_folder[-1:] != SLASH:
 				input_folder += SLASH
