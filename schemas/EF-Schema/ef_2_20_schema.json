@@ -121,7 +121,7 @@
 				"value": { "type": "string" },
 				"type": { "type": "string" }
 			},
-			"required": [ "value", "id" ]
+			"required": [ "value", "type" ]
 		},
 		"subject_array": {
 			"type": "array",
