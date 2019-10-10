@@ -640,9 +640,11 @@
 					<xsl:choose>
 						<xsl:when test="substring(./@rdf:about,1,1) != '_'">
 							<xsl:text> &#10;			{</xsl:text>
-							<xsl:text> &#10;				"id": "</xsl:text><xsl:value-of select="./@rdf:about" /><xsl:text>"</xsl:text>
+							<xsl:text> &#10;				"type": "</xsl:text><xsl:value-of select="./rdf:type[1]/@rdf:resource" /><xsl:text>"</xsl:text>
+							<xsl:if test="starts-with(./@rdf:about, 'http://id.loc.gov')">
+								<xsl:text>, &#10;				"id": "</xsl:text><xsl:value-of select="./@rdf:about" /><xsl:text>"</xsl:text>
+							</xsl:if>
 							<xsl:text>, &#10;				"value": "</xsl:text><xsl:value-of select="replace(replace(./rdfs:label,$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
-							<xsl:text>, &#10;				"type": "</xsl:text><xsl:value-of select="./rdf:type[1]/@rdf:resource" /><xsl:text>"</xsl:text>
 							<xsl:text> &#10;			}</xsl:text>
 						</xsl:when>
 						<xsl:otherwise>
