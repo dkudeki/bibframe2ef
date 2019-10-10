@@ -272,7 +272,7 @@
 					<xsl:call-template name="contribution_agents">
 						<xsl:with-param name="node" select="$full_work/bf:contribution/bf:Contribution" />
 					</xsl:call-template>
-					<xsl:if test="./bf:provisionActivity/bf:ProvisionActivity/bf:date">
+					<xsl:if test="./bf:provisionActivity/bf:ProvisionActivity/bf:date and ./bf:provisionActivity/bf:ProvisionActivity/rdf:type[@rdf:resource = 'http://id.loc.gov/ontologies/bibframe/Publication']">
 						<xsl:text>, &#10;		"pubDate": </xsl:text>
 							<xsl:choose>
 								<xsl:when test="./bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf']">

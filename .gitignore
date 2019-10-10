@@ -24,3 +24,8 @@ xsl/python2_test
 xsl/test2
 xsl/test3
 xsl/test4
+xsl/big_test_input
+xsl/error_files
+xsl/error_files_output
+xsl/error_test
+xsl/java_test

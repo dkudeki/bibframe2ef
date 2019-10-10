@@ -11,6 +11,7 @@ def mergeDicts(output_folder):
 
 	for root, dirs, files in os.walk(dict_folder):
 		for f in files:
+			print(f)
 			with open(dict_folder + f,'r') as readfile:
 				if f[-14:-5] == '_instance':
 					master_instance.update(json.load(readfile))
