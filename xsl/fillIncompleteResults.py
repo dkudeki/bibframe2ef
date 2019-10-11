@@ -6,9 +6,6 @@ def fillIncompleteResults(output_folder):
 	incomplete_folder = output_folder + 'incomplete/'
 	complete_folder = output_folder + 'complete/'
 
-	with open(output_folder + 'dicts/instance.json','r') as instance_readfile:
-		instances = json.load(instance_readfile)
-
 	with open(output_folder + 'dicts/meta.json','r') as meta_readfile:
 		meta = json.load(meta_readfile)
 
@@ -25,9 +22,8 @@ def fillIncompleteResults(output_folder):
 							if ids['propertyID'] == 'oclc':
 								instance_id = ids['value']
 
-					work_id = instances[instance_id]
 					try:
-						work_dict = meta[str(work_id)]
+						work_dict = meta[str(instance_id)]
 						print(ef['metadata']['id'])
 						for key in work_dict.keys():
 							if key not in ef['metadata'] or key == 'title':
@@ -36,7 +32,7 @@ def fillIncompleteResults(output_folder):
 						with open(complete_folder + f,'w') as writefile:
 							json.dump(ef,writefile,indent=4)
 					except:
-						err_file.write(work_id + ' ' + f + '\n')
+						err_file.write(instance_id + ' ' + f + '\n')
 
 				if os.path.exists(complete_folder + f):
 					os.remove(incomplete_folder + f)

@@ -4,22 +4,21 @@ from datetime import timedelta
 def mergeDicts(output_folder):
 	dict_folder = output_folder + 'dicts/'
 
-	master_instance = {}
 	master_meta = {}
 
 	start_time = datetime.datetime.now().time()
 
 	for root, dirs, files in os.walk(dict_folder):
-		for f in files:
-			print(f)
-			with open(dict_folder + f,'r') as readfile:
-				if f[-14:-5] == '_instance':
-					master_instance.update(json.load(readfile))
-				else:
-					master_meta.update(json.load(readfile))
 
-	with open(dict_folder + 'instance.json','w') as write_file:
-		json.dump(master_instance,write_file)
+		for f in files:
+			if f[-10:-5] == '_meta':
+				print(f)
+				with open(dict_folder + f,'r') as readfile:
+					imported = json.load(readfile)
+					for instance in imported:
+						if instance not in master_meta:
+							master_meta[instance] = imported[instance]
+
 	with open(dict_folder + 'meta.json','w') as write_file:
 		json.dump(master_meta,write_file)
 

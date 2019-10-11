@@ -188,7 +188,7 @@
 
 		<!--This section is for mapping Instance OCLC numbers to Work OCLC numbers, and Work OCLC numbers to general metadata for those works. By storing this we should be able to get around
 			records that are sparse because the full Work/Instance record are not present after their first appearance-->
-		<xsl:variable name="instance_file_path">
+<!--		<xsl:variable name="instance_file_path">
 			<xsl:choose>
 				<xsl:when test="not($output_path)">
 					<xsl:value-of select="concat(concat('./outputs/dicts/',$filename),'_instance.json')" />
@@ -197,8 +197,12 @@
 					<xsl:value-of select="concat(concat(concat($output_path,'/dicts/'),$filename),'_instance.json')" />
 				</xsl:otherwise>
 			</xsl:choose>
-		</xsl:variable>
+		</xsl:variable>-->
 
+		<!--This section is for storing the metadata for the first appearence of an instance id in the file. The
+		first instance in the sequence will have all the metadata. When we merge the stores of all the first 
+		appearance of each instance, we'll be able to fill in metadata from trimmed records by referencing the
+		stored metadata-->
 		<xsl:variable name="meta_file_path">
 			<xsl:choose>
 				<xsl:when test="not($output_path)">
@@ -210,7 +214,7 @@
 			</xsl:choose>
 		</xsl:variable>
 
-		<xsl:result-document href="{$instance_file_path}" method='text' exclude-result-prefixes="#all" omit-xml-declaration="yes" indent="no" encoding="UTF-8">
+<!--		<xsl:result-document href="{$instance_file_path}" method='text' exclude-result-prefixes="#all" omit-xml-declaration="yes" indent="no" encoding="UTF-8">
 			<xsl:variable name="instance_set" select="/rdf:RDF/bf:Instance[generate-id() = generate-id(key('instances',./@rdf:about)[1])]" />
 			<xsl:text>{</xsl:text>
 				<xsl:for-each select="$instance_set">
@@ -238,7 +242,7 @@
 					<xsl:text>"</xsl:text>
 				</xsl:for-each>
 			<xsl:text>&#10;}</xsl:text>
-		</xsl:result-document>
+		</xsl:result-document>-->
 
 		<xsl:result-document href="{$meta_file_path}" method='text' exclude-result-prefixes="#all" omit-xml-declaration="yes" indent="no" encoding="UTF-8">
 			<xsl:variable name="instance_set" select="/rdf:RDF/bf:Instance[generate-id() = generate-id(key('instances',./@rdf:about)[1])]" />
@@ -252,10 +256,10 @@
 					<xsl:text>&#10;	"</xsl:text>
 					<xsl:choose>
 						<xsl:when test="substring(./bf:instanceOf/@rdf:resource,1,1) != '_'">
-							<xsl:value-of select="substring(./bf:instanceOf/@rdf:resource,36)" />
+							<xsl:value-of select="substring(./@rdf:about,30)" />
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of select="./bf:instanceOf/@rdf:resource" />
+							<xsl:value-of select="./@rdf:about" />
 						</xsl:otherwise>
 					</xsl:choose>
 					<xsl:text>":	{</xsl:text>

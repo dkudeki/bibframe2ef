@@ -29,3 +29,5 @@ xsl/error_files
 xsl/error_files_output
 xsl/error_test
 xsl/java_test
+xsl/error_files_old
+xsl/error_files_old_output
