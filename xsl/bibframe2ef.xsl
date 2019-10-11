@@ -93,7 +93,7 @@
 							<xsl:when test="./dct:created">
 								<xsl:text>, &#10;		"pubDate": </xsl:text>
 								<xsl:choose>
-									<xsl:when test='matches(substring(./dct:created/text(),1,4),"\d{4}")'>
+									<xsl:when test='matches(substring(./dct:created/text(),1,4),"[12]\d{3}")'>
 										<xsl:value-of select="substring(./dct:created/text(),1,4)" />
 									</xsl:when>
 									<xsl:otherwise>
@@ -106,7 +106,7 @@
 								<xsl:choose>
 									<xsl:when test="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf']">
 										<xsl:choose>
-											<xsl:when test="matches(substring($Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf'][1]/text(),1,4),'\d{4}')">
+											<xsl:when test="matches(substring($Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf'][1]/text(),1,4),'[12]\d{3}')">
 												<xsl:value-of select="substring($Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf'][1]/text(),1,4)" />
 											</xsl:when>
 											<xsl:otherwise>
@@ -116,7 +116,7 @@
 									</xsl:when>
 									<xsl:otherwise>
 										<xsl:choose>
-											<xsl:when test='matches(substring($Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[1]/text(),1,4),"\d{4}")'>
+											<xsl:when test='matches(substring($Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[1]/text(),1,4),"[12]\d{3}")'>
 												<xsl:value-of select="substring($Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[1]/text(),1,4)" />
 											</xsl:when>
 											<xsl:otherwise>
@@ -281,7 +281,7 @@
 							<xsl:choose>
 								<xsl:when test="./bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf']">
 									<xsl:choose>
-										<xsl:when test="matches(substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf'][1]/text(),1,4),'\d{4}')">
+										<xsl:when test="matches(substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf'][1]/text(),1,4),'[12]\d{3}')">
 											<xsl:value-of select="substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf'][1]/text(),1,4)" />
 										</xsl:when>
 										<xsl:otherwise>
@@ -291,7 +291,7 @@
 								</xsl:when>
 								<xsl:otherwise>
 									<xsl:choose>
-										<xsl:when test='matches(substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[1]/text(),1,4),"\d{4}")'>
+										<xsl:when test='matches(substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[1]/text(),1,4),"[12]\d{3}")'>
 											<xsl:value-of select="substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[1]/text(),1,4)" />
 										</xsl:when>
 										<xsl:otherwise>
