@@ -16,7 +16,7 @@ def applyXSLStylesheetToBIBFRAMEXML(filename,input_folder,output_folder,saxon_ja
 	bashCommand = 'java -jar ' + saxon_jar + ' ' + input_folder + filename + ' bibframe2ef.xsl output_path=' + output_folder + ' filename=' + filename[:-4]
 	with open(output_folder + 'reports/transform_error.txt','a') as err_output:
 		print("Calling saxon for " + filename)
-		err_output.write(filename)
+		err_output.write(filename + '\n')
 		subprocess.call(bashCommand.split(), stderr=err_output)
 		print("Finished transforming " + filename)
 
