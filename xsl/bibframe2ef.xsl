@@ -141,7 +141,7 @@
 						<xsl:with-param name="Instance" select="$Instance" />
 					</xsl:call-template>
 					<xsl:call-template name="languages">
-						<xsl:with-param name="langs" select="$Work/bf:language/bf:Language/@rdf:about | $Work/bf:language/bf:Language/bf:identifiedBy/bf:Identifier/rdf:value/@rdf:resource" />
+						<xsl:with-param name="langs" select='$Work/bf:language/bf:Language/@rdf:about[matches(substring(.,40),"[a-z]{3}")] | $Work/bf:language/bf:Language/bf:identifiedBy/bf:Identifier/rdf:value/@rdf:resource[matches(substring(.,40),"[a-z]{3}")]' />
 					</xsl:call-template>
 					<xsl:if test="./dct:accessRights">
 						<xsl:text>, &#10;		"accessRights": "</xsl:text><xsl:value-of select="./dct:accessRights/text()" /><xsl:text>"</xsl:text>
@@ -317,7 +317,7 @@
 						<xsl:with-param name="Instance" select="." />
 					</xsl:call-template>
 					<xsl:call-template name="languages">
-						<xsl:with-param name="langs" select="$full_work//bf:language/bf:Language/@rdf:about | $full_work/bf:language/bf:Language/bf:identifiedBy/bf:Identifier/rdf:value/@rdf:resource" />
+						<xsl:with-param name="langs" select='$full_work//bf:language/bf:Language/@rdf:about[matches(substring(.,40),"[a-z]{3}")] | $full_work/bf:language/bf:Language/bf:identifiedBy/bf:Identifier/rdf:value/@rdf:resource[matches(substring(.,40),"[a-z]{3}")]' />
 					</xsl:call-template>
 						<xsl:call-template name="create_identifiers">
 						<xsl:with-param name="Instance" select="." />

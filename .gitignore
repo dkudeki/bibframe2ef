@@ -37,3 +37,5 @@ xsl/errors_huge
 xsl/error_dates
 xsl/error_dates_output
 xsl/error_samples
+xsl/error_langs
+xsl/error_langs_output
