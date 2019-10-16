@@ -10,7 +10,7 @@
 
 <xsl:output method="text" encoding="UTF-8" omit-xml-declaration="yes" />
 
-<xsl:key name="lang_combined" match="@rdf:about | @rdf:resource" use="." />
+<xsl:key name="lang_combined" match="." use="." />
 <xsl:key name="instances" match="/rdf:RDF/bf:Instance" use="@rdf:about" />
 <xsl:key name="works" match="/rdf:RDF/bf:Work" use="@rdf:about" />
 <xsl:param name="output_path" />
@@ -88,10 +88,13 @@
 					<xsl:call-template name="contribution_agents">
 						<xsl:with-param name="node" select="$Work/bf:contribution/bf:Contribution[bf:agent/bf:Agent/rdfs:label/text()]" />
 					</xsl:call-template>
-					<xsl:if test="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date | ./dct:created">
+					<xsl:if test="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date and $Instance/bf:provisionActivity/bf:ProvisionActivity/rdf:type[@rdf:resource = 'http://id.loc.gov/ontologies/bibframe/Publication'] | ./dct:created">
 						<xsl:choose>
 							<xsl:when test="./dct:created">
-								<xsl:text>, &#10;		"pubDate": </xsl:text>
+								<xsl:call-template name="date">
+									<xsl:with-param name="node" select="./dct:created" />
+								</xsl:call-template>
+<!--								<xsl:text>, &#10;		"pubDate": </xsl:text>
 								<xsl:choose>
 									<xsl:when test='matches(substring(./dct:created/text(),1,4),"[12]\d{3}")'>
 										<xsl:value-of select="substring(./dct:created/text(),1,4)" />
@@ -99,10 +102,13 @@
 									<xsl:otherwise>
 										<xsl:text>"</xsl:text><xsl:value-of select="substring(./dct:created/text(),1,4)" /><xsl:text>"</xsl:text>
 									</xsl:otherwise>
-								</xsl:choose>
+								</xsl:choose>-->
 							</xsl:when>
 							<xsl:otherwise>
-								<xsl:text>, &#10;		"pubDate": </xsl:text>
+								<xsl:call-template name="date">
+									<xsl:with-param name="node" select="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf']" />
+								</xsl:call-template>
+<!--								<xsl:text>, &#10;		"pubDate": </xsl:text>
 								<xsl:choose>
 									<xsl:when test="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf']">
 										<xsl:choose>
@@ -124,7 +130,7 @@
 											</xsl:otherwise>
 										</xsl:choose>
 									</xsl:otherwise>
-								</xsl:choose>
+								</xsl:choose>-->
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:if>
@@ -135,7 +141,7 @@
 						<xsl:with-param name="Instance" select="$Instance" />
 					</xsl:call-template>
 					<xsl:call-template name="languages">
-						<xsl:with-param name="Work" select="$Work" />
+						<xsl:with-param name="langs" select="$Work/bf:language/bf:Language/@rdf:about | $Work/bf:language/bf:Language/bf:identifiedBy/bf:Identifier/rdf:value/@rdf:resource" />
 					</xsl:call-template>
 					<xsl:if test="./dct:accessRights">
 						<xsl:text>, &#10;		"accessRights": "</xsl:text><xsl:value-of select="./dct:accessRights/text()" /><xsl:text>"</xsl:text>
@@ -277,7 +283,10 @@
 						<xsl:with-param name="node" select="$full_work/bf:contribution/bf:Contribution[bf:agent/bf:Agent/rdfs:label/text()]" />
 					</xsl:call-template>
 					<xsl:if test="./bf:provisionActivity/bf:ProvisionActivity/bf:date and ./bf:provisionActivity/bf:ProvisionActivity/rdf:type[@rdf:resource = 'http://id.loc.gov/ontologies/bibframe/Publication']">
-						<xsl:text>, &#10;		"pubDate": </xsl:text>
+						<xsl:call-template name="date">
+							<xsl:with-param name="node" select="./bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf']" />
+						</xsl:call-template>
+<!--						<xsl:text>, &#10;		"pubDate": </xsl:text>
 							<xsl:choose>
 								<xsl:when test="./bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf']">
 									<xsl:choose>
@@ -299,7 +308,7 @@
 										</xsl:otherwise>
 									</xsl:choose>
 								</xsl:otherwise>
-							</xsl:choose>
+							</xsl:choose>-->
 					</xsl:if>
 					<xsl:call-template name="publisher">
 						<xsl:with-param name="Instance" select="." />
@@ -308,7 +317,7 @@
 						<xsl:with-param name="Instance" select="." />
 					</xsl:call-template>
 					<xsl:call-template name="languages">
-						<xsl:with-param name="Work" select="$full_work" />
+						<xsl:with-param name="langs" select="$full_work//bf:language/bf:Language/@rdf:about | $full_work/bf:language/bf:Language/bf:identifiedBy/bf:Identifier/rdf:value/@rdf:resource" />
 					</xsl:call-template>
 						<xsl:call-template name="create_identifiers">
 						<xsl:with-param name="Instance" select="." />
@@ -383,6 +392,37 @@
 						</xsl:if>
 					</xsl:for-each>
 					<xsl:text>&#10;		]</xsl:text>
+				</xsl:if>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="date">
+		<xsl:param name="node" />
+		<xsl:variable name="date_count" select="count($node)" />
+		<xsl:choose>
+			<xsl:when test="$date_count = 1">
+				<xsl:text>, &#10;		"pubDate": </xsl:text>
+				<xsl:choose>
+					<xsl:when test='matches(substring($node/text(),1,4),"[12]\d{3}")'>
+						<xsl:value-of select="substring($node/text(),1,4)" />
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>"</xsl:text><xsl:value-of select="substring($node/text(),1,4)" /><xsl:text>"</xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:if test="$date_count > 1">
+					<xsl:text>, &#10;		"pubDate": </xsl:text>
+					<xsl:choose>
+						<xsl:when test='matches(substring($node[1]/text(),1,4),"[12]\d{3}")'>
+							<xsl:value-of select="substring($node[1]/text(),1,4)" />
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:text>"</xsl:text><xsl:value-of select="substring($node[1]/text(),1,4)" /><xsl:text>"</xsl:text>
+						</xsl:otherwise>
+					</xsl:choose>
 				</xsl:if>
 			</xsl:otherwise>
 		</xsl:choose>
@@ -479,35 +519,63 @@
 	</xsl:template>
 
 	<xsl:template name="languages">
-		<xsl:param name="Work" />
-		<xsl:variable name="lang_strs" select="$Work/bf:language/bf:Language/@rdf:about" />
+		<xsl:param name="langs" />
+<!--		<xsl:variable name="lang_strs" select="$Work/bf:language/bf:Language/@rdf:about" />
 		<xsl:variable name="lang_nodes" select="$Work/bf:language/bf:Language/bf:identifiedBy/bf:Identifier/rdf:value/@rdf:resource" />
+		<xsl:variable name="all_langs">
+			<xsl:copy-of select="$lang_strs" />
+			<xsl:copy-of select="$lang_nodes" />
+		</xsl:variable>
 		<xsl:variable name="lang_strs_count" select="count($lang_strs)" />
-		<xsl:variable name="lang_nodes_count" select="count($lang_nodes)" />
-		<xsl:variable name="lang_count" select="$lang_strs_count + $lang_nodes_count" />
+		<xsl:variable name="lang_nodes_count" select="count($lang_nodes)" />-->
+		<xsl:variable name="lang_count" select="count($langs)" />
 		<xsl:choose>
 			<xsl:when test="$lang_count > 1">
-				<xsl:text>, &#10;		"inLanguage": [</xsl:text>
-					<!--Create a set of unique language values present in the language structures, both with and without the identifiedBy structure-->
-					<xsl:for-each select="$Work/bf:language/bf:Language/@rdf:about[generate-id() = generate-id(key('lang_combined',.)[1])] | $Work/bf:language/bf:Language/bf:identifiedBy/bf:Identifier/rdf:value/@rdf:resource[generate-id() = generate-id(key('lang_combined',.)[1])]">
-						<xsl:if test="position() != 1">
-							<xsl:text>,</xsl:text>
-						</xsl:if>
-						<xsl:text> &#10;			"</xsl:text><xsl:value-of select="substring(.,40)" /><xsl:text>"</xsl:text>
-					</xsl:for-each>
-				<xsl:text> &#10;		]</xsl:text>
+				<xsl:variable name="lang_set" select="$langs[generate-id() = generate-id(key('lang_combined',.)[1])]" />
+				<xsl:variable name="lang_set_count" select="count($lang_set)" />
+				<xsl:choose>
+					<xsl:when test="$lang_set_count > 1">
+						<xsl:text>, &#10;		"inLanguage": [</xsl:text>
+						<xsl:for-each select="$lang_set">
+							<xsl:if test="position() != 1">
+								<xsl:text>,</xsl:text>
+							</xsl:if>
+							<xsl:text> &#10;			"</xsl:text><xsl:value-of select="substring(.,40)" /><xsl:text>"</xsl:text>
+						</xsl:for-each>
+						<xsl:text> &#10;		]</xsl:text>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:choose>
+							<xsl:when test="$lang_set_count = 1">
+								<xsl:text>, &#10;		"inLanguage": "</xsl:text><xsl:value-of select="substring($lang_set,40)" /><xsl:text>"</xsl:text>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:text>, &#10;		"inLanguage": [</xsl:text>
+								<!--Create a set of unique language values present in the language structures, both with and without the identifiedBy structure-->
+								<xsl:for-each select="$langs">
+<!--					<xsl:for-each select="$Work/bf:language/bf:Language/@rdf:about[generate-id() = generate-id(key('lang_combined',.)[1])] | $Work/bf:language/bf:Language/bf:identifiedBy/bf:Identifier/rdf:value/@rdf:resource[generate-id() = generate-id(key('lang_combined',.)[1])]">-->
+									<xsl:if test="position() != 1">
+										<xsl:text>,</xsl:text>
+									</xsl:if>
+									<xsl:text> &#10;			"</xsl:text><xsl:value-of select="substring(.,40)" /><xsl:text>"</xsl:text>
+								</xsl:for-each>
+							<xsl:text> &#10;		]</xsl:text>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:if test="$lang_count = 1">
-					<xsl:text>, &#10;		"inLanguage": "</xsl:text>
-					<xsl:choose>
+					<xsl:text>, &#10;		"inLanguage": "</xsl:text><xsl:value-of select="substring($langs,40)" /><xsl:text>"</xsl:text>
+<!--					<xsl:choose>
 						<xsl:when test="$lang_strs_count = 1">
 							<xsl:value-of select="substring($lang_strs,40)" /><xsl:text>"</xsl:text>
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:value-of select="substring($lang_nodes,40)" /><xsl:text>"</xsl:text>
 						</xsl:otherwise>
-					</xsl:choose>
+					</xsl:choose>-->
 				</xsl:if>
 			</xsl:otherwise>
 		</xsl:choose>

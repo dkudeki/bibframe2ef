@@ -34,3 +34,6 @@ xsl/error_files_old_output
 xsl/error_contributor
 xsl/error_contributor_output
 xsl/errors_huge
+xsl/error_dates
+xsl/error_dates_output
+xsl/error_samples
