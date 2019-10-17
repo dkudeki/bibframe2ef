@@ -18,6 +18,10 @@ def mergeDicts(output_folder):
 					for instance in imported:
 						if instance not in master_meta:
 							master_meta[instance] = imported[instance]
+						else:
+							for field in imported[instance]:
+								if field not in master_meta[instance]:
+									master_meta[instance][field] = imported[instance][field]
 
 	with open(dict_folder + 'meta.json','w') as write_file:
 		json.dump(master_meta,write_file)
