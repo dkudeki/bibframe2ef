@@ -187,6 +187,9 @@
 					<xsl:if test="$Work/rdf:type/@rdf:resource">
 						<xsl:text>, &#10;		"typeOfResource": "</xsl:text><xsl:value-of select="$Work/rdf:type/@rdf:resource" /><xsl:text>"</xsl:text>
 					</xsl:if>
+					<xsl:if test="./htrc:lastRightsUpdateDate">
+						<xsl:text>, &#10;		"lastRightsUpdateDate": "</xsl:text><xsl:value-of select="./htrc:lastRightsUpdateDate/text()" /><xsl:text>"</xsl:text>
+					</xsl:if>
 					<xsl:call-template name="part_of">
 						<xsl:with-param name="Instance" select="$Instance" />
 						<xsl:with-param name="Work" select="$Work" />
