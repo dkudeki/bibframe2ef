@@ -152,11 +152,15 @@
 						<xsl:text>, &#10;			"name": "</xsl:text><xsl:value-of select="substring(./htrc:contentProviderAgent/@rdf:resource,52)" /><xsl:text>"</xsl:text>
 						<xsl:text> &#10;		}</xsl:text>
 					</xsl:if>
-					<xsl:text>, &#10;		"mainEntityOfPage": [</xsl:text>
-					<xsl:text> &#10;			"http://catalog.hathitrust.org/api/volumes/brief/oclc/</xsl:text><xsl:value-of select="substring($Instance/@rdf:about,30)" /><xsl:text>.json"</xsl:text>
-					<xsl:text>, &#10;			"http://catalog.hathitrust.org/api/volumes/full/oclc/</xsl:text><xsl:value-of select="substring($Instance/@rdf:about,30)" /><xsl:text>.json"</xsl:text>
-					<xsl:if test="$Work/bf:adminMetadata/bf:AdminMetadata/bf:identifiedBy/bf:Local/rdf:value">
-						<xsl:text>, &#10;			"https://catalog.hathitrust.org/Record/</xsl:text><xsl:value-of select="$Work/bf:adminMetadata/bf:AdminMetadata/bf:identifiedBy/bf:Local/rdf:value/text()" /><xsl:text>"</xsl:text>
+					<xsl:if test="$Work/bf:adminMetadata/bf:AdminMetadata/bf:identifiedBy/bf:Local/rdf:value or starts-with($Instance/@rdf:about, 'http://www.worldcat.org')">
+						<xsl:text>, &#10;		"mainEntityOfPage": [</xsl:text>
+						<xsl:if test="$Work/bf:adminMetadata/bf:AdminMetadata/bf:identifiedBy/bf:Local/rdf:value">
+							<xsl:text> &#10;			"https://catalog.hathitrust.org/Record/</xsl:text><xsl:value-of select="$Work/bf:adminMetadata/bf:AdminMetadata/bf:identifiedBy/bf:Local/rdf:value/text()" /><xsl:text>"</xsl:text>
+						</xsl:if>
+						<xsl:if test="starts-with($Instance/@rdf:about, 'http://www.worldcat.org')">
+							<xsl:text>, &#10;			"http://catalog.hathitrust.org/api/volumes/brief/oclc/</xsl:text><xsl:value-of select="substring($Instance/@rdf:about,30)" /><xsl:text>.json"</xsl:text>
+							<xsl:text>, &#10;			"http://catalog.hathitrust.org/api/volumes/full/oclc/</xsl:text><xsl:value-of select="substring($Instance/@rdf:about,30)" /><xsl:text>.json"</xsl:text>
+						</xsl:if>
 					</xsl:if>
 					<xsl:text> &#10;		]</xsl:text>
 					<xsl:call-template name="create_identifiers">
@@ -269,11 +273,15 @@
 						</xsl:otherwise>
 					</xsl:choose>
 					<xsl:text>":	{</xsl:text>
-					<xsl:text>&#10;		"mainEntityOfPage": [</xsl:text>
-					<xsl:text> &#10;			"http://catalog.hathitrust.org/api/volumes/brief/oclc/</xsl:text><xsl:value-of select="substring(./@rdf:about,30)" /><xsl:text>.json"</xsl:text>
-					<xsl:text>, &#10;			"http://catalog.hathitrust.org/api/volumes/full/oclc/</xsl:text><xsl:value-of select="substring(./@rdf:about,30)" /><xsl:text>.json"</xsl:text>
-					<xsl:if test="$full_work/bf:adminMetadata/bf:AdminMetadata/bf:identifiedBy/bf:Local/rdf:value">
-						<xsl:text>, &#10;			"https://catalog.hathitrust.org/Record/</xsl:text><xsl:value-of select="$full_work/bf:adminMetadata/bf:AdminMetadata/bf:identifiedBy/bf:Local/rdf:value/text()" /><xsl:text>"</xsl:text>
+					<xsl:if test="$full_work/bf:adminMetadata/bf:AdminMetadata/bf:identifiedBy/bf:Local/rdf:value or starts-with(./@rdf:about, 'http://www.worldcat.org')">
+						<xsl:text>&#10;		"mainEntityOfPage": [</xsl:text>
+						<xsl:if test="$full_work/bf:adminMetadata/bf:AdminMetadata/bf:identifiedBy/bf:Local/rdf:value">
+							<xsl:text> &#10;			"https://catalog.hathitrust.org/Record/</xsl:text><xsl:value-of select="$full_work/bf:adminMetadata/bf:AdminMetadata/bf:identifiedBy/bf:Local/rdf:value/text()" /><xsl:text>"</xsl:text>
+						</xsl:if>
+						<xsl:if test="starts-with(./@rdf:about, 'http://www.worldcat.org')">
+							<xsl:text>, &#10;			"http://catalog.hathitrust.org/api/volumes/brief/oclc/</xsl:text><xsl:value-of select="substring(./@rdf:about,30)" /><xsl:text>.json"</xsl:text>
+							<xsl:text>, &#10;			"http://catalog.hathitrust.org/api/volumes/full/oclc/</xsl:text><xsl:value-of select="substring(./@rdf:about,30)" /><xsl:text>.json"</xsl:text>
+						</xsl:if>
 					</xsl:if>
 					<xsl:text> &#10;		]</xsl:text>
 					<xsl:call-template name="title">

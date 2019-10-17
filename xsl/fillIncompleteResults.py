@@ -15,19 +15,33 @@ def fillIncompleteResults(output_folder):
 				print(incomplete_folder + f)
 				with open(incomplete_folder + f,'r') as readfile:
 					ef = json.load(readfile)
-					if type(ef['metadata']['identifier']) == dict and ef['metadata']['identifier']['propertyID'] == 'oclc':
-						instance_id = ef['metadata']['identifier']['value']
+					if 'identifier' in ef['metadata']:
+						if type(ef['metadata']['identifier']) == dict and ef['metadata']['identifier']['propertyID'] == 'oclc':
+							instance_id = ef['metadata']['identifier']['value']
+						else:
+							for ids in ef['metadata']['identifier']:
+								if ids['propertyID'] == 'oclc':
+									instance_id = ids['value']
+
+							try:
+								instance_id
+							except NameError:
+								instance_id = '_:b' + ef['metadata']['mainEntityOfPage'][0][ef['metadata']['mainEntityOfPage'][0].rfind('/')+1:]
+								print(instance_id)
+					elif 'mainEntityOfPage' in ef['metadata']:
+						instance_id = '_:b' + ef['metadata']['mainEntityOfPage'][0][ef['metadata']['mainEntityOfPage'][0].rfind('/')+1:]
+						print(instance_id)
 					else:
-						for ids in ef['metadata']['identifier']:
-							if ids['propertyID'] == 'oclc':
-								instance_id = ids['value']
+						err_file.write(f + ' has no retrievable instance id\n')
 
 					try:
 						work_dict = meta[str(instance_id)]
-						print(ef['metadata']['id'])
 						for key in work_dict.keys():
 							if key not in ef['metadata'] or key == 'title':
 								ef['metadata'][key] = work_dict[key]
+
+						if 'isPartOf' in work_dict and 'isPartOf' in ef['metadata'] and len(ef['metadata']['isPartOf']['journalTitle']) == 0:
+							ef['metadata']['isPartOf']['journalTitle'] = work_dict['isPartOf']['journalTitle']
 
 						with open(complete_folder + f,'w') as writefile:
 							json.dump(ef,writefile,indent=4)
