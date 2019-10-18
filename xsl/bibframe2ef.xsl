@@ -552,7 +552,7 @@
 				<xsl:variable name="lang_set_count" select="count($lang_set)" />
 				<xsl:choose>
 					<xsl:when test="$lang_set_count > 1">
-						<xsl:text>, &#10;		"inLanguage": [</xsl:text>
+						<xsl:text>, &#10;		"language": [</xsl:text>
 						<xsl:for-each select="$lang_set">
 							<xsl:if test="position() != 1">
 								<xsl:text>,</xsl:text>
@@ -564,10 +564,10 @@
 					<xsl:otherwise>
 						<xsl:choose>
 							<xsl:when test="$lang_set_count = 1">
-								<xsl:text>, &#10;		"inLanguage": "</xsl:text><xsl:value-of select="substring($lang_set,40)" /><xsl:text>"</xsl:text>
+								<xsl:text>, &#10;		"language": "</xsl:text><xsl:value-of select="substring($lang_set,40)" /><xsl:text>"</xsl:text>
 							</xsl:when>
 							<xsl:otherwise>
-								<xsl:text>, &#10;		"inLanguage": [</xsl:text>
+								<xsl:text>, &#10;		"language": [</xsl:text>
 								<!--Create a set of unique language values present in the language structures, both with and without the identifiedBy structure-->
 								<xsl:for-each select="$langs">
 <!--					<xsl:for-each select="$Work/bf:language/bf:Language/@rdf:about[generate-id() = generate-id(key('lang_combined',.)[1])] | $Work/bf:language/bf:Language/bf:identifiedBy/bf:Identifier/rdf:value/@rdf:resource[generate-id() = generate-id(key('lang_combined',.)[1])]">-->
@@ -584,7 +584,7 @@
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:if test="$lang_count = 1">
-					<xsl:text>, &#10;		"inLanguage": "</xsl:text><xsl:value-of select="substring($langs,40)" /><xsl:text>"</xsl:text>
+					<xsl:text>, &#10;		"language": "</xsl:text><xsl:value-of select="substring($langs,40)" /><xsl:text>"</xsl:text>
 <!--					<xsl:choose>
 						<xsl:when test="$lang_strs_count = 1">
 							<xsl:value-of select="substring($lang_strs,40)" /><xsl:text>"</xsl:text>
