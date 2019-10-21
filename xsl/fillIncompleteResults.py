@@ -43,12 +43,12 @@ def fillIncompleteResults(output_folder):
 						if 'isPartOf' in work_dict and 'isPartOf' in ef['metadata'] and len(ef['metadata']['isPartOf']['journalTitle']) == 0:
 							ef['metadata']['isPartOf']['journalTitle'] = work_dict['isPartOf']['journalTitle']
 
-						with open(complete_folder + f,'w') as writefile:
+						with open(complete_folder + f[:f.find('.')] + '/' + f,'w') as writefile:
 							json.dump(ef,writefile,indent=4)
 					except:
 						err_file.write(instance_id + ' ' + f + '\n')
 
-				if os.path.exists(complete_folder + f):
+				if os.path.exists(complete_folder + f[:f.find('.')] + '/' + f):
 					os.remove(incomplete_folder + f)
 
 if __name__ == "__main__":
