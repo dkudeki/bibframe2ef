@@ -47,7 +47,7 @@ def validateInput():
 		return False
 
 def callPipeline(input_folder,output_folder,saxon_jar,core_count,validate):
-	start_time = datetime.datetime.now().time()
+	start_time = datetime.datetime.now()
 
 	transformBIBF2JSON.transformBIBF2JSON(input_folder,output_folder,saxon_jar,core_count)
 	mergeDicts.mergeDicts(output_folder)
@@ -55,11 +55,11 @@ def callPipeline(input_folder,output_folder,saxon_jar,core_count,validate):
 	if (validate):
 		validateEFMetadata.validateEFMetadata(output_folder,core_count)
 
-	end_time = datetime.datetime.now().time()
+	end_time = datetime.datetime.now()
 	print('PIPELINE TIMELINE:')
 	print("Start time: " + str(start_time))
 	print("End time: " + str(end_time))
-	print("Run duration: " + str(datetime.datetime.combine(datetime.date.min,end_time)-datetime.datetime.combine(datetime.date.min,start_time)))
+	print("Run duration: " + str(end_time-start_time))
 
 def generateEFMetaFromBIBF():
 	if len(sys.argv) < 4 or len(sys.argv) > 6 or sys.argv[1] == '-h' or sys.argv[1] == '--help':
