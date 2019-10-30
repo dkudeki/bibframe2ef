@@ -10,14 +10,17 @@ def unpack(func):
 	return wrapper
 
 def addFieldToJSONLD(last_update_date,htid,output_folder):
-	filename = output_folder + '/' + htid[:htid.find('.')] + htid.replace('/','=').replace(':','+') + '.json'
-	with open(filename,'r') as f:
-		data = json.load(f)
+	filename = output_folder + '/complete/' + htid[:htid.find('.')] + '/' + htid.replace('/','=').replace(':','+') + '.json'
+	try:
+		with open(filename,'r') as f:
+			data = json.load(f)
 
-	data.update({'lastRightsUpdateDate': last_update_date})
+		data['metadata'].update({'lastRightsUpdateDate': last_update_date})
 
-	with open(filename,'w') as outfile:
-		json.dump(data,outfile)
+		with open(filename,'w') as outfile:
+			json.dump(data,outfile)
+	except:
+		pass
 
 def processMARCJSON(record,output_folder):
 	marc_record = json.loads(record)
@@ -34,17 +37,17 @@ def processMARCJSON(record,output_folder):
 
 @unpack
 def processJSONLFile(file_name,output_folder):
+	print(file_name)
 	with open(file_name,'r') as readfile:
-		recrods = readfile.readlines()
+		records = readfile.readlines()
 		for r in records:
 			processMARCJSON(r,output_folder)
 
-def addLastUpdateDates(input_folder,output_folder,core_count):
-	p = Pool(core_count)
+def addLastUpdateDates(marc_in_json_folder,output_folder,core_count):
+	p = Pool(int(core_count))
 
-	for root, dirs, files in os.walk(input_folder):
-		for f in files:
-			p.map(processJSONLFile,iterable=zip(f,repeat(output_folder)))
+	for root, dirs, files in os.walk(marc_in_json_folder):
+		p.map(processJSONLFile,iterable=zip([marc_in_json_folder + '/' + f for f in files if f != '.DS_Store'],repeat(output_folder)))
 
 if __name__ == "__main__":
 	addLastUpdateDates(sys.argv[1],sys.argv[2],sys.argv[3])
