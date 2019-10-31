@@ -615,7 +615,14 @@
 				<xsl:choose>
 					<xsl:when test="$lcc_count = 1">
 						<xsl:text>, &#10;			"propertyID": "lcc"</xsl:text>
-						<xsl:text>, &#10;			"value": "</xsl:text><xsl:value-of select="replace(replace($lcc/bf:classificationPortion/text(),$oneSlash,$twoSlash),$pPat,$pRep)" />
+						<xsl:choose>
+							<xsl:when test="count($lcc/bf:classificationPortion) > 1">
+								<xsl:text>, &#10;			"value": "</xsl:text><xsl:value-of select="replace(replace($lcc/bf:classificationPortion[1]/text(),$oneSlash,$twoSlash),$pPat,$pRep)" />
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:text>, &#10;			"value": "</xsl:text><xsl:value-of select="replace(replace($lcc/bf:classificationPortion/text(),$oneSlash,$twoSlash),$pPat,$pRep)" />
+							</xsl:otherwise>
+						</xsl:choose>
 						<xsl:for-each select="$lcc/bf:itemPortion/text()">
 							<xsl:text> </xsl:text>
 							<xsl:value-of select="replace(replace(.,$oneSlash,$twoSlash),$pPat,$pRep)" />
@@ -646,7 +653,14 @@
 						<xsl:text> &#10;			{</xsl:text>
 						<xsl:text> &#10;				"type": "PropertyValue"</xsl:text>
 						<xsl:text>, &#10;				"propertyID": "lcc"</xsl:text>
-						<xsl:text>, &#10;				"value": "</xsl:text><xsl:value-of select="replace(replace(./bf:classificationPortion/text(),$oneSlash,$twoSlash),$pPat,$pRep)" />
+						<xsl:choose>
+							<xsl:when test="count(./bf:classificationPortion) > 1">
+								<xsl:text>, &#10;				"value": "</xsl:text><xsl:value-of select="replace(replace(./bf:classificationPortion[1]/text(),$oneSlash,$twoSlash),$pPat,$pRep)" />
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:text>, &#10;				"value": "</xsl:text><xsl:value-of select="replace(replace(./bf:classificationPortion/text(),$oneSlash,$twoSlash),$pPat,$pRep)" />
+							</xsl:otherwise>
+						</xsl:choose>
 						<xsl:for-each select="./bf:itemPortion/text()">
 							<xsl:text> </xsl:text>
 							<xsl:value-of select="replace(replace(.,$oneSlash,$twoSlash),$pPat,$pRep)" />
@@ -681,21 +695,17 @@
 
 		<xsl:if test="$lcc_count > 0">
 			<xsl:choose>
-				<xsl:when test="$lcc_count = 1">
+				<xsl:when test="count($lcc/bf:classificationPortion) = 1">
 					<xsl:text>, &#10;		"category": "</xsl:text><xsl:value-of select="replace(replace($lcc/bf:classificationPortion/text(),$oneSlash,$twoSlash),$pPat,$pRep)" />
-					<xsl:for-each select="$lcc/bf:itemPortion/text()">
-						<xsl:text> </xsl:text>
-						<xsl:value-of select="replace(replace(.,$oneSlash,$twoSlash),$pPat,$pRep)" />
-					</xsl:for-each>
 					<xsl:text>"</xsl:text>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:text>, &#10;		"category": [</xsl:text>
-						<xsl:for-each select="$lcc">
+						<xsl:for-each select="$lcc/bf:classificationPortion">
 							<xsl:if test="position() != 1">
 								<xsl:text>,</xsl:text>
 							</xsl:if>
-							<xsl:text> &#10;			"</xsl:text><xsl:value-of select="replace(replace(./bf:classificationPortion/text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text> </xsl:text><xsl:value-of select="replace(replace(./bf:itemPortion/text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
+							<xsl:text> &#10;			"</xsl:text><xsl:value-of select="replace(replace(./text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
 						</xsl:for-each>
 					<xsl:text> &#10;		]</xsl:text>
 				</xsl:otherwise>
