@@ -94,43 +94,11 @@
 								<xsl:call-template name="date">
 									<xsl:with-param name="node" select="./dct:created" />
 								</xsl:call-template>
-<!--								<xsl:text>, &#10;		"pubDate": </xsl:text>
-								<xsl:choose>
-									<xsl:when test='matches(substring(./dct:created/text(),1,4),"[12]\d{3}")'>
-										<xsl:value-of select="substring(./dct:created/text(),1,4)" />
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:text>"</xsl:text><xsl:value-of select="substring(./dct:created/text(),1,4)" /><xsl:text>"</xsl:text>
-									</xsl:otherwise>
-								</xsl:choose>-->
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:call-template name="date">
 									<xsl:with-param name="node" select="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf']" />
 								</xsl:call-template>
-<!--								<xsl:text>, &#10;		"pubDate": </xsl:text>
-								<xsl:choose>
-									<xsl:when test="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf']">
-										<xsl:choose>
-											<xsl:when test="matches(substring($Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf'][1]/text(),1,4),'[12]\d{3}')">
-												<xsl:value-of select="substring($Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf'][1]/text(),1,4)" />
-											</xsl:when>
-											<xsl:otherwise>
-												<xsl:text>"</xsl:text><xsl:value-of select="substring($Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf'][1]/text(),1,4)" /><xsl:text>"</xsl:text>
-											</xsl:otherwise>
-										</xsl:choose>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:choose>
-											<xsl:when test='matches(substring($Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[1]/text(),1,4),"[12]\d{3}")'>
-												<xsl:value-of select="substring($Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[1]/text(),1,4)" />
-											</xsl:when>
-											<xsl:otherwise>
-												<xsl:text>"</xsl:text><xsl:value-of select="substring($Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[1]/text(),1,4)" /><xsl:text>"</xsl:text>
-											</xsl:otherwise>
-										</xsl:choose>
-									</xsl:otherwise>
-								</xsl:choose>-->
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:if>
@@ -199,19 +167,6 @@
 			</xsl:result-document>
 		</xsl:for-each>
 
-		<!--This section is for mapping Instance OCLC numbers to Work OCLC numbers, and Work OCLC numbers to general metadata for those works. By storing this we should be able to get around
-			records that are sparse because the full Work/Instance record are not present after their first appearance-->
-<!--		<xsl:variable name="instance_file_path">
-			<xsl:choose>
-				<xsl:when test="not($output_path)">
-					<xsl:value-of select="concat(concat('./outputs/dicts/',$filename),'_instance.json')" />
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="concat(concat(concat($output_path,'/dicts/'),$filename),'_instance.json')" />
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>-->
-
 		<!--This section is for storing the metadata for the first appearence of an instance id in the file. The
 		first instance in the sequence will have all the metadata. When we merge the stores of all the first 
 		appearance of each instance, we'll be able to fill in metadata from trimmed records by referencing the
@@ -226,36 +181,6 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-
-<!--		<xsl:result-document href="{$instance_file_path}" method='text' exclude-result-prefixes="#all" omit-xml-declaration="yes" indent="no" encoding="UTF-8">
-			<xsl:variable name="instance_set" select="/rdf:RDF/bf:Instance[generate-id() = generate-id(key('instances',./@rdf:about)[1])]" />
-			<xsl:text>{</xsl:text>
-				<xsl:for-each select="$instance_set">
-					<xsl:if test="position() != 1">
-						<xsl:text>,</xsl:text>
-					</xsl:if>
-					<xsl:text>&#10;	"</xsl:text>
-					<xsl:choose>
-						<xsl:when test="substring(./@rdf:about,1,1) != '_'">
-							<xsl:value-of select="substring(./@rdf:about,30)" />
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="./@rdf:about" />
-						</xsl:otherwise>
-					</xsl:choose>
-					<xsl:text>":	"</xsl:text>
-					<xsl:choose>
-						<xsl:when test="substring(./bf:instanceOf/@rdf:resource,1,1) != '_'">
-							<xsl:value-of select="substring(./bf:instanceOf/@rdf:resource,36)" />
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="./bf:instanceOf/@rdf:resource" />
-						</xsl:otherwise>
-					</xsl:choose>
-					<xsl:text>"</xsl:text>
-				</xsl:for-each>
-			<xsl:text>&#10;}</xsl:text>
-		</xsl:result-document>-->
 
 		<xsl:result-document href="{$meta_file_path}" method='text' exclude-result-prefixes="#all" omit-xml-declaration="yes" indent="no" encoding="UTF-8">
 			<xsl:variable name="instance_set" select="/rdf:RDF/bf:Instance[generate-id() = generate-id(key('instances',./@rdf:about)[1])]" />
@@ -297,29 +222,6 @@
 						<xsl:call-template name="date">
 							<xsl:with-param name="node" select="./bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf']" />
 						</xsl:call-template>
-<!--						<xsl:text>, &#10;		"pubDate": </xsl:text>
-							<xsl:choose>
-								<xsl:when test="./bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf']">
-									<xsl:choose>
-										<xsl:when test="matches(substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf'][1]/text(),1,4),'[12]\d{3}')">
-											<xsl:value-of select="substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf'][1]/text(),1,4)" />
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:text>"</xsl:text><xsl:value-of select="substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf'][1]/text(),1,4)" /><xsl:text>"</xsl:text>
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:choose>
-										<xsl:when test='matches(substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[1]/text(),1,4),"[12]\d{3}")'>
-											<xsl:value-of select="substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[1]/text(),1,4)" />
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:text>"</xsl:text><xsl:value-of select="substring(./bf:provisionActivity/bf:ProvisionActivity/bf:date[1]/text(),1,4)" /><xsl:text>"</xsl:text>
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:otherwise>
-							</xsl:choose>-->
 					</xsl:if>
 					<xsl:call-template name="publisher">
 						<xsl:with-param name="Instance" select="." />
@@ -537,14 +439,6 @@
 
 	<xsl:template name="languages">
 		<xsl:param name="langs" />
-<!--		<xsl:variable name="lang_strs" select="$Work/bf:language/bf:Language/@rdf:about" />
-		<xsl:variable name="lang_nodes" select="$Work/bf:language/bf:Language/bf:identifiedBy/bf:Identifier/rdf:value/@rdf:resource" />
-		<xsl:variable name="all_langs">
-			<xsl:copy-of select="$lang_strs" />
-			<xsl:copy-of select="$lang_nodes" />
-		</xsl:variable>
-		<xsl:variable name="lang_strs_count" select="count($lang_strs)" />
-		<xsl:variable name="lang_nodes_count" select="count($lang_nodes)" />-->
 		<xsl:variable name="lang_count" select="count($langs)" />
 		<xsl:choose>
 			<xsl:when test="$lang_count > 1">
@@ -570,7 +464,6 @@
 								<xsl:text>, &#10;		"language": [</xsl:text>
 								<!--Create a set of unique language values present in the language structures, both with and without the identifiedBy structure-->
 								<xsl:for-each select="$langs">
-<!--					<xsl:for-each select="$Work/bf:language/bf:Language/@rdf:about[generate-id() = generate-id(key('lang_combined',.)[1])] | $Work/bf:language/bf:Language/bf:identifiedBy/bf:Identifier/rdf:value/@rdf:resource[generate-id() = generate-id(key('lang_combined',.)[1])]">-->
 									<xsl:if test="position() != 1">
 										<xsl:text>,</xsl:text>
 									</xsl:if>
@@ -585,14 +478,6 @@
 			<xsl:otherwise>
 				<xsl:if test="$lang_count = 1">
 					<xsl:text>, &#10;		"language": "</xsl:text><xsl:value-of select="replace(replace(substring($langs,40),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
-<!--					<xsl:choose>
-						<xsl:when test="$lang_strs_count = 1">
-							<xsl:value-of select="substring($lang_strs,40)" /><xsl:text>"</xsl:text>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="substring($lang_nodes,40)" /><xsl:text>"</xsl:text>
-						</xsl:otherwise>
-					</xsl:choose>-->
 				</xsl:if>
 			</xsl:otherwise>
 		</xsl:choose>
@@ -696,7 +581,10 @@
 		<xsl:if test="$lcc_count > 0">
 			<xsl:choose>
 				<xsl:when test="count($lcc/bf:classificationPortion) = 1">
-					<xsl:text>, &#10;		"category": "</xsl:text><xsl:value-of select="replace(replace($lcc/bf:classificationPortion/text(),$oneSlash,$twoSlash),$pPat,$pRep)" />
+					<xsl:text>, &#10;		"category": "</xsl:text>
+					<xsl:call-template name="lcc_map">
+						<xsl:with-param name="lcc_value" select="replace(replace($lcc/bf:classificationPortion/text(),$oneSlash,$twoSlash),$pPat,$pRep)" />
+					</xsl:call-template>
 					<xsl:text>"</xsl:text>
 				</xsl:when>
 				<xsl:otherwise>
@@ -705,7 +593,11 @@
 							<xsl:if test="position() != 1">
 								<xsl:text>,</xsl:text>
 							</xsl:if>
-							<xsl:text> &#10;			"</xsl:text><xsl:value-of select="replace(replace(./text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
+							<xsl:text> &#10;			"</xsl:text>
+							<xsl:call-template name="lcc_map">
+								<xsl:with-param name="lcc_value" select="replace(replace(./text(),$oneSlash,$twoSlash),$pPat,$pRep)" />
+							</xsl:call-template>
+							<xsl:text>"</xsl:text>
 						</xsl:for-each>
 					<xsl:text> &#10;		]</xsl:text>
 				</xsl:otherwise>
@@ -790,5 +682,486 @@
 			<xsl:text>, &#10;			"journalTitle": "</xsl:text><xsl:value-of select="replace(replace($Work/bf:title[1]/bf:Title/rdfs:label/text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
 			<xsl:text> &#10;		}</xsl:text>
 		</xsl:if>
+	</xsl:template>
+
+	<xsl:template name="lcc_map">
+		<xsl:param name="lcc_value" />
+		<xsl:choose>
+			<xsl:when test="substring($lcc_value,1,1) = 'A'">
+				<xsl:call-template name="lcc_map_a">
+					<xsl:with-param name="val" select="$lcc_value" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="substring($lcc_value,1,1) = 'B'">
+				<xsl:call-template name="lcc_map_b">
+					<xsl:with-param name="val" select="$lcc_value" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="substring($lcc_value,1,1) = 'C'">
+				<xsl:call-template name="lcc_map_c">
+					<xsl:with-param name="val" select="$lcc_value" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="substring($lcc_value,1,1) = 'D'">
+				<xsl:call-template name="lcc_map_d">
+					<xsl:with-param name="val" select="$lcc_value" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="substring($lcc_value,1,1) = 'E'">
+				<xsl:call-template name="lcc_map_e">
+					<xsl:with-param name="val" select="$lcc_value" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="substring($lcc_value,1,1) = 'F'">
+				<xsl:call-template name="lcc_map_f">
+					<xsl:with-param name="val" select="$lcc_value" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="substring($lcc_value,1,1) = 'G'">
+				<xsl:call-template name="lcc_map_g">
+					<xsl:with-param name="val" select="$lcc_value" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="substring($lcc_value,1,1) = 'H'">
+				<xsl:call-template name="lcc_map_h">
+					<xsl:with-param name="val" select="$lcc_value" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="substring($lcc_value,1,1) = 'J'">
+				<xsl:call-template name="lcc_map_j">
+					<xsl:with-param name="val" select="$lcc_value" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="substring($lcc_value,1,1) = 'K'">
+				<xsl:call-template name="lcc_map_k">
+					<xsl:with-param name="val" select="$lcc_value" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="substring($lcc_value,1,1) = 'L'">
+				<xsl:call-template name="lcc_map_l">
+					<xsl:with-param name="val" select="$lcc_value" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="substring($lcc_value,1,1) = 'M'">
+				<xsl:call-template name="lcc_map_m">
+					<xsl:with-param name="val" select="$lcc_value" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="substring($lcc_value,1,1) = 'N'">
+				<xsl:call-template name="lcc_map_n">
+					<xsl:with-param name="val" select="$lcc_value" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="substring($lcc_value,1,1) = 'P'">
+				<xsl:call-template name="lcc_map_p">
+					<xsl:with-param name="val" select="$lcc_value" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="substring($lcc_value,1,1) = 'Q'">
+				<xsl:call-template name="lcc_map_q">
+					<xsl:with-param name="val" select="$lcc_value" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="substring($lcc_value,1,1) = 'R'">
+				<xsl:call-template name="lcc_map_r">
+					<xsl:with-param name="val" select="$lcc_value" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="substring($lcc_value,1,1) = 'S'">
+				<xsl:call-template name="lcc_map_s">
+					<xsl:with-param name="val" select="$lcc_value" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="substring($lcc_value,1,1) = 'T'">
+				<xsl:call-template name="lcc_map_t">
+					<xsl:with-param name="val" select="$lcc_value" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="substring($lcc_value,1,1) = 'U'">
+				<xsl:call-template name="lcc_map_u">
+					<xsl:with-param name="val" select="$lcc_value" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="substring($lcc_value,1,1) = 'V'">
+				<xsl:call-template name="lcc_map_v">
+					<xsl:with-param name="val" select="$lcc_value" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="substring($lcc_value,1,1) = 'Z'">
+				<xsl:call-template name="lcc_map_z">
+					<xsl:with-param name="val" select="$lcc_value" />
+				</xsl:call-template>
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="lcc_map_a">
+		<xsl:param name="val" />
+		<xsl:choose>
+			<xsl:when test="substring($val,1,2) = 'AC'"><xsl:text>Collections. Series. Collected works</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'AE'"><xsl:text>Encyclopedias</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'AG'"><xsl:text>Dictionaries and other general reference works</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'AI'"><xsl:text>Indexes</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'AM'"><xsl:text>Museums. Collectors and collecting</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'AN'"><xsl:text>Newspapers</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'AP'"><xsl:text>Periodicals</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'AS'"><xsl:text>Academies and learned societies</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'AY'"><xsl:text>Yearbooks. Almanacs. Directories</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'AZ'"><xsl:text>History of scholarship and learning. The humanities</xsl:text></xsl:when>
+			<xsl:otherwise><xsl:text>GENERAL WORKS</xsl:text></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="lcc_map_b">
+		<xsl:param name="val" />
+		<xsl:choose>
+			<xsl:when test="substring($val,1,2) = 'BC'"><xsl:text>Logic</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'BD'"><xsl:text>Speculative philosophy</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'BF'"><xsl:text>Psychology</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'BH'"><xsl:text>Aesthetics</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'BJ'"><xsl:text>Ethics</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'BL'"><xsl:text>Religions. Mythology. Rationalism</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'BM'"><xsl:text>Judaism</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'BP'"><xsl:text>Islam. Bahaism. Theosophy, etc.</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'BQ'"><xsl:text>Buddhism</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'BR'"><xsl:text>Christianity</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'BS'"><xsl:text>The Bible</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'BT'"><xsl:text>Doctrinal Theology</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'BV'"><xsl:text>Practical Theology</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'BX'"><xsl:text>Christian Denominations</xsl:text></xsl:when>
+			<xsl:otherwise><xsl:text>Philosophy (General)</xsl:text></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="lcc_map_c">
+		<xsl:param name="val" />
+		<xsl:choose>
+			<xsl:when test="substring($val,1,2) = 'CB'"><xsl:text>History of Civilization</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'CC'"><xsl:text>Archaeology</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'CD'"><xsl:text>Diplomatics. Archives. Seals</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'CE'"><xsl:text>Technical Chronology. Calendar</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'CJ'"><xsl:text>Numismatics</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'CN'"><xsl:text>Inscriptions. Epigraphy</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'CR'"><xsl:text>Heraldry</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'CS'"><xsl:text>Genealogy</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'CT'"><xsl:text>Biography</xsl:text></xsl:when>
+			<xsl:otherwise><xsl:text>Auxiliary Sciences of History (General)</xsl:text></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="lcc_map_d">
+		<xsl:param name="val" />
+		<xsl:choose>
+			<xsl:when test="substring($val,1,3) = 'DAW'"><xsl:text>Central Europe</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'DA'"><xsl:text>Great Britain</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'DB'"><xsl:text>Austria - Liechtenstein - Hungary - Czechoslovakia</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'DC'"><xsl:text>France - Andorra - Monaco</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'DD'"><xsl:text>Germany</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'DE'"><xsl:text>Greco-Roman World</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'DF'"><xsl:text>Greece</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'DG'"><xsl:text>Italy - Malta</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'DH'"><xsl:text>Low Countries - Benelux Countries</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,3) = 'DJK'"><xsl:text>Eastern Europe (General)</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'DJ'"><xsl:text>Netherlands (Holland)</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'DK'"><xsl:text>Russia. Soviet Union. Former Soviet Republics - Poland</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'DL'"><xsl:text>Northern Europe. Scandinavia</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'DP'"><xsl:text>Spain - Portugal</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'DQ'"><xsl:text>Switzerland</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'DR'"><xsl:text>Balkan Peninsula</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'DS'"><xsl:text>Asia</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'DT'"><xsl:text>Africa</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'DU'"><xsl:text>Oceania (South Seas)</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'DX'"><xsl:text>Romanies</xsl:text></xsl:when>
+			<xsl:otherwise><xsl:text>History (General)</xsl:text></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="lcc_map_e">
+		<xsl:param name="val" />
+		<xsl:choose>
+			<xsl:when test="number(substring-after($val,'E')) &lt;= 143">America</xsl:when>
+			<xsl:when test="number(substring-after($val,'E')) &lt;= 909">United States</xsl:when>
+			<xsl:otherwise><xsl:text>HISTORY OF THE AMERICAS</xsl:text></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="lcc_map_f">
+		<xsl:param name="val" />
+		<xsl:choose>
+			<xsl:when test="number(substring-after($val,'F')) &lt;= 975">United States local history</xsl:when>
+			<xsl:when test="number(substring-after($val,'F')) &lt;= 1145.2">British America (including Canada)</xsl:when>
+			<xsl:when test="number(substring-after($val,'F')) = 1170">French America</xsl:when>
+			<xsl:when test="number(substring-after($val,'F')) &lt;= 3799">Latin America. Spanish America</xsl:when>
+			<xsl:otherwise><xsl:text>HISTORY OF THE AMERICAS</xsl:text></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="lcc_map_g">
+		<xsl:param name="val" />
+		<xsl:choose>
+			<xsl:when test="substring($val,1,2) = 'GA'"><xsl:text>Mathematical geography. Cartography</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'GB'"><xsl:text>Physical geography</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'GC'"><xsl:text>Oceanography</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'GE'"><xsl:text>Environmental Sciences</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'GF'"><xsl:text>Human ecology. Anthropogeography</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'GN'"><xsl:text>Anthropology</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'GR'"><xsl:text>Folklore</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'GT'"><xsl:text>Manners and customs (General)</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'GV'"><xsl:text>Recreation. Leisure</xsl:text></xsl:when>
+			<xsl:otherwise><xsl:text>Geography (General). Atlases. Maps</xsl:text></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="lcc_map_h">
+		<xsl:param name="val" />
+		<xsl:choose>
+			<xsl:when test="substring($val,1,2) = 'HA'"><xsl:text>Statistics</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'HB'"><xsl:text>Economic theory. Demography</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'HC'"><xsl:text>Economic history and conditions</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'HD'"><xsl:text>Industries. Land use. Labor</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'HE'"><xsl:text>Transportation and communications</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'HF'"><xsl:text>Commerce</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'HG'"><xsl:text>Finance</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'HJ'"><xsl:text>Public finance</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'HM'"><xsl:text>Sociology (General)</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'HN'"><xsl:text>Social history and conditions. Social problems. Social reform</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'HQ'"><xsl:text>The family. Marriage. Women</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'HS'"><xsl:text>Societies: secret, benevolent, etc.</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'HT'"><xsl:text>Communities. Classes. Races</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'HV'"><xsl:text>Social pathology. Social and public welfare. Criminology</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'HX'"><xsl:text>Socialism. Communism. Anarchism</xsl:text></xsl:when>
+			<xsl:otherwise><xsl:text>Social sciences (General)</xsl:text></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="lcc_map_j">
+		<xsl:param name="val" />
+		<xsl:choose>
+			<xsl:when test="substring($val,1,2) = 'JA'"><xsl:text>Political science (General)</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'JC'"><xsl:text>Political theory</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'JF'"><xsl:text>Political institutions and public administration</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'JJ'"><xsl:text>Political institutions and public administration (North America)</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'JK'"><xsl:text>Political institutions and public administration (United States)</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'JL'"><xsl:text>Political institutions and public administration (Canada, Latin America, etc.)</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'JN'"><xsl:text>Political institutions and public administration (Europe)</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'JQ'"><xsl:text>Political institutions and public administration (Asia, Africa, Australia, Pacific Area, etc.)</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'JS'"><xsl:text>Local government. Municipal government</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'JV'"><xsl:text>Colonies and colonization. Emigration and immigration. International migration</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'JX'"><xsl:text>International law, see JZ and KZ</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'JZ'"><xsl:text>International relations</xsl:text></xsl:when>
+			<xsl:otherwise><xsl:text>General legislative and executive papers</xsl:text></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="lcc_map_k">
+		<xsl:param name="val" />
+		<xsl:choose>
+			<xsl:when test="substring($val,1,3) = 'KBM'"><xsl:text>Jewish law</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,3) = 'KBP'"><xsl:text>Islamic law</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,3) = 'KBR'"><xsl:text>History of canon law</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,3) = 'KBU'"><xsl:text>Law of the Roman Catholic Church. The Holy See</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'KB'"><xsl:text>Religious law in general. Comparative religious law. Jurisprudence</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,3) = 'KDZ'"><xsl:text>America. North America</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'KD'"><xsl:text>United Kingdom and Ireland</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'KE'"><xsl:text>Canada</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'KF'"><xsl:text>United States</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'KG'"><xsl:text>Latin America - Mexico and Central America - West Indies. Caribbean area</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'KH'"><xsl:text>South America</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'KJ'"><xsl:text>Europe</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'KK'"><xsl:text>Europe</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'KL'"><xsl:text>Asia and Eurasia, Africa, Pacific Area, and Antarctica</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'KM'"><xsl:text>Asia</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'KN'"><xsl:text>South Asia. Southeast Asia. East Asia</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'KP'"><xsl:text>South Asia. Southeast Asia. East Asia</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'KQ'"><xsl:text>Africa</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'KR'"><xsl:text>Africa</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'KS'"><xsl:text>Africa</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'KT'"><xsl:text>Africa</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'KU'"><xsl:text>Pacific Area</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'KV'"><xsl:text>Pacific area jurisdictions</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'KW'"><xsl:text>Pacific area jurisdictions</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'KZ'"><xsl:text>Law of nations</xsl:text></xsl:when>
+			<xsl:otherwise><xsl:text>Law in general. Comparative and uniform law. Jurisprudence</xsl:text></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="lcc_map_l">
+		<xsl:param name="val" />
+		<xsl:choose>
+			<xsl:when test="substring($val,1,2) = 'LA'"><xsl:text>History of education</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'LB'"><xsl:text>Theory and practice of education</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'LC'"><xsl:text>Special aspects of education</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'LD'"><xsl:text>Individual institutions - United States</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'LE'"><xsl:text>Individual institutions - America (except United States)</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'LF'"><xsl:text>Individual institutions - Europe</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'LG'"><xsl:text>Individual institutions - Asia, Africa, Indian Ocean islands, Australia, New Zealand, Pacific islands</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'LH'"><xsl:text>College and school magazines and papers</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'LJ'"><xsl:text>Student fraternities and societies, United States</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'LT'"><xsl:text>Textbooks</xsl:text></xsl:when>
+			<xsl:otherwise><xsl:text>Education (General)</xsl:text></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="lcc_map_m">
+		<xsl:param name="val" />
+		<xsl:choose>
+			<xsl:when test="substring($val,1,2) = 'ML'"><xsl:text>Literature on music</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'MT'"><xsl:text>Instruction and study</xsl:text></xsl:when>
+			<xsl:otherwise><xsl:text>Music</xsl:text></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="lcc_map_n">
+		<xsl:param name="val" />
+		<xsl:choose>
+			<xsl:when test="substring($val,1,2) = 'NA'"><xsl:text>Architecture</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'NB'"><xsl:text>Sculpture</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'NC'"><xsl:text>Drawing. Design. Illustration</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'ND'"><xsl:text>Painting</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'NE'"><xsl:text>Print media</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'NK'"><xsl:text>Decorative arts</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'NX'"><xsl:text>Arts in general</xsl:text></xsl:when>
+			<xsl:otherwise><xsl:text>Visual arts</xsl:text></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="lcc_map_p">
+		<xsl:param name="val" />
+		<xsl:choose>
+			<xsl:when test="substring($val,1,2) = 'PA'"><xsl:text>Greek language and literature. Latin language and literature</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'PB'"><xsl:text>Modern languages. Celtic languages</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'PC'"><xsl:text>Romance languages</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'PD'"><xsl:text>Germanic languages. Scandinavian languages</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'PE'"><xsl:text>English language</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'PF'"><xsl:text>West Germanic languages</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'PG'"><xsl:text>Slavic languages. Baltic languages. Albanian language</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'PH'"><xsl:text>Uralic languages. Basque language</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'PJ'"><xsl:text>Oriental languages and literatures</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'PK'"><xsl:text>Indo-Iranian languages and literatures</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'PL'"><xsl:text>Languages and literatures of Eastern Asia, Africa, Oceania</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'PM'"><xsl:text>Hyperborean, Indian, and artificial languages</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'PN'"><xsl:text>Literature (General)</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'PQ'"><xsl:text>French literature - Italian literature - Spanish literature - Portuguese literature</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'PR'"><xsl:text>English literature</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'PS'"><xsl:text>American literature</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'PT'"><xsl:text>German literature - Dutch literature - Flemish literature since 1830 - Afrikaans literature - Scandinavian literature - Old Norse literature: Old Icelandic and Old Norwegian - Modern Icelandic literature - Faroese literature - Danish literature - Norwegian literature - Swedish literature</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'PZ'"><xsl:text>Fiction and juvenile belles lettres</xsl:text></xsl:when>
+			<xsl:otherwise><xsl:text>Philology. Linguistics</xsl:text></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="lcc_map_q">
+		<xsl:param name="val" />
+		<xsl:choose>
+			<xsl:when test="substring($val,1,2) = 'QA'"><xsl:text>Mathematics</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'QB'"><xsl:text>Astronomy</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'QC'"><xsl:text>Physics</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'QD'"><xsl:text>Chemistry</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'QE'"><xsl:text>Geology</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'QH'"><xsl:text>Natural history - Biology</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'QK'"><xsl:text>Botany</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'QL'"><xsl:text>Zoology</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'QM'"><xsl:text>Human anatomy</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'QP'"><xsl:text>Physiology</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'QR'"><xsl:text>Microbiology</xsl:text></xsl:when>
+			<xsl:otherwise><xsl:text>Science (General)</xsl:text></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="lcc_map_r">
+		<xsl:param name="val" />
+		<xsl:choose>
+			<xsl:when test="substring($val,1,2) = 'RA'"><xsl:text>Public aspects of medicine</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'RB'"><xsl:text>Pathology</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'RC'"><xsl:text>Internal medicine</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'RD'"><xsl:text>Surgery</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'RE'"><xsl:text>Ophthalmology</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'RF'"><xsl:text>Otorhinolaryngology</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'RG'"><xsl:text>Gynecology and obstetrics</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'RJ'"><xsl:text>Pediatrics</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'RK'"><xsl:text>Dentistry</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'RL'"><xsl:text>Dermatology</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'RM'"><xsl:text>Therapeutics. Pharmacology</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'RS'"><xsl:text>Pharmacy and materia medica</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'RT'"><xsl:text>Nursing</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'RV'"><xsl:text>Botanic, Thomsonian, and eclectic medicine</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'RX'"><xsl:text>Homeopathy</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'RZ'"><xsl:text>Other systems of medicine</xsl:text></xsl:when>
+			<xsl:otherwise><xsl:text>Medicine (General)</xsl:text></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="lcc_map_s">
+		<xsl:param name="val" />
+		<xsl:choose>
+			<xsl:when test="substring($val,1,2) = 'SB'"><xsl:text>Plant culture</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'SD'"><xsl:text>Forestry</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'SF'"><xsl:text>Animal culture</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'SH'"><xsl:text>Aquaculture. Fisheries. Angling</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'SK'"><xsl:text>Hunting sports</xsl:text></xsl:when>
+			<xsl:otherwise><xsl:text>Agriculture (General)</xsl:text></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="lcc_map_t">
+		<xsl:param name="val" />
+		<xsl:choose>
+			<xsl:when test="substring($val,1,2) = 'TA'"><xsl:text>Engineering (General). Civil engineering</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'TC'"><xsl:text>Hydraulic engineering. Ocean engineering</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'TD'"><xsl:text>Environmental technology. Sanitary engineering</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'TE'"><xsl:text>Highway engineering. Roads and pavements</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'TF'"><xsl:text>Railroad engineering and operation</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'TG'"><xsl:text>Bridge engineering</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'TH'"><xsl:text>Building construction</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'TJ'"><xsl:text>Mechanical engineering and machinery</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'TK'"><xsl:text>Electrical engineering. Electronics. Nuclear engineering</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'TL'"><xsl:text>Motor vehicles. Aeronautics. Astronautics</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'TN'"><xsl:text>Mining engineering. Metallurgy</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'TP'"><xsl:text>Chemical technology</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'TR'"><xsl:text>Photography</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'TS'"><xsl:text>Manufactures</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'TT'"><xsl:text>Handicrafts. Arts and crafts</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'TX'"><xsl:text>Home economics</xsl:text></xsl:when>
+			<xsl:otherwise><xsl:text>Technology (General)</xsl:text></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="lcc_map_u">
+		<xsl:param name="val" />
+		<xsl:choose>
+			<xsl:when test="substring($val,1,2) = 'UA'"><xsl:text>Armies: Organization, distribution, military situation</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'UB'"><xsl:text>Military administration</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'UC'"><xsl:text>Maintenance and transportation</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'UD'"><xsl:text>Infantry</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'UE'"><xsl:text>Cavalry. Armor</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'UF'"><xsl:text>Artillery</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'UG'"><xsl:text>Military engineering. Air forces</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'UH'"><xsl:text>Other services</xsl:text></xsl:when>
+			<xsl:otherwise><xsl:text>Military science (General)</xsl:text></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="lcc_map_v">
+		<xsl:param name="val" />
+		<xsl:choose>
+			<xsl:when test="substring($val,1,2) = 'VA'"><xsl:text>Navies: Organization, distribution, naval situation</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'VB'"><xsl:text>Naval administration</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'VC'"><xsl:text>Naval maintenance</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'VD'"><xsl:text>Naval seamen</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'VE'"><xsl:text>Marines</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'VF'"><xsl:text>Naval ordnance</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'VG'"><xsl:text>Minor services of navies</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'VK'"><xsl:text>Navigation. Merchant marine</xsl:text></xsl:when>
+			<xsl:when test="substring($val,1,2) = 'VM'"><xsl:text>Naval architecture. Shipbuilding. Marine engineering</xsl:text></xsl:when>
+			<xsl:otherwise><xsl:text>Naval science (General)</xsl:text></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="lcc_map_z">
+		<xsl:param name="val" />
+		<xsl:choose>
+			<xsl:when test="substring($val,1,2) = 'ZA'"><xsl:text>Information resources (General)</xsl:text></xsl:when>
+			<xsl:otherwise><xsl:text>Books (General). Writing. Paleography. Book industries and trade. Libraries. Bibliography</xsl:text></xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 </xsl:stylesheet>

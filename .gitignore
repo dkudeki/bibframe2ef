@@ -27,3 +27,8 @@ xsl/test4
 xsl/big_test_input
 xsl/java_test
 xsl/error*
+xsl/*_output
+xsl/*.dat
+xsl/*.png
+xsl/test_big*
+xsl/speed_tests.txt
