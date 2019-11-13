@@ -32,3 +32,4 @@ xsl/*.dat
 xsl/*.png
 xsl/test_big*
 xsl/speed_tests.txt
+xsl/debugging*

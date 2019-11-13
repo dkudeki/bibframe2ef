@@ -616,13 +616,13 @@
 						<xsl:if test="position() != 1">
 							<xsl:text>,</xsl:text>
 						</xsl:if>
-						<xsl:text> &#10;			"</xsl:text><xsl:value-of select="tokenize(./rdf:value/text(),' ')[position() = 1]" /><xsl:text>"</xsl:text>
+						<xsl:text> &#10;			"</xsl:text><xsl:value-of select="replace(replace(tokenize(./rdf:value/text(),' ')[position() = 1],$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
 					</xsl:for-each>
 					<xsl:text> &#10;		]</xsl:text>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:if test="count($base_path/bf:status) = 0 or $base_path/bf:status/bf:Status/rdf:label/text() != 'invalid' or $base_path/bf:status/bf:Status/rdf:label/text() != 'incorrect'">
-						<xsl:text>, &#10;		"</xsl:text><xsl:value-of select="$is_n" /><xsl:text>": "</xsl:text><xsl:value-of select="tokenize($base_path/rdf:value/text(),' ')[position() = 1]" /><xsl:text>"</xsl:text>
+						<xsl:text>, &#10;		"</xsl:text><xsl:value-of select="$is_n" /><xsl:text>": "</xsl:text><xsl:value-of select="replace(replace(tokenize($base_path/rdf:value/text(),' ')[position() = 1],$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
 					</xsl:if>
 				</xsl:otherwise>
 			</xsl:choose>
