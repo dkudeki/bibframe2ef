@@ -228,11 +228,13 @@
 		<xsl:choose>
 			<xsl:when test="$contributor_count = 1">
 				<xsl:text>,"contributor":{</xsl:text>
-				<xsl:text>"type":"</xsl:text><xsl:value-of select="$node/bf:agent/bf:Agent/rdf:type/@rdf:resource" /><xsl:text>"</xsl:text>
+				<xsl:text>"name":"</xsl:text><xsl:value-of select="replace(replace($node/bf:agent/bf:Agent/rdfs:label/text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
+				<xsl:if test="$node/bf:agent/bf:Agent/rdf:type/@rdf:resource">
+					<xsl:text>,"type":"</xsl:text><xsl:value-of select="$node/bf:agent/bf:Agent/rdf:type/@rdf:resource" /><xsl:text>"</xsl:text>
+				</xsl:if>
 				<xsl:if test="starts-with($node/bf:agent/bf:Agent/@rdf:about, 'http://www.viaf.org')">
 					<xsl:text>,"id":"</xsl:text><xsl:value-of select="$node/bf:agent/bf:Agent/@rdf:about" /><xsl:text>"</xsl:text>
 				</xsl:if>
-				<xsl:text>,"name":"</xsl:text><xsl:value-of select="replace(replace($node/bf:agent/bf:Agent/rdfs:label/text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
 				<xsl:text>}</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
@@ -243,11 +245,13 @@
 							<xsl:text>,</xsl:text>
 						</xsl:if>
 						<xsl:text>{</xsl:text>
-						<xsl:text>"type":"</xsl:text><xsl:value-of select="./bf:agent/bf:Agent/rdf:type/@rdf:resource" /><xsl:text>"</xsl:text>
+						<xsl:text>"name":"</xsl:text><xsl:value-of select="replace(replace(./bf:agent/bf:Agent/rdfs:label/text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
+						<xsl:if test="./bf:agent/bf:Agent/rdf:type/@rdf:resource">
+							<xsl:text>,"type":"</xsl:text><xsl:value-of select="./bf:agent/bf:Agent/rdf:type/@rdf:resource" /><xsl:text>"</xsl:text>
+						</xsl:if>
 						<xsl:if test="starts-with(./bf:agent/bf:Agent/@rdf:about, 'http://www.viaf.org')">
 							<xsl:text>,"id":"</xsl:text><xsl:value-of select="./bf:agent/bf:Agent/@rdf:about" /><xsl:text>"</xsl:text>
 						</xsl:if>
-						<xsl:text>,"name":"</xsl:text><xsl:value-of select="replace(replace(./bf:agent/bf:Agent/rdfs:label/text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
 						<xsl:text>}</xsl:text>
 					</xsl:for-each>
 					<xsl:text>]</xsl:text>
