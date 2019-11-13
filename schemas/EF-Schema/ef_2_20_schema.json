@@ -50,7 +50,7 @@
 					]
 				}
 			},
-			"required": [ "type", "name" ]
+			"required": [ "name" ]
 		},
 		"contributor_array": {
 			"type": "array",
