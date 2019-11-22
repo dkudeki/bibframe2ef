@@ -33,3 +33,4 @@ xsl/*.png
 xsl/test_big*
 xsl/speed_tests.txt
 xsl/debugging*
+xsl/ef2_metadata_examples*

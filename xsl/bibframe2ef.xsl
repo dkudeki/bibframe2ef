@@ -32,7 +32,8 @@
 
 			<xsl:result-document href="{$output_file_path}" method='text' exclude-result-prefixes="#all" omit-xml-declaration="yes" indent="no" encoding="UTF-8">
 				<xsl:text>{</xsl:text>
-					<xsl:text>"metadata":{</xsl:text>
+					<xsl:text>"@context": "https://worksets.htrc.illinois.edu/context/ef_context.jsonld"</xsl:text>
+					<xsl:text>,"metadata":{</xsl:text>
 					<xsl:text>"id":"</xsl:text><xsl:value-of select="./@rdf:about" /><xsl:text>"</xsl:text>
 					<xsl:choose>
 						<xsl:when test="substring($Instance/bf:issuance/bf:Issuance/@rdf:about,39) = 'mono'">
@@ -50,14 +51,14 @@
 						</xsl:otherwise>
 					</xsl:choose>
 					<xsl:text>,"isAccessibleForFree":</xsl:text>
-						<xsl:choose>
-							<xsl:when test="./dct:accessRights/text() = 'pd'">
-								<xsl:text>true</xsl:text>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:text>false</xsl:text>
-							</xsl:otherwise>
-						</xsl:choose>
+					<xsl:choose>
+						<xsl:when test="./dct:accessRights/text() = 'pd'">
+							<xsl:text>true</xsl:text>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:text>false</xsl:text>
+						</xsl:otherwise>
+					</xsl:choose>
 					<xsl:call-template name="title">
 						<xsl:with-param name="Instance" select="$Instance" />
 					</xsl:call-template>
@@ -321,6 +322,9 @@
 					<xsl:text>{</xsl:text>
 					<xsl:text>"id":"</xsl:text><xsl:value-of select="." /><xsl:text>"</xsl:text>
 					<xsl:text>,"type":"http://id.loc.gov/ontologies/bibframe/Place"</xsl:text>
+					<xsl:call-template name="pub_place_name">
+						<xsl:with-param name="val" select="substring(.,40)" />
+					</xsl:call-template>
 					<xsl:text>}</xsl:text>
 				</xsl:for-each>
 				<xsl:text>]</xsl:text>
@@ -330,6 +334,9 @@
 					<xsl:text>,"pubPlace":{</xsl:text>
 					<xsl:text>"id":"</xsl:text><xsl:value-of select="$pub_places" /><xsl:text>"</xsl:text>
 					<xsl:text>,"type":"http://id.loc.gov/ontologies/bibframe/Place"</xsl:text>
+					<xsl:call-template name="pub_place_name">
+						<xsl:with-param name="val" select="substring($pub_places,40)" />
+					</xsl:call-template>
 					<xsl:text>}</xsl:text>
 				</xsl:if>
 			</xsl:otherwise>
@@ -1061,6 +1068,395 @@
 		<xsl:choose>
 			<xsl:when test="substring($val,1,2) = 'ZA'"><xsl:text>Information resources (General)</xsl:text></xsl:when>
 			<xsl:otherwise><xsl:text>Books (General). Writing. Paleography. Book industries and trade. Libraries. Bibliography</xsl:text></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="pub_place_name">
+		<xsl:param name="val" />
+		<xsl:choose>
+			<xsl:when test="$val = 'aa'"><xsl:text>,"name": "Albania"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'abc'"><xsl:text>,"name": "Alberta"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ac'"><xsl:text>,"name": "Ashmore and Cartier Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'aca'"><xsl:text>,"name": "Australian Capital Territory"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ae'"><xsl:text>,"name": "Algeria"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'af'"><xsl:text>,"name": "Afghanistan"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ag'"><xsl:text>,"name": "Argentina"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ai'"><xsl:text>,"name": "Anguilla"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ai'"><xsl:text>,"name": "Armenia (Republic)"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'air'"><xsl:text>,"name": "Armenian S.S.R."</xsl:text></xsl:when>
+			<xsl:when test="$val = 'aj'"><xsl:text>,"name": "Azerbaijan"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ajr'"><xsl:text>,"name": "Azerbaijan S.S.R."</xsl:text></xsl:when>
+			<xsl:when test="$val = 'aku'"><xsl:text>,"name": "Alaska"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'alu'"><xsl:text>,"name": "Alabama"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'am'"><xsl:text>,"name": "Anguilla"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'an'"><xsl:text>,"name": "Andorra"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ao'"><xsl:text>,"name": "Angola"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'aq'"><xsl:text>,"name": "Antigua and Barbuda"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'aru'"><xsl:text>,"name": "Arkansas"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'as'"><xsl:text>,"name": "American Samoa"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'at'"><xsl:text>,"name": "Australia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'au'"><xsl:text>,"name": "Austria"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'aw'"><xsl:text>,"name": "Aruba"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ay'"><xsl:text>,"name": "Antarctica"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'azu'"><xsl:text>,"name": "Arizona"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ba'"><xsl:text>,"name": "Bahrain"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'bb'"><xsl:text>,"name": "Barbados"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'bcc'"><xsl:text>,"name": "British Columbia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'bd'"><xsl:text>,"name": "Burundi"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'be'"><xsl:text>,"name": "Belgium"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'bf'"><xsl:text>,"name": "Bahamas"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'bg'"><xsl:text>,"name": "Bangladesh"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'bh'"><xsl:text>,"name": "Belize"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'bi'"><xsl:text>,"name": "British Indian Ocean Territory"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'bl'"><xsl:text>,"name": "Brazil"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'bm'"><xsl:text>,"name": "Bermuda Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'bn'"><xsl:text>,"name": "Bosnia and Herzegovina"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'bo'"><xsl:text>,"name": "Bolivia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'bp'"><xsl:text>,"name": "Solomon Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'br'"><xsl:text>,"name": "Burma"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'bs'"><xsl:text>,"name": "Botswana"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'bt'"><xsl:text>,"name": "Bhutan"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'bu'"><xsl:text>,"name": "Bulgaria"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'bv'"><xsl:text>,"name": "Bouvet Island"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'bw'"><xsl:text>,"name": "Belarus"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'bwr'"><xsl:text>,"name": "Byelorussian S.S.R."</xsl:text></xsl:when>
+			<xsl:when test="$val = 'bx'"><xsl:text>,"name": "Brunei"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ca'"><xsl:text>,"name": "Caribbean Netherlands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'cau'"><xsl:text>,"name": "California"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'cb'"><xsl:text>,"name": "Cambodia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'cc'"><xsl:text>,"name": "China"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'cd'"><xsl:text>,"name": "Chad"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ce'"><xsl:text>,"name": "Sri Lanka"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'cf'"><xsl:text>,"name": "Congo (Brazzaville)"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'cg'"><xsl:text>,"name": "Congo (Democratic Republic)"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ch'"><xsl:text>,"name": "China (Republic : 1949 )"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ci'"><xsl:text>,"name": "Croatia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'cj'"><xsl:text>,"name": "Cayman Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ck'"><xsl:text>,"name": "Colombia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'cl'"><xsl:text>,"name": "Chile"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'cm'"><xsl:text>,"name": "Cameroon"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'cn'"><xsl:text>,"name": "Canada"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'co'"><xsl:text>,"name": "Curaçao"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'cou'"><xsl:text>,"name": "Colorado"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'cp'"><xsl:text>,"name": "Canton and Enderbury Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'cq'"><xsl:text>,"name": "Comoros"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'cr'"><xsl:text>,"name": "Costa Rica"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'cs'"><xsl:text>,"name": "Czechoslovakia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ctu'"><xsl:text>,"name": "Connecticut"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'cu'"><xsl:text>,"name": "Cuba"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'cv'"><xsl:text>,"name": "Cabo Verde"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'cw'"><xsl:text>,"name": "Cook Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'cx'"><xsl:text>,"name": "Central African Republic"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'cy'"><xsl:text>,"name": "Cyprus"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'cz'"><xsl:text>,"name": "Canal Zone"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'dcu'"><xsl:text>,"name": "District of Columbia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'deu'"><xsl:text>,"name": "Delaware"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'dk'"><xsl:text>,"name": "Denmark"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'dm'"><xsl:text>,"name": "Benin"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'dq'"><xsl:text>,"name": "Dominica"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'dr'"><xsl:text>,"name": "Dominican Republic"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ea'"><xsl:text>,"name": "Eritrea"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ec'"><xsl:text>,"name": "Ecuador"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'eg'"><xsl:text>,"name": "Equatorial Guinea"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'em'"><xsl:text>,"name": "TimorLeste"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'enk'"><xsl:text>,"name": "England"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'er'"><xsl:text>,"name": "Estonia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'err'"><xsl:text>,"name": "Estonia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'es'"><xsl:text>,"name": "El Salvador"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'et'"><xsl:text>,"name": "Ethiopia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'fa'"><xsl:text>,"name": "Faroe Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'fg'"><xsl:text>,"name": "French Guiana"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'fi'"><xsl:text>,"name": "Finland"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'fj'"><xsl:text>,"name": "Fiji"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'fk'"><xsl:text>,"name": "Falkland Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'flu'"><xsl:text>,"name": "Florida"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'fm'"><xsl:text>,"name": "Micronesia (Federated States)"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'fp'"><xsl:text>,"name": "French Polynesia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'fr'"><xsl:text>,"name": "France"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'fs'"><xsl:text>,"name": "Terres australes et antarctiques françaises"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ft'"><xsl:text>,"name": "Djibouti"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'gau'"><xsl:text>,"name": "Georgia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'gb'"><xsl:text>,"name": "Kiribati"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'gd'"><xsl:text>,"name": "Grenada"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ge'"><xsl:text>,"name": "Germany (East)"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'gg'"><xsl:text>,"name": "Guernsey"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'gh'"><xsl:text>,"name": "Ghana"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'gi'"><xsl:text>,"name": "Gibraltar"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'gl'"><xsl:text>,"name": "Greenland"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'gm'"><xsl:text>,"name": "Gambia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'gn'"><xsl:text>,"name": "Gilbert and Ellice Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'go'"><xsl:text>,"name": "Gabon"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'gp'"><xsl:text>,"name": "Guadeloupe"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'gr'"><xsl:text>,"name": "Greece"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'gs'"><xsl:text>,"name": "Georgia (Republic)"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'gsr'"><xsl:text>,"name": "Georgian S.S.R."</xsl:text></xsl:when>
+			<xsl:when test="$val = 'gt'"><xsl:text>,"name": "Guatemala"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'gu'"><xsl:text>,"name": "Guam"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'gv'"><xsl:text>,"name": "Guinea"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'gw'"><xsl:text>,"name": "Germany"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'gy'"><xsl:text>,"name": "Guyana"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'gz'"><xsl:text>,"name": "Gaza Strip"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'hiu'"><xsl:text>,"name": "Hawaii"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'hk'"><xsl:text>,"name": "Hong Kong"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'hm'"><xsl:text>,"name": "Heard and McDonald Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ho'"><xsl:text>,"name": "Honduras"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ht'"><xsl:text>,"name": "Haiti"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'hu'"><xsl:text>,"name": "Hungary"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'iau'"><xsl:text>,"name": "Iowa"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ic'"><xsl:text>,"name": "Iceland"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'idu'"><xsl:text>,"name": "Idaho"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ie'"><xsl:text>,"name": "Ireland"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ii'"><xsl:text>,"name": "India"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ilu'"><xsl:text>,"name": "Illinois"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'im'"><xsl:text>,"name": "Isle of Man"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'inu'"><xsl:text>,"name": "Indiana"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'io'"><xsl:text>,"name": "Indonesia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'iq'"><xsl:text>,"name": "Iraq"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ir'"><xsl:text>,"name": "Iran"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'is'"><xsl:text>,"name": "Israel"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'it'"><xsl:text>,"name": "Italy"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'iu'"><xsl:text>,"name": "IsraelSyria Demilitarized Zones"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'iv'"><xsl:text>,"name": "Côte d'Ivoire"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'iw'"><xsl:text>,"name": "IsraelJordan Demilitarized Zones"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'iy'"><xsl:text>,"name": "IraqSaudi Arabia Neutral Zone"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ja'"><xsl:text>,"name": "Japan"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'je'"><xsl:text>,"name": "Jersey"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ji'"><xsl:text>,"name": "Johnston Atoll"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'jm'"><xsl:text>,"name": "Jamaica"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'jn'"><xsl:text>,"name": "Jan Mayen"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'jo'"><xsl:text>,"name": "Jordan"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ke'"><xsl:text>,"name": "Kenya"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'kg'"><xsl:text>,"name": "Kyrgyzstan"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'kgr'"><xsl:text>,"name": "Kirghiz S.S.R."</xsl:text></xsl:when>
+			<xsl:when test="$val = 'kn'"><xsl:text>,"name": "Korea (North)"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ko'"><xsl:text>,"name": "Korea (South)"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ksu'"><xsl:text>,"name": "Kansas"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ku'"><xsl:text>,"name": "Kuwait"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'kv'"><xsl:text>,"name": "Kosovo"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'kyu'"><xsl:text>,"name": "Kentucky"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'kz'"><xsl:text>,"name": "Kazakhstan"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'kzr'"><xsl:text>,"name": "Kazakh S.S.R."</xsl:text></xsl:when>
+			<xsl:when test="$val = 'lau'"><xsl:text>,"name": "Louisiana"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'lb'"><xsl:text>,"name": "Liberia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'le'"><xsl:text>,"name": "Lebanon"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'lh'"><xsl:text>,"name": "Liechtenstein"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'li'"><xsl:text>,"name": "Lithuania"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'lir'"><xsl:text>,"name": "Lithuania"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ln'"><xsl:text>,"name": "Central and Southern Line Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'lo'"><xsl:text>,"name": "Lesotho"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ls'"><xsl:text>,"name": "Laos"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'lu'"><xsl:text>,"name": "Luxembourg"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'lv'"><xsl:text>,"name": "Latvia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'lvr'"><xsl:text>,"name": "Latvia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ly'"><xsl:text>,"name": "Libya"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'mau'"><xsl:text>,"name": "Massachusetts"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'mbc'"><xsl:text>,"name": "Manitoba"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'mc'"><xsl:text>,"name": "Monaco"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'mdu'"><xsl:text>,"name": "Maryland"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'meu'"><xsl:text>,"name": "Maine"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'mf'"><xsl:text>,"name": "Mauritius"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'mg'"><xsl:text>,"name": "Madagascar"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'mh'"><xsl:text>,"name": "Macao"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'miu'"><xsl:text>,"name": "Michigan"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'mj'"><xsl:text>,"name": "Montserrat"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'mk'"><xsl:text>,"name": "Oman"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ml'"><xsl:text>,"name": "Mali"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'mm'"><xsl:text>,"name": "Malta"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'mnu'"><xsl:text>,"name": "Minnesota"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'mo'"><xsl:text>,"name": "Montenegro"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'mou'"><xsl:text>,"name": "Missouri"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'mp'"><xsl:text>,"name": "Mongolia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'mq'"><xsl:text>,"name": "Martinique"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'mr'"><xsl:text>,"name": "Morocco"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'msu'"><xsl:text>,"name": "Mississippi"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'mtu'"><xsl:text>,"name": "Montana"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'mu'"><xsl:text>,"name": "Mauritania"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'mv'"><xsl:text>,"name": "Moldova"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'mvr'"><xsl:text>,"name": "Moldavian S.S.R."</xsl:text></xsl:when>
+			<xsl:when test="$val = 'mw'"><xsl:text>,"name": "Malawi"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'mx'"><xsl:text>,"name": "Mexico"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'my'"><xsl:text>,"name": "Malaysia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'mz'"><xsl:text>,"name": "Mozambique"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'na'"><xsl:text>,"name": "Netherlands Antilles"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'nbu'"><xsl:text>,"name": "Nebraska"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ncu'"><xsl:text>,"name": "North Carolina"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ndu'"><xsl:text>,"name": "North Dakota"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ne'"><xsl:text>,"name": "Netherlands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'nfc'"><xsl:text>,"name": "Newfoundland and Labrador"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ng'"><xsl:text>,"name": "Niger"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'nhu'"><xsl:text>,"name": "New Hampshire"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'nik'"><xsl:text>,"name": "Northern Ireland"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'nju'"><xsl:text>,"name": "New Jersey"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'nkc'"><xsl:text>,"name": "New Brunswick"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'nl'"><xsl:text>,"name": "New Caledonia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'nm'"><xsl:text>,"name": "Northern Mariana Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'nmu'"><xsl:text>,"name": "New Mexico"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'nn'"><xsl:text>,"name": "Vanuatu"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'no'"><xsl:text>,"name": "Norway"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'np'"><xsl:text>,"name": "Nepal"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'nq'"><xsl:text>,"name": "Nicaragua"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'nr'"><xsl:text>,"name": "Nigeria"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'nsc'"><xsl:text>,"name": "Nova Scotia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ntc'"><xsl:text>,"name": "Northwest Territories"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'nu'"><xsl:text>,"name": "Nauru"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'nuc'"><xsl:text>,"name": "Nunavut"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'nvu'"><xsl:text>,"name": "Nevada"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'nw'"><xsl:text>,"name": "Northern Mariana Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'nx'"><xsl:text>,"name": "Norfolk Island"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'nyu'"><xsl:text>,"name": "New York (State)"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'nz'"><xsl:text>,"name": "New Zealand"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ohu'"><xsl:text>,"name": "Ohio"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'oku'"><xsl:text>,"name": "Oklahoma"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'onc'"><xsl:text>,"name": "Ontario"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'oru'"><xsl:text>,"name": "Oregon"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ot'"><xsl:text>,"name": "Mayotte"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'pau'"><xsl:text>,"name": "Pennsylvania"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'pc'"><xsl:text>,"name": "Pitcairn Island"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'pe'"><xsl:text>,"name": "Peru"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'pf'"><xsl:text>,"name": "Paracel Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'pg'"><xsl:text>,"name": "GuineaBissau"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ph'"><xsl:text>,"name": "Philippines"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'pic'"><xsl:text>,"name": "Prince Edward Island"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'pk'"><xsl:text>,"name": "Pakistan"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'pl'"><xsl:text>,"name": "Poland"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'pn'"><xsl:text>,"name": "Panama"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'po'"><xsl:text>,"name": "Portugal"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'pp'"><xsl:text>,"name": "Papua New Guinea"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'pr'"><xsl:text>,"name": "Puerto Rico"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'pt'"><xsl:text>,"name": "Portuguese Timor"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'pw'"><xsl:text>,"name": "Palau"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'py'"><xsl:text>,"name": "Paraguay"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'qa'"><xsl:text>,"name": "Qatar"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'qea'"><xsl:text>,"name": "Queensland"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'quc'"><xsl:text>,"name": "Québec (Province)"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'rb'"><xsl:text>,"name": "Serbia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 're'"><xsl:text>,"name": "Réunion"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'rh'"><xsl:text>,"name": "Zimbabwe"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'riu'"><xsl:text>,"name": "Rhode Island"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'rm'"><xsl:text>,"name": "Romania"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ru'"><xsl:text>,"name": "Russia (Federation)"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'rur'"><xsl:text>,"name": "Russian S.F.S.R."</xsl:text></xsl:when>
+			<xsl:when test="$val = 'rw'"><xsl:text>,"name": "Rwanda"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ry'"><xsl:text>,"name": "Ryukyu Islands, Southern"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'sa'"><xsl:text>,"name": "South Africa"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'sb'"><xsl:text>,"name": "Svalbard"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'sc'"><xsl:text>,"name": "SaintBarthélemy"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'scu'"><xsl:text>,"name": "South Carolina"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'sd'"><xsl:text>,"name": "South Sudan"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'sdu'"><xsl:text>,"name": "South Dakota"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'se'"><xsl:text>,"name": "Seychelles"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'sf'"><xsl:text>,"name": "Sao Tome and Principe"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'sg'"><xsl:text>,"name": "Senegal"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'sh'"><xsl:text>,"name": "Spanish North Africa"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'si'"><xsl:text>,"name": "Singapore"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'sj'"><xsl:text>,"name": "Sudan"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'sk'"><xsl:text>,"name": "Sikkim"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'sl'"><xsl:text>,"name": "Sierra Leone"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'sm'"><xsl:text>,"name": "San Marino"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'sn'"><xsl:text>,"name": "Sint Maarten"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'snc'"><xsl:text>,"name": "Saskatchewan"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'so'"><xsl:text>,"name": "Somalia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'sp'"><xsl:text>,"name": "Spain"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'sq'"><xsl:text>,"name": "Eswatini"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'sr'"><xsl:text>,"name": "Surinam"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ss'"><xsl:text>,"name": "Western Sahara"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'st'"><xsl:text>,"name": "SaintMartin"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'stk'"><xsl:text>,"name": "Scotland"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'su'"><xsl:text>,"name": "Saudi Arabia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'sv'"><xsl:text>,"name": "Swan Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'sw'"><xsl:text>,"name": "Sweden"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'sx'"><xsl:text>,"name": "Namibia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'sy'"><xsl:text>,"name": "Syria"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'sz'"><xsl:text>,"name": "Switzerland"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ta'"><xsl:text>,"name": "Tajikistan"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'tar'"><xsl:text>,"name": "Tajik S.S.R."</xsl:text></xsl:when>
+			<xsl:when test="$val = 'tc'"><xsl:text>,"name": "Turks and Caicos Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'tg'"><xsl:text>,"name": "Togo"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'th'"><xsl:text>,"name": "Thailand"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ti'"><xsl:text>,"name": "Tunisia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'tk'"><xsl:text>,"name": "Turkmenistan"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'tkr'"><xsl:text>,"name": "Turkmen S.S.R."</xsl:text></xsl:when>
+			<xsl:when test="$val = 'tl'"><xsl:text>,"name": "Tokelau"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'tma'"><xsl:text>,"name": "Tasmania"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'tnu'"><xsl:text>,"name": "Tennessee"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'to'"><xsl:text>,"name": "Tonga"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'tr'"><xsl:text>,"name": "Trinidad and Tobago"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ts'"><xsl:text>,"name": "United Arab Emirates"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'tt'"><xsl:text>,"name": "Trust Territory of the Pacific Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'tu'"><xsl:text>,"name": "Turkey"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'tv'"><xsl:text>,"name": "Tuvalu"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'txu'"><xsl:text>,"name": "Texas"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'tz'"><xsl:text>,"name": "Tanzania"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ua'"><xsl:text>,"name": "Egypt"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'uc'"><xsl:text>,"name": "United States Misc. Caribbean Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ug'"><xsl:text>,"name": "Uganda"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ui'"><xsl:text>,"name": "United Kingdom Misc. Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'uik'"><xsl:text>,"name": "United Kingdom Misc. Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'uk'"><xsl:text>,"name": "United Kingdom"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'un'"><xsl:text>,"name": "Ukraine"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'unr'"><xsl:text>,"name": "Ukraine"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'up'"><xsl:text>,"name": "United States Misc. Pacific Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ur'"><xsl:text>,"name": "Soviet Union"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'us'"><xsl:text>,"name": "United States"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'utu'"><xsl:text>,"name": "Utah"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'uv'"><xsl:text>,"name": "Burkina Faso"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'uy'"><xsl:text>,"name": "Uruguay"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'uz'"><xsl:text>,"name": "Uzbekistan"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'uzr'"><xsl:text>,"name": "Uzbek S.S.R."</xsl:text></xsl:when>
+			<xsl:when test="$val = 'vau'"><xsl:text>,"name": "Virginia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'vb'"><xsl:text>,"name": "British Virgin Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'vc'"><xsl:text>,"name": "Vatican City"</xsl:text></xsl:when>
+			<xsl:when test="$val = 've'"><xsl:text>,"name": "Venezuela"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'vi'"><xsl:text>,"name": "Virgin Islands of the United States"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'vm'"><xsl:text>,"name": "Vietnam"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'vn'"><xsl:text>,"name": "Vietnam, North"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'vp'"><xsl:text>,"name": "Various places"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'vra'"><xsl:text>,"name": "Victoria"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'vs'"><xsl:text>,"name": "Vietnam, South"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'vtu'"><xsl:text>,"name": "Vermont"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'wau'"><xsl:text>,"name": "Washington (State)"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'wb'"><xsl:text>,"name": "West Berlin"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'wea'"><xsl:text>,"name": "Western Australia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'wf'"><xsl:text>,"name": "Wallis and Futuna"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'wiu'"><xsl:text>,"name": "Wisconsin"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'wj'"><xsl:text>,"name": "West Bank of the Jordan River"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'wk'"><xsl:text>,"name": "Wake Island"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'wlk'"><xsl:text>,"name": "Wales"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ws'"><xsl:text>,"name": "Samoa"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'wvu'"><xsl:text>,"name": "West Virginia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'wyu'"><xsl:text>,"name": "Wyoming"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xa'"><xsl:text>,"name": "Christmas Island (Indian Ocean)"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xb'"><xsl:text>,"name": "Cocos (Keeling) Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xc'"><xsl:text>,"name": "Maldives"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xd'"><xsl:text>,"name": "Saint KittsNevis"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xe'"><xsl:text>,"name": "Marshall Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xf'"><xsl:text>,"name": "Midway Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xga'"><xsl:text>,"name": "Coral Sea Islands Territory"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xh'"><xsl:text>,"name": "Niue"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xi'"><xsl:text>,"name": "Saint KittsNevisAnguilla"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xj'"><xsl:text>,"name": "Saint Helena"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xk'"><xsl:text>,"name": "Saint Lucia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xl'"><xsl:text>,"name": "Saint Pierre and Miquelon"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xm'"><xsl:text>,"name": "Saint Vincent and the Grenadines"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xn'"><xsl:text>,"name": "North Macedonia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xna'"><xsl:text>,"name": "New South Wales"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xo'"><xsl:text>,"name": "Slovakia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xoa'"><xsl:text>,"name": "Northern Territory"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xp'"><xsl:text>,"name": "Spratly Island"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xr'"><xsl:text>,"name": "Czech Republic"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xra'"><xsl:text>,"name": "South Australia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xs'"><xsl:text>,"name": "South Georgia and the South Sandwich Islands"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xv'"><xsl:text>,"name": "Slovenia"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xx'"><xsl:text>,"name": "No place, unknown, or undetermined"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xxc'"><xsl:text>,"name": "Canada"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xxk'"><xsl:text>,"name": "United Kingdom"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xxr'"><xsl:text>,"name": "Soviet Union"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'xxu'"><xsl:text>,"name": "United States"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ye'"><xsl:text>,"name": "Yemen"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ykc'"><xsl:text>,"name": "Yukon Territory"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'ys'"><xsl:text>,"name": "Yemen (People's Democratic Republic)"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'yu'"><xsl:text>,"name": "Serbia and Montenegro"</xsl:text></xsl:when>
+			<xsl:when test="$val = 'za'"><xsl:text>,"name": "Zambia"</xsl:text></xsl:when>
 		</xsl:choose>
 	</xsl:template>
 </xsl:stylesheet>
