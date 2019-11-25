@@ -5,8 +5,7 @@
 				xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
 				xmlns:bf="http://id.loc.gov/ontologies/bibframe/"
 				xmlns:dct="http://purl.org/dc/terms/"
-				xmlns:htrc="http://wcsa.htrc.illinois.edu/"
-				xmlns:ext="http://exslt.org/common">
+				xmlns:htrc="http://wcsa.htrc.illinois.edu/">
 
 <xsl:output method="text" encoding="UTF-8" omit-xml-declaration="yes" />
 
