@@ -34,21 +34,23 @@
 					<xsl:text>"@context": "https://worksets.htrc.illinois.edu/context/ef_context.jsonld"</xsl:text>
 					<xsl:text>,"metadata":{</xsl:text>
 					<xsl:text>"id":"</xsl:text><xsl:value-of select="./@rdf:about" /><xsl:text>"</xsl:text>
+					<xsl:text>,"type": [ "DataFeedItem", </xsl:text>
 					<xsl:choose>
 						<xsl:when test="substring($Instance/bf:issuance/bf:Issuance/@rdf:about,39) = 'mono'">
-							<xsl:text>,"type":"Book"</xsl:text>
+							<xsl:text>"Book"</xsl:text>
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:choose>
 								<xsl:when test="substring($Instance/bf:issuance/bf:Issuance/@rdf:about,39) = 'serl'">
-									<xsl:text>,"type":"PublicationVolume"</xsl:text>
+									<xsl:text>"PublicationVolume"</xsl:text>
 								</xsl:when>
 								<xsl:otherwise>
-									<xsl:text>,"type":"CreativeWork"</xsl:text>
+									<xsl:text>"CreativeWork"</xsl:text>
 								</xsl:otherwise>
 							</xsl:choose>
 						</xsl:otherwise>
 					</xsl:choose>
+					<xsl:text> ]</xsl:text>
 					<xsl:text>,"isAccessibleForFree":</xsl:text>
 					<xsl:choose>
 						<xsl:when test="./dct:accessRights/text() = 'pd'">
