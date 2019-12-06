@@ -50,8 +50,8 @@ def callPipeline(input_folder,output_folder,saxon_jar,core_count,validate):
 	start_time = datetime.datetime.now()
 
 	transformBIBF2JSON.transformBIBF2JSON(input_folder,output_folder,saxon_jar,core_count)
-	mergeDicts.mergeDicts(output_folder)
-	fillIncompleteResults.fillIncompleteResults(output_folder)
+#	mergeDicts.mergeDicts(output_folder)
+#	fillIncompleteResults.fillIncompleteResults(output_folder)
 	if (validate):
 		validateEFMetadata.validateEFMetadata(output_folder,core_count)
 
@@ -102,6 +102,8 @@ def generateEFMetaFromBIBF():
 				output_folder += SLASH
 			if not os.path.exists(output_folder + 'reports'):
 				os.mkdir(output_folder + 'reports')
+			if not os.path.exists(output_folder + 'complete'):
+				os.mkdir(output_folder + 'complete')
 
 			callPipeline(input_folder,output_folder,saxon_jar,core_count,validate)
 		else:
