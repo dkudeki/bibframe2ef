@@ -19,7 +19,7 @@
 <xsl:param name="twoSlash">\\\\</xsl:param>
 
 	<xsl:template match='/'>
-		<xsl:variable name="Item" select="/rdf:RDF/bf:Item" />
+		<xsl:variable name="Item" select="/rdf:RDF/bf:Item[starts-with(@rdf:about,'http://hdl.handle.net/2027/')]" />
 		<xsl:for-each select="$Item">
 			<xsl:variable name="volume_id" select="translate(translate(substring(./@rdf:about,28),'/','='),':','+')" />
 			<xsl:variable name="instance_id" select="./bf:itemOf/@rdf:resource" />
