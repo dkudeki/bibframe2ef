@@ -398,57 +398,36 @@
 		<xsl:variable name="lccn_count" select="count($lccn)" />
 		<xsl:variable name="oclc_count" select="count($oclc)" />
 		<xsl:variable name="identifier_count" select="$lcc_count + $lccn_count + $oclc_count" />
-		<xsl:choose>
-			<xsl:when test="$identifier_count = 1">
-				<xsl:text>,"identifier":{</xsl:text>
-				<xsl:text>"type":"PropertyValue"</xsl:text>
-				<xsl:choose>
-					<xsl:when test="$lcc_count = 1">
-						<xsl:text>,"propertyID":"lcc"</xsl:text>
-						<xsl:choose>
-							<xsl:when test="count($lcc/bf:classificationPortion) > 1">
-								<xsl:text>,"value":"</xsl:text><xsl:value-of select="replace(replace($lcc/bf:classificationPortion[1]/text(),$oneSlash,$twoSlash),$pPat,$pRep)" />
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:text>,"value":"</xsl:text><xsl:value-of select="replace(replace($lcc/bf:classificationPortion/text(),$oneSlash,$twoSlash),$pPat,$pRep)" />
-							</xsl:otherwise>
-						</xsl:choose>
-						<xsl:for-each select="$lcc/bf:itemPortion/text()">
-							<xsl:text></xsl:text>
-							<xsl:value-of select="replace(replace(.,$oneSlash,$twoSlash),$pPat,$pRep)" />
-						</xsl:for-each><xsl:text>"</xsl:text>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:choose>
-							<xsl:when test="$lccn_count = 1">
-								<xsl:text>,"propertyID":"lccn"</xsl:text>
-								<xsl:text>,"value":"</xsl:text><xsl:value-of select="replace(replace(replace($lccn/text(),$oneSlash,$twoSlash),$pPat,$pRep),'^\s+|\s+$','')" /><xsl:text>"</xsl:text>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:text>,"propertyID":"oclc"</xsl:text>
-								<xsl:text>,"value":"</xsl:text><xsl:value-of select="replace(replace($oclc/rdf:value/text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:otherwise>
-				</xsl:choose>
-				<xsl:text>}</xsl:text>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:if test="$identifier_count > 1">
-					<xsl:text>,"identifier":[</xsl:text>
+
+		<xsl:if test="$lcc_count > 0">
+			<xsl:choose>
+				<xsl:when test="$lcc_count = 1">
+					<xsl:text>,"lcc":</xsl:text>
+					<xsl:choose>
+						<xsl:when test="count($lcc/bf:classificationPortion) > 1">
+							<xsl:text>"</xsl:text><xsl:value-of select="replace(replace($lcc/bf:classificationPortion[1]/text(),$oneSlash,$twoSlash),$pPat,$pRep)" />
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:text>"</xsl:text><xsl:value-of select="replace(replace($lcc/bf:classificationPortion/text(),$oneSlash,$twoSlash),$pPat,$pRep)" />
+						</xsl:otherwise>
+					</xsl:choose>
+					<xsl:for-each select="$lcc/bf:itemPortion/text()">
+						<xsl:text></xsl:text>
+						<xsl:value-of select="replace(replace(.,$oneSlash,$twoSlash),$pPat,$pRep)" />
+					</xsl:for-each><xsl:text>"</xsl:text>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:text>,"lcc":[</xsl:text>
 					<xsl:for-each select="$lcc">
 						<xsl:if test="position() != 1">
 							<xsl:text>,</xsl:text>
 						</xsl:if>
-						<xsl:text>{</xsl:text>
-						<xsl:text>"type":"PropertyValue"</xsl:text>
-						<xsl:text>,"propertyID":"lcc"</xsl:text>
 						<xsl:choose>
 							<xsl:when test="count(./bf:classificationPortion) > 1">
-								<xsl:text>,"value":"</xsl:text><xsl:value-of select="replace(replace(./bf:classificationPortion[1]/text(),$oneSlash,$twoSlash),$pPat,$pRep)" />
+								<xsl:text>"</xsl:text><xsl:value-of select="replace(replace(./bf:classificationPortion[1]/text(),$oneSlash,$twoSlash),$pPat,$pRep)" />
 							</xsl:when>
 							<xsl:otherwise>
-								<xsl:text>,"value":"</xsl:text><xsl:value-of select="replace(replace(./bf:classificationPortion/text(),$oneSlash,$twoSlash),$pPat,$pRep)" />
+								<xsl:text>"</xsl:text><xsl:value-of select="replace(replace(./bf:classificationPortion/text(),$oneSlash,$twoSlash),$pPat,$pRep)" />
 							</xsl:otherwise>
 						</xsl:choose>
 						<xsl:for-each select="./bf:itemPortion/text()">
@@ -456,32 +435,49 @@
 							<xsl:value-of select="replace(replace(.,$oneSlash,$twoSlash),$pPat,$pRep)" />
 						</xsl:for-each>
 						<xsl:text>"</xsl:text>
-						<xsl:text>}</xsl:text>
-					</xsl:for-each>
-					<xsl:for-each select="$lccn">
-						<xsl:if test="position() != 1 or $lcc_count > 0">
-							<xsl:text>,</xsl:text>
-						</xsl:if>
-						<xsl:text>{</xsl:text>
-						<xsl:text>"type":"PropertyValue"</xsl:text>
-						<xsl:text>,"propertyID":"lccn"</xsl:text>
-						<xsl:text>,"value":"</xsl:text><xsl:value-of select="replace(replace(replace(./text(),$oneSlash,$twoSlash),$pPat,$pRep),'^\s+|\s+$','')" /><xsl:text>"</xsl:text>
-						<xsl:text>}</xsl:text>
-					</xsl:for-each>
-					<xsl:for-each select="$oclc">
-						<xsl:if test="position() != 1 or $lcc_count + $lccn_count > 0">
-							<xsl:text>,</xsl:text>
-						</xsl:if>
-						<xsl:text>{</xsl:text>
-						<xsl:text>"type":"PropertyValue"</xsl:text>
-						<xsl:text>,"propertyID":"oclc"</xsl:text>
-						<xsl:text>,"value":"</xsl:text><xsl:value-of select="replace(replace(./rdf:value/text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
-						<xsl:text>}</xsl:text>
 					</xsl:for-each>
 					<xsl:text>]</xsl:text>
-				</xsl:if>
-			</xsl:otherwise>
-		</xsl:choose>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:if>
+
+		<xsl:if test="$lccn_count > 0">
+			<xsl:choose>
+				<xsl:when test="$lccn_count = 1">
+					<xsl:text>,"lccn":</xsl:text>
+					<xsl:text>"</xsl:text><xsl:value-of select="replace(replace(replace($lccn/text(),$oneSlash,$twoSlash),$pPat,$pRep),'^\s+|\s+$','')" /><xsl:text>"</xsl:text>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:text>,"lccn":[</xsl:text>
+					<xsl:for-each select="$lccn">
+						<xsl:if test="position() != 1">
+							<xsl:text>,</xsl:text>
+						</xsl:if>
+						<xsl:text>"</xsl:text><xsl:value-of select="replace(replace(replace(./text(),$oneSlash,$twoSlash),$pPat,$pRep),'^\s+|\s+$','')" /><xsl:text>"</xsl:text>
+					</xsl:for-each>
+					<xsl:text>]</xsl:text>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:if>
+
+		<xsl:if test="$oclc_count > 0">
+			<xsl:choose>
+				<xsl:when test="$oclc_count = 1">
+					<xsl:text>,"oclc":</xsl:text>
+					<xsl:text>"</xsl:text><xsl:value-of select="replace(replace($oclc/rdf:value/text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:text>,"oclc":[</xsl:text>
+					<xsl:for-each select="$oclc">
+						<xsl:if test="position() != 1">
+							<xsl:text>,</xsl:text>
+						</xsl:if>
+						<xsl:text>"</xsl:text><xsl:value-of select="replace(replace(./rdf:value/text(),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
+					</xsl:for-each>
+					<xsl:text>]</xsl:text>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:if>
 
 		<xsl:if test="$lcc_count > 0">
 			<xsl:choose>
