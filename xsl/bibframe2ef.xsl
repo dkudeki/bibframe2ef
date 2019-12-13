@@ -239,7 +239,7 @@
 					</xsl:otherwise>
 				</xsl:choose>
 				<xsl:text>"</xsl:text>
-				<xsl:if test="starts-with($node/bf:agent/bf:Agent/@rdf:about, 'http://www.viaf.org')">
+				<xsl:if test="$node/bf:agent/bf:Agent/@rdf:about">
 					<xsl:text>,"id":"</xsl:text><xsl:value-of select="$node/bf:agent/bf:Agent/@rdf:about" /><xsl:text>"</xsl:text>
 				</xsl:if>
 				<xsl:text>}</xsl:text>
@@ -263,7 +263,7 @@
 							</xsl:otherwise>
 						</xsl:choose>
 						<xsl:text>"</xsl:text>
-						<xsl:if test="starts-with(./bf:agent/bf:Agent/@rdf:about, 'http://www.viaf.org')">
+						<xsl:if test="./bf:agent/bf:Agent/@rdf:about">
 							<xsl:text>,"id":"</xsl:text><xsl:value-of select="./bf:agent/bf:Agent/@rdf:about" /><xsl:text>"</xsl:text>
 						</xsl:if>
 						<xsl:text>}</xsl:text>
@@ -286,7 +286,7 @@
 					</xsl:if>
 					<xsl:text>{</xsl:text>
 					<xsl:text>"type":"http://id.loc.gov/ontologies/bibframe/Organization"</xsl:text>
-					<xsl:if test="starts-with(./@rdf:about, 'http://www.viaf.org')">
+					<xsl:if test="./@rdf:about">
 						<xsl:text>,"id":"</xsl:text><xsl:value-of select="./@rdf:about" /><xsl:text>"</xsl:text>
 					</xsl:if>
 					<xsl:text>,"name":"</xsl:text><xsl:value-of select='replace(replace(./rdfs:label/text(),$oneSlash,$twoSlash),$pPat,$pRep)' /><xsl:text>"</xsl:text>
@@ -298,8 +298,8 @@
 				<xsl:if test="count($publication_agents) = 1" >
 					<xsl:text>,"publisher":{</xsl:text>
 					<xsl:text>"type":"http://id.loc.gov/ontologies/bibframe/Organization"</xsl:text>
-					<xsl:if test="starts-with($publication_agents/@rdf:about, 'http://www.viaf.org')">
-						<xsl:text>,"id":"</xsl:text><xsl:value-of select="$publication_agents/bf:agent/bf:Agent/@rdf:about" /><xsl:text>"</xsl:text>
+					<xsl:if test="$publication_agents/@rdf:about">
+						<xsl:text>,"id":"</xsl:text><xsl:value-of select="$publication_agents/@rdf:about" /><xsl:text>"</xsl:text>
 					</xsl:if>
 					<xsl:text>,"name":"</xsl:text><xsl:value-of select='replace(replace($publication_agents/rdfs:label/text(),$oneSlash,$twoSlash),$pPat,$pRep)' /><xsl:text>"</xsl:text>
 					<xsl:text>}</xsl:text>
@@ -545,7 +545,7 @@
 					</xsl:if>
 						<xsl:text>{</xsl:text>
 						<xsl:text>"type":"</xsl:text><xsl:value-of select="./rdf:type[1]/@rdf:resource" /><xsl:text>"</xsl:text>
-						<xsl:if test="starts-with(./@rdf:about, 'http://id.loc.gov')">
+						<xsl:if test="./@rdf:about">
 							<xsl:text>,"id":"</xsl:text><xsl:value-of select="./@rdf:about" /><xsl:text>"</xsl:text>
 						</xsl:if>
 						<xsl:text>,"value":"</xsl:text><xsl:value-of select="replace(replace(./rdfs:label,$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
