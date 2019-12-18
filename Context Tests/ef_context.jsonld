@@ -97,7 +97,11 @@
             "propertyID": {
                 "@id": "propertyID",
                 "@type": "Text"
-            }
+            },
+            "oclc": "htrc:oclc",
+            "lccn": "htrc:lccn",
+            "lcc": "htrc:lcc",
+            "doi": "htrc:doi"
         }
     ]
 }
