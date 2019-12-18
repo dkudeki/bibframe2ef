@@ -65,20 +65,21 @@
 				<xsl:call-template name="contribution_agents">
 					<xsl:with-param name="node" select="$Work/bf:contribution/bf:Contribution[bf:agent/bf:Agent/rdfs:label/text()]" />
 				</xsl:call-template>
-				<xsl:if test="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date and $Instance/bf:provisionActivity/bf:ProvisionActivity/rdf:type[@rdf:resource = 'http://id.loc.gov/ontologies/bibframe/Publication'] | ./dct:created">
-					<xsl:choose>
-						<xsl:when test="./dct:created">
-							<xsl:call-template name="date">
-								<xsl:with-param name="node" select="./dct:created" />
-							</xsl:call-template>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:call-template name="date">
-								<xsl:with-param name="node" select="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf']" />
-							</xsl:call-template>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:if>
+				<xsl:choose>
+					<xsl:when test="./dct:created">
+						<xsl:call-template name="date">
+							<xsl:with-param name="node" select="./dct:created" />
+						</xsl:call-template>
+					</xsl:when>
+					<xsl:when test="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date and $Instance/bf:provisionActivity/bf:ProvisionActivity/rdf:type[@rdf:resource = 'http://id.loc.gov/ontologies/bibframe/Publication']">
+						<xsl:call-template name="date">
+							<xsl:with-param name="node" select="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf']" />
+						</xsl:call-template>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>,"pubDate": null</xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
 				<xsl:call-template name="publisher">
 					<xsl:with-param name="Instance" select="$Instance" />
 				</xsl:call-template>
@@ -207,17 +208,15 @@
 				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:if test="$date_count > 1">
-					<xsl:text>,"pubDate":</xsl:text>
-					<xsl:choose>
-						<xsl:when test='matches(substring($node[1]/text(),1,4),"[12]\d{3}")'>
-							<xsl:value-of select="substring($node[1]/text(),1,4)" />
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:text>"</xsl:text><xsl:value-of select="replace(replace(substring($node[1]/text(),1,4),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:if>
+				<xsl:text>,"pubDate":</xsl:text>
+				<xsl:choose>
+					<xsl:when test='matches(substring($node[1]/text(),1,4),"[12]\d{3}")'>
+						<xsl:value-of select="substring($node[1]/text(),1,4)" />
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>"</xsl:text><xsl:value-of select="replace(replace(substring($node[1]/text(),1,4),$oneSlash,$twoSlash),$pPat,$pRep)" /><xsl:text>"</xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
