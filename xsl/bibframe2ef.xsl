@@ -49,7 +49,7 @@
 				</xsl:choose>
 				<xsl:text> ]</xsl:text>
 				<xsl:text>,"schemaVersion":"</xsl:text><xsl:value-of select="$schema_version" /><xsl:text>"</xsl:text>
-				<xsl:text>,"dateCreated":"</xsl:text><xsl:value-of select="format-date(current-date(),'[Y0001]-[M01]-[D01]')" /><xsl:text>"</xsl:text>
+				<xsl:text>,"dateCreated":</xsl:text><xsl:value-of select="format-date(current-date(),'[Y0001][M01][D01]')" />
 				<xsl:text>,"isAccessibleForFree":</xsl:text>
 				<xsl:choose>
 					<xsl:when test="./dct:accessRights/text() = 'pd'">
@@ -133,7 +133,7 @@
 					<xsl:text>,"typeOfResource":"</xsl:text><xsl:value-of select="$Work/rdf:type/@rdf:resource" /><xsl:text>"</xsl:text>
 				</xsl:if>
 				<xsl:if test="./htrc:lastRightsUpdateDate">
-					<xsl:text>,"lastRightsUpdateDate":"</xsl:text><xsl:value-of select="./htrc:lastRightsUpdateDate/text()" /><xsl:text>"</xsl:text>
+					<xsl:text>,"lastRightsUpdateDate":</xsl:text><xsl:value-of select="./htrc:lastRightsUpdateDate/text()" />
 				</xsl:if>
 				<xsl:call-template name="part_of">
 					<xsl:with-param name="Instance" select="$Instance" />
