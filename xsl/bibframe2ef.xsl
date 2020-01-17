@@ -121,9 +121,9 @@
 					<xsl:with-param name="base_path" select="$Instance/bf:identifiedBy/bf:Isbn" />
 					<xsl:with-param name="is_n" select="'isbn'" />
 				</xsl:call-template>
-				<xsl:call-template name="subject">
+<!--				<xsl:call-template name="subject">
 					<xsl:with-param name="Work" select="$Work" />
-				</xsl:call-template>
+				</xsl:call-template>-->
 				<xsl:call-template name="genre">
 					<xsl:with-param name="Work" select="$Work" />
 				</xsl:call-template>
