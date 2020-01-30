@@ -30,7 +30,8 @@
 			<xsl:text>{</xsl:text>
 				<xsl:text>"@context": "https://worksets.htrc.illinois.edu/context/ef_context.jsonld"</xsl:text>
 				<xsl:text>,"metadata":{</xsl:text>
-				<xsl:text>"id":"</xsl:text><xsl:value-of select="./@rdf:about" /><xsl:text>"</xsl:text>
+				<xsl:text>"schemaVersion":"</xsl:text><xsl:value-of select="$schema_version" /><xsl:text>"</xsl:text>
+				<xsl:text>,"id":"</xsl:text><xsl:value-of select="./@rdf:about" /><xsl:text>"</xsl:text>
 				<xsl:text>,"type": [ "DataFeedItem", </xsl:text>
 				<xsl:choose>
 					<xsl:when test="substring($Instance/bf:issuance/bf:Issuance/@rdf:about,39) = 'mono'">
@@ -48,7 +49,6 @@
 					</xsl:otherwise>
 				</xsl:choose>
 				<xsl:text> ]</xsl:text>
-				<xsl:text>,"schemaVersion":"</xsl:text><xsl:value-of select="$schema_version" /><xsl:text>"</xsl:text>
 				<xsl:text>,"dateCreated":</xsl:text><xsl:value-of select="format-date(current-date(),'[Y0001][M01][D01]')" />
 				<xsl:text>,"isAccessibleForFree":</xsl:text>
 				<xsl:choose>
