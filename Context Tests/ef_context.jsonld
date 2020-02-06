@@ -11,8 +11,8 @@
                 "@id": "htrc:htid",
                 "@type": "Text"
             },
-            "metadata": "DataFeedItem",
-            "features": "DataFeedItem",
+            "metadata": "dataFeedElement",
+            "features": "dataFeedElement",
             "pageCount": {
                 "@id": "htrc:pageCount",
                 "@type": "Integer"
