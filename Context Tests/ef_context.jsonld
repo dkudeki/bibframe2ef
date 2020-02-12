@@ -85,6 +85,10 @@
                 "@id": "htrc:accessRights",
                 "@type": "Text"
             },
+            "accessProfile": {
+                "@id": "htrc:accessProfile",
+                "@type": "Text"
+            },
             "lastRightsUpdateDate": {
                 "@id": "dateModified",
                 "@type": "Date"
