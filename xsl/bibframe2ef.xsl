@@ -555,7 +555,7 @@
 
 	<xsl:template name="genre">
 		<xsl:param name="Work" />
-		<xsl:variable name="genres" select="$Work/bf:genreForm/bf:GenreForm/@rdf:about[substring(.,1,1) != '_']" />
+		<xsl:variable name="genres" select="$Work/bf:genreForm/bf:GenreForm/@rdf:about[substring(.,1,1) != '_' and substring(.,1,4) != 'urn:']" />
 		<xsl:choose>
 			<xsl:when test="count($genres) > 1">
 				<xsl:text>,"genre":[</xsl:text>
