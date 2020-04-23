@@ -324,7 +324,7 @@
 					<xsl:text>"id":"</xsl:text><xsl:value-of select="." /><xsl:text>"</xsl:text>
 					<xsl:text>,"type":"http://id.loc.gov/ontologies/bibframe/Place"</xsl:text>
 					<xsl:call-template name="pub_place_name">
-						<xsl:with-param name="val" select="substring(.,40)" />
+						<xsl:with-param name="val" select="translate(substring(.,40),'#','')" />
 					</xsl:call-template>
 					<xsl:text>}</xsl:text>
 				</xsl:for-each>
@@ -336,7 +336,7 @@
 					<xsl:text>"id":"</xsl:text><xsl:value-of select="$pub_places" /><xsl:text>"</xsl:text>
 					<xsl:text>,"type":"http://id.loc.gov/ontologies/bibframe/Place"</xsl:text>
 					<xsl:call-template name="pub_place_name">
-						<xsl:with-param name="val" select="substring($pub_places,40)" />
+						<xsl:with-param name="val" select="translate(substring($pub_places,40),'#','')" />
 					</xsl:call-template>
 					<xsl:text>}</xsl:text>
 				</xsl:if>
