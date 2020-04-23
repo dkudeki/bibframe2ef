@@ -1,0 +1,294 @@
+{
+	"$schema": "http://json-schema.org/schema#",
+	"$id": "https://worksets.htrc.illinois.edu/context/schema.json",
+	"type": "object",
+	"definitions": {
+		"unique_name": {
+			"type": "object",
+			"properties": {
+				"id": { "type": "string" },
+				"type": { "type": "string" },
+				"name": { "type": "string" }
+			},
+			"required": [ "name", "type" ]
+		},
+		"unique_name_array": {
+			"type": "array",
+			"items": { "$ref": "#/definitions/unique_name" }
+		},
+		"unique_id": {
+			"type": "object",
+			"properties": {
+				"id": { "type" : "string"},
+				"type": { "type": "string" },
+				"name": { "type": "string" }
+			},
+			"required": [ "id", "type" ]
+		},
+		"unique_id_array": {
+			"type": "array",
+			"items": { "$ref": "#/definitions/unique_id" }
+		},
+		"string_array": {
+			"type": "array",
+			"items": { "type": "string" }
+		},
+		"contributor_object": {
+			"type": "object",
+			"properties": {
+				"id": { "type": "string" },
+				"type": {
+					"anyOf": [ 
+						{ "type": "string" },
+						{ "$ref": "#/definitions/string_array" }
+					]
+				},
+				"name": {
+					"anyOf": [
+						{ "type": "string" },
+						{ "$ref": "#/definitions/string_array" }
+					]
+				}
+			},
+			"required": [ "name" ]
+		},
+		"contributor_array": {
+			"type": "array",
+			"items": { "$ref": "#/definitions/contributor_object" }
+		},
+		"journal_object": {
+			"type": "object",
+			"properties": {
+				"type": { "type": "string" },
+				"id": { "type": "string" },
+				"journalTitle": { "type": "string" },
+				"title": { "type": "string" }
+			},
+			"required": [ "type" ],
+			"oneOf": [ 
+				{ 
+					"required": [
+						"journalTitle"
+					] 
+				},
+				{
+					"required": [
+						"title"
+					]
+				}
+			]
+		},
+		"issue_object": {
+			"type": "object",
+			"properties": {
+				"type": { "type": "string" },
+				"id": { "type": "string" },
+				"issueTitle": { "type": "string" },
+				"isPartOf": { "$ref": "#/definitions/journal_object" },
+				"title": { "type": "string" }
+			},
+			"required": [ "type" ],
+			"oneOf": [ 
+				{ 
+					"required": [
+						"issueTitle"
+					] 
+				},
+				{
+					"required": [
+						"title"
+					]
+				}
+			]
+		},
+		"identifier_object": {
+			"type": "object",
+			"properties": {
+				"type": { "type": "string" },
+				"propertyID": { "type": "string" },
+				"value": { "type": "string" }
+			},
+			"required": [ "propertyID", "value" ]
+		},
+		"identifier_array": {
+			"type": "array",
+			"items": { "$ref": "#/definitions/identifier_object" }
+		},
+		"subject_object": {
+			"type": "object",
+			"properties": {
+				"id": { "type": "string" },
+				"value": { "type": "string" },
+				"type": { "type": "string" }
+			},
+			"required": [ "value", "type" ]
+		},
+		"subject_array": {
+			"type": "array",
+			"items": {
+				"anyOf": [
+					{ "type": "string" },
+					{ "$ref": "#/definitions/subject_object" }
+				]
+			}
+		}
+	},
+	"properties": {
+		"metadata": {
+			"type": "object",
+			"properties": {
+				"id": { "type": "string" },
+				"type": { "$ref": "#/definitions/string_array" },
+				"title": { "type": "string" },
+				"alternateTitle": {
+					"anyOf": [
+						{ "type": "string" },
+						{ "$ref": "#/definitions/string_array" }
+					]
+				},
+				"enumerationChronology": { "type": [ "string", "null" ] },
+				"issueNumber": { "type": [ "integer", "string", "null" ] },
+				"volumeNumber": { "type": [ "integer", "string", "null" ] },
+				"publisher": {
+					"anyOf": [
+						{ "$ref": "#/definitions/unique_name" },
+						{ "$ref": "#/definitions/unique_name_array" }
+					]
+				},
+				"pubPlace": {
+					"anyOf": [
+						{ "$ref": "#/definitions/unique_id" },
+						{ "$ref": "#/definitions/unique_id_array" }
+					]
+				},
+				"pubDate": { "type": [ "number", "string", "null" ] },
+				"genre": {
+					"anyOf": [
+						{ "type": "string" },
+						{ "$ref": "#/definitions/string_array" }
+					]
+				},
+				"category": {
+					"anyOf": [
+						{ "type": "null" },
+						{ "type": "string" },
+						{ "$ref": "#/definitions/string_array" }
+					]
+				},
+				"subjects": {
+					"anyOf": [
+						{ "type": "null" },
+						{ "$ref": "#/definitions/string_array" },
+						{ "$ref": "#/definitions/subject_object" },
+						{ "$ref": "#/definitions/subject_array" }
+					]
+				},
+				"inLanguage": {
+					"anyOf": [
+						{ "type": "string" },
+						{ "$ref": "#/definitions/string_array" }
+					]
+				},
+				"governmentDocument": { "type": [ "null", "boolean" ] },
+				"accessRights": {
+					"anyOf": [ 
+						{ "type": "null" },
+						{
+							"type": "string",
+							"enum": [ 
+								"pd", 
+								"ic", 
+								"op", 
+								"orph", 
+								"und", 
+								"ic-world", 
+								"nobody", 
+								"pdus", 
+								"cc-by-3.0", 
+								"cc-by-nd-3.0", 
+								"cc-by-nc-nd-3.0",
+								"cc-by-nc-3.0",
+								"cc-by-nc-sa-3.0",
+								"cc-by-sa-3.0",
+								"orphcand",
+								"cc-zero",
+								"und-world",
+								"icus",
+								"cc-by-4.0",
+								"cc-by-nd-4.0",
+								"cc-by-nc-nd-4.0",
+								"cc-by-nc-4.0",
+								"cc-by-nc-sa-4.0",
+								"cc-by-sa-4.0",
+								"pd-pvt",
+								"supp"
+							]
+						}
+					]
+				},
+				"accessProfile": {
+					"anyOf": [
+						{ "type": "null" },
+						{
+							"type": "string",
+							"enum": [
+								"open",
+								"google",
+								"page",
+								"page+lowres"
+							]
+						}
+					]
+				},
+				"isAccessibleForFree": { "type": "boolean" },
+				"lastRightsUpdateDate": { "type": "integer" },
+				"contributor": {
+					"anyOf": [
+						{ "$ref": "#/definitions/contributor_object" },
+						{ "$ref": "#/definitions/contributor_array" }
+					]
+				},
+				"typeOfResource": { "type": [ "string", "null" ] },
+				"sourceInstitution": {
+					"anyOf": [
+						{ "$ref": "#/definitions/unique_name" },
+						{ "type": "string" }
+					]
+				},
+				"isPartOf": {
+					"anyOf": [
+						{ "type": "null" },
+						{ "$ref": "#/definitions/issue_object" },
+						{ "$ref": "#/definitions/journal_object" }
+					]
+				},
+				"mainEntityOfPage": {
+					"anyOf": [
+						{ "type": "string" },
+						{ "$ref": "#/definitions/string_array" }
+					]
+				},
+				"identifier": {
+					"anyOf": [
+						{ "$ref": "#/definitions/identifier_object" },
+						{ "$ref": "#/definitions/identifier_array" }
+					]
+				},
+				"issn": {
+					"anyOf": [
+						{ "type": "string" },
+						{ "$ref": "#/definitions/string_array" }
+					]
+				},
+				"isbn": {
+					"anyOf": [
+						{ "type": "string" },
+						{ "$ref": "#/definitions/string_array" }
+					]
+				}
+			},
+			"required": [ "id", "type", "title" ]
+		}
+	},
+	"required": [ "metadata" ]
+}

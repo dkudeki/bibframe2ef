@@ -63,9 +63,18 @@
 						</xsl:call-template>
 					</xsl:when>
 					<xsl:when test="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date and $Instance/bf:provisionActivity/bf:ProvisionActivity/rdf:type[@rdf:resource = 'http://id.loc.gov/ontologies/bibframe/Publication']">
-						<xsl:call-template name="date">
-							<xsl:with-param name="node" select="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf']" />
-						</xsl:call-template>
+						<xsl:choose>
+							<xsl:when test="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf']">
+								<xsl:call-template name="date">
+									<xsl:with-param name="node" select="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date[@rdf:datatype = 'http://id.loc.gov/datatypes/edtf']" />
+								</xsl:call-template>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:call-template name="date">
+									<xsl:with-param name="node" select="$Instance/bf:provisionActivity/bf:ProvisionActivity/bf:date" />
+								</xsl:call-template>
+							</xsl:otherwise>	
+						</xsl:choose>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:text>,"pubDate": null</xsl:text>
@@ -1069,7 +1078,6 @@
 			<xsl:when test="$val = 'ae'"><xsl:text>,"name": "Algeria"</xsl:text></xsl:when>
 			<xsl:when test="$val = 'af'"><xsl:text>,"name": "Afghanistan"</xsl:text></xsl:when>
 			<xsl:when test="$val = 'ag'"><xsl:text>,"name": "Argentina"</xsl:text></xsl:when>
-			<xsl:when test="$val = 'ai'"><xsl:text>,"name": "Anguilla"</xsl:text></xsl:when>
 			<xsl:when test="$val = 'ai'"><xsl:text>,"name": "Armenia (Republic)"</xsl:text></xsl:when>
 			<xsl:when test="$val = 'air'"><xsl:text>,"name": "Armenian S.S.R."</xsl:text></xsl:when>
 			<xsl:when test="$val = 'aj'"><xsl:text>,"name": "Azerbaijan"</xsl:text></xsl:when>
