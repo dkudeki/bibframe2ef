@@ -1,6 +1,6 @@
 {
 	"$schema": "http://json-schema.org/schema#",
-	"$id": "https://worksets.htrc.illinois.edu/context/schema.json",
+	"$id": "https://schemas.hathitrust.org/EF_Schema_MetadataSubSchema_v_3.0",
 	"type": "object",
 	"definitions": {
 		"unique_name": {
