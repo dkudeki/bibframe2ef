@@ -137,8 +137,10 @@
 		"metadata": {
 			"type": "object",
 			"properties": {
+				"schemaVersion": { "type": "string" },
 				"id": { "type": "string" },
 				"type": { "$ref": "#/definitions/string_array" },
+				"dateCreated": { "type": "integer" } ,
 				"title": { "type": "string" },
 				"alternateTitle": {
 					"anyOf": [
@@ -161,7 +163,7 @@
 						{ "$ref": "#/definitions/unique_id_array" }
 					]
 				},
-				"pubDate": { "type": [ "number", "string", "null" ] },
+				"pubDate": { "type": [ "integer", "string", "null" ] },
 				"genre": {
 					"anyOf": [
 						{ "type": "string" },
@@ -183,7 +185,7 @@
 						{ "$ref": "#/definitions/subject_array" }
 					]
 				},
-				"inLanguage": {
+				"language": {
 					"anyOf": [
 						{ "type": "string" },
 						{ "$ref": "#/definitions/string_array" }
@@ -285,9 +287,27 @@
 						{ "type": "string" },
 						{ "$ref": "#/definitions/string_array" }
 					]
+				},
+				"lcc": {
+					"anyOf": [
+						{ "type": "string" },
+						{ "$ref": "#/definitions/string_array" }
+					]
+				},
+				"lccn": {
+					"anyOf": [
+						{ "type": "string" },
+						{ "$ref": "#/definitions/string_array" }
+					]
+				},
+				"oclc": {
+					"anyOf": [
+						{ "type": "string" },
+						{ "$ref": "#/definitions/string_array" }
+					]
 				}
 			},
-			"required": [ "id", "type", "title" ]
+			"required": [ "id", "type", "schemaVersion", "dateCreated" ]
 		}
 	},
 	"required": [ "metadata" ]
