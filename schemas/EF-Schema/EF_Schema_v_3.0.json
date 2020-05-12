@@ -18,7 +18,8 @@
 			}
 		},
 		"datePublished": { "type": "integer" },
-		"metadata": { "$ref": "EF_Schema_MetadataSubSchema_v_3.0#/definitions/metadata_object" }
+		"metadata": { "$ref": "EF_Schema_MetadataSubSchema_v_3.0#/definitions/metadata_object" },
+		"features": { "$ref": "EF_Schema_FeaturesSubSchema_v_3.0#/definitions/features_object" }
 	},
 	"required": [ "@context", "schemaVersion", "id", "type", "publisher", "datePublished", "metadata" ]
 }

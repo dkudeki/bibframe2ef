@@ -1,8 +1,16 @@
 {
 	"$schema": "http://json-schema.org/schema#",
-	"$id": "https://schemas.hathitrust.org/EF_Schema_MetadataSubSchema_v_3.0/EF_Schema_FeaturesSubSchema_v_3.0",
+	"$id": "https://schemas.hathitrust.org/EF_Schema_FeaturesSubSchema_v_3.0",
 	"type": "object",
-	"definition": {},
-	"properties": {},
-	"required": []
+	"definitions": {
+		"features_object": {
+			"type": "object",
+			"properties": {},
+			"required": []
+		}
+	},
+	"properties": {
+		"features": { "$ref": "#/definitions/features_object" }
+	},
+	"required": [ "features" ]
 }
