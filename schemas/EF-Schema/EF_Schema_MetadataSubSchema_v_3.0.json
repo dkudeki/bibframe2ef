@@ -131,10 +131,8 @@
 					{ "$ref": "#/definitions/subject_object" }
 				]
 			}
-		}
-	},
-	"properties": {
-		"metadata": {
+		},
+		"metadata_object": {
 			"type": "object",
 			"properties": {
 				"schemaVersion": { "type": "string" },
@@ -309,6 +307,9 @@
 			},
 			"required": [ "id", "type", "schemaVersion", "dateCreated" ]
 		}
+	},
+	"properties" : {
+		"metadata": { "$ref": "#/definitions/metadata_object" }
 	},
 	"required": [ "metadata" ]
 }

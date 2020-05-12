@@ -1,0 +1,24 @@
+{
+	"$schema": "http://json-schema.org/schema#",
+	"$id": "https://schemas.hathitrust.org/EF_Schema_v_3.0",
+	"type": "object",
+	"definitions": {},
+	"properties": {
+		"@context": { "type": "string" },
+		"schemaVersion": { "type": "string" },
+		"id": { "type": "string" },
+		"htid": { "type": "string" },
+		"type": { "type": "string" },
+		"publisher": {
+			"type": "object",
+			"properties": {
+				"id": { "type": "string" },
+				"type": { "type": "string" },
+				"name": { "type": "string" }
+			}
+		},
+		"datePublished": { "type": "integer" },
+		"metadata": { "$ref": "EF_Schema_MetadataSubSchema_v_3.0#/definitions/metadata_object" }
+	},
+	"required": [ "@context", "schemaVersion", "id", "type", "publisher", "datePublished", "metadata" ]
+}
