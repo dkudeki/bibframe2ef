@@ -3,10 +3,135 @@
 	"$id": "https://schemas.hathitrust.org/EF_Schema_FeaturesSubSchema_v_3.0",
 	"type": "object",
 	"definitions": {
+		"string_array": {
+			"type": "array",
+			"items": { "type": "string" }
+		},
+		"pos_count": {
+			"type": "object"
+		},
+		"token_pos_count": {
+			"type": "object",
+			"additionalProperties": { "$ref": "#/definitions/pos_count" }
+		},
+		"char_count": {
+			"type": "object",
+			"patternProperties": {
+				"^.$": { "type": "integer" }
+			},
+			"additionalProperties": false
+		},
+		"feature_count": {
+			"type": "object",
+			"properties": {
+				"tokenCount": {
+					"anyOf": [
+						{ "type": "null" },
+						{ "type": "integer" } 
+					]
+				},
+				"lineCount": {
+					"anyOf": [
+						{ "type": "null" },
+						{ "type": "integer" } 
+					]
+				},
+				"emptyLineCount": {
+					"anyOf": [
+						{ "type": "null" },
+						{ "type": "integer" } 
+					]
+				},
+				"sentenceCount": {
+					"anyOf": [
+						{ "type": "null" },
+						{ "type": "integer" } 
+					]
+				},
+				"capAlphaSeq": {
+					"anyOf": [
+						{ "type": "null" },
+						{ "type": "integer" } 
+					]
+				},
+				"beginCharCount": { "$ref": "#/definitions/char_count" },
+				"endCharCount": { "$ref": "#/definitions/char_count" },
+				"tokenPosCount": { "$ref": "#/definitions/token_pos_count" }
+			},
+			"required": []
+		},
+		"page": {
+			"type": "object",
+			"properties": {
+				"seq": { "type": "string" },
+				"version": { "type": "string" },
+				"tokenCount": {
+					"anyOf": [
+						{ "type": "null" },
+						{ "type": "integer" } 
+					]
+				},
+				"lineCount": {
+					"anyOf": [
+						{ "type": "null" },
+						{ "type": "integer" } 
+					]
+				},
+				"emptyLineCount": {
+					"anyOf": [
+						{ "type": "null" },
+						{ "type": "integer" } 
+					]
+				},
+				"sentenceCount": {
+					"anyOf": [
+						{ "type": "null" },
+						{ "type": "integer" } 
+					]
+				},
+				"header": {
+					"anyOf": [
+						{ "type": "null" },
+						{ "$ref": "#/definitions/feature_count" }
+					]
+				},
+				"body": {
+					"anyOf": [
+						{ "type": "null" },
+						{ "$ref": "#/definitions/feature_count" }
+					]
+				},
+				"footer": {
+					"anyOf": [
+						{ "type": "null" },
+						{ "$ref": "#/definitions/feature_count" }
+					]
+				},
+				"calculatedLanguage": {
+					"anyOf": [
+						{ "type": "null" },
+						{ "type": "string" },
+						{ "$ref": "#/definitions/string_array" }
+					]
+				}
+			},
+			"required": [ "seq", "version", "tokenCount", "lineCount", "emptyLineCount", "sentenceCount", "header", "body", "footer", "calculatedLanguage" ]
+		},
+		"page_array": {
+			"type": "array",
+			"items": { "$ref": "#/definitions/page" }
+		},
 		"features_object": {
 			"type": "object",
-			"properties": {},
-			"required": []
+			"properties": {
+				"schemaVersion": { "type": "string" },
+				"id": { "type": "string" },
+				"type": { "type": "string" },
+				"dateCreated": { "type": "integer" } ,
+				"pageCount": { "type": "integer" } ,
+				"pages": { "$ref": "#/definitions/page_array" }
+			},
+			"required": [ "id", "schemaVersion", "type", "dateCreated" ]
 		}
 	},
 	"properties": {
