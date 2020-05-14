@@ -303,6 +303,12 @@
 						{ "type": "string" },
 						{ "$ref": "#/definitions/string_array" }
 					]
+				},
+				"doi": {
+					"anyOf": [
+						{ "type": "string" },
+						{ "$ref": "#/definitions/string_array" }
+					]
 				}
 			},
 			"required": [ "id", "type", "schemaVersion", "dateCreated" ]

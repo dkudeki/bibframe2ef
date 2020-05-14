@@ -152,36 +152,11 @@
 		"feature_count": {
 			"type": "object",
 			"properties": {
-				"tokenCount": {
-					"anyOf": [
-						{ "type": "null" },
-						{ "type": "integer" } 
-					]
-				},
-				"lineCount": {
-					"anyOf": [
-						{ "type": "null" },
-						{ "type": "integer" } 
-					]
-				},
-				"emptyLineCount": {
-					"anyOf": [
-						{ "type": "null" },
-						{ "type": "integer" } 
-					]
-				},
-				"sentenceCount": {
-					"anyOf": [
-						{ "type": "null" },
-						{ "type": "integer" } 
-					]
-				},
-				"capAlphaSeq": {
-					"anyOf": [
-						{ "type": "null" },
-						{ "type": "integer" } 
-					]
-				},
+				"tokenCount": { "type": [ "integer", "null" ] },
+				"lineCount": { "type": [ "integer", "null" ] },
+				"emptyLineCount": { "type": [ "integer", "null" ] },
+				"sentenceCount": { "type": [ "integer", "null" ] },
+				"capAlphaSeq": { "type": [ "integer", "null" ] },
 				"beginCharCount": { "$ref": "#/definitions/char_count" },
 				"endCharCount": { "$ref": "#/definitions/char_count" },
 				"tokenPosCount": { "$ref": "#/definitions/token_pos_count" }
@@ -193,30 +168,10 @@
 			"properties": {
 				"seq": { "type": "string" },
 				"version": { "type": "string" },
-				"tokenCount": {
-					"anyOf": [
-						{ "type": "null" },
-						{ "type": "integer" } 
-					]
-				},
-				"lineCount": {
-					"anyOf": [
-						{ "type": "null" },
-						{ "type": "integer" } 
-					]
-				},
-				"emptyLineCount": {
-					"anyOf": [
-						{ "type": "null" },
-						{ "type": "integer" } 
-					]
-				},
-				"sentenceCount": {
-					"anyOf": [
-						{ "type": "null" },
-						{ "type": "integer" } 
-					]
-				},
+				"tokenCount": { "type": [ "integer", "null" ] },
+				"lineCount": { "type": [ "integer", "null" ] },
+				"emptyLineCount": { "type": [ "integer", "null" ] },
+				"sentenceCount": { "type": [ "integer", "null" ] },
 				"header": {
 					"anyOf": [
 						{ "type": "null" },
