@@ -99,10 +99,10 @@
 				<xsl:if test="./htrc:accessProfile">
 					<xsl:choose>
 						<xsl:when test="./htrc:accessProfile/text() = 'open'">
-							<xsl:text>,"isAccessibleForFree":True</xsl:text>
+							<xsl:text>,"isAccessibleForFree": true</xsl:text>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:text>,"isAccessibleForFree":False</xsl:text>
+							<xsl:text>,"isAccessibleForFree": false</xsl:text>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:if>
