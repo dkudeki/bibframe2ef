@@ -16,6 +16,7 @@ xsl/outputs/*
 xsl/outputs_old/*
 xsl/inputs/fixed_first_segments/*
 xsl/inputs/format_change/*
+xsl/inputs/incremental_examples/*
 xsl/__pycache__/*
 xsl/test_outputs*
 xsl/sample_outputs*

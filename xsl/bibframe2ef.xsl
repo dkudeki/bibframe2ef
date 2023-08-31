@@ -96,9 +96,9 @@
 				<xsl:if test="./dct:accessRights">
 					<xsl:text>,"accessRights":"</xsl:text><xsl:value-of select="./dct:accessRights/text()" /><xsl:text>"</xsl:text>
 				</xsl:if>
-				<xsl:if test="./htrc:accessProfile">
+				<xsl:if test="./dct:accessRights">
 					<xsl:choose>
-						<xsl:when test="./htrc:accessProfile/text() = 'open'">
+						<xsl:when test="./dct:accessRights/text() = 'pd'">
 							<xsl:text>,"isAccessibleForFree": true</xsl:text>
 						</xsl:when>
 						<xsl:otherwise>
